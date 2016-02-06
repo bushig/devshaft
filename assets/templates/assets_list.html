@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h1>Categories</h1>
     {% for category in categories %}
         {{ category.category }}
+    {% endfor %}
+
+    <h1>Entries</h1>
+    {% for entry in entries %}
+        name: {{ entry.name }}<br>
+        description: {{ entry.description }}<br>
+        category: {{ entry.category }}<br>
+        <hr>
     {% endfor %}
 
 {% endblock %}
