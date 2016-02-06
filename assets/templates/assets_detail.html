@@ -2,19 +2,32 @@
 
 {% block content %}
     <div class="row">
-    <div class="well well-lg col-lg-4">
+    <div class="well well-sm col-lg-12">
       <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>
     <p>{{ entry.description }}</p>
     </div>
 
 
 
-    <div class="panel panel-default col-lg-8">
+
+    </div>
+    <div class="row">
+    <div class="panel panel-default col-lg-6">
+    <h1>Changelog</h1>
+    {% for version in versions %}
+        <hr>
+        <h5><strong>{{ version.version }}</strong></h5>
+        {{ version.changelog }}
+    {% endfor %}
+    
+    </div>
+
+    <div class="panel panel-default col-lg-6">
+    <h1>Versions</h1>
     {% if versions %}
         <table class="table table-bordered table-striped"><tr><th>version</th><th>date</th><th>download</th></tr>
             {% for version in versions %}
-                <tr><td>{{ version.version }}</td><td>{{ version.timestamp }}</td><td>{{ version.file }}</td></tr>
-                {{ version.changelog }} {% comment %} TODO: refactor changelog to be stacked all in one place {% endcomment %}
+                <tr><td>{{ version.version }}</td><td>{{ version.timestamp }}</td><td><a href="{{ MEDIA_URL }}{{ version.file }}">link</a></td></tr>
             {% endfor %}
 
       </table>
@@ -22,5 +35,5 @@
     <h1>No versions yet</h1>
     {% endif %}
     </div>
-  </div>
+    </div>
 {% endblock %}

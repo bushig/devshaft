@@ -1,0 +1,9 @@
+Assets:
+    -TAGS
+    -right versioning(+validation)
+    -changelog markup
+    -changelog tags with icons(for example: Core, Bug, Fix, Network, Graphics)
+
+
+General:
+    -AllAuth?
