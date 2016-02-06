@@ -5,7 +5,8 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="panel panel-default" >
-                    <div class="panel-heading"> <h4>{{ entry.name }} <span class="label label-info">{{ entry.category }}</span></h4></div>
+                    <div class="panel-heading"> <h4>{{ entry.name }} <span class="label label-info">{{ entry.category }}</span></h4>
+                        <span class="label label-default">{{ entry.user }}</span></div>
                     <div class="panel-body fixed-panel">
                     <img class="img-rounded img-responsive" src="{{ MEDIA_URL }}{{ entry.category.image }}" style="max-height:200px" alt="...">
 

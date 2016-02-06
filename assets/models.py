@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     category=models.CharField(max_length=120, unique=True)
@@ -10,6 +11,7 @@ class Category(models.Model):
 
 class Entry(models.Model):
     category=models.ForeignKey(Category)
+    user=models.ForeignKey(User)
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
     likes=models.PositiveIntegerField(default=0)

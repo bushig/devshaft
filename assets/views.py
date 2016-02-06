@@ -15,9 +15,11 @@ def assets_entry_details(request, id):
     return render(request, 'assets_detail.html', context)
 
 def assets_add_entry(request):
-    form=EntryForm(request.POST)
+    form=EntryForm(request.POST or None)
     if form.is_valid():
-        form.save()
+        entry=form.save(commit=False)
+        entry.user=request.user
+        entry.save()
         messages.success(request, 'Successfuly created new asset')
         return redirect('assets:assets_list')
     context={'form': form}
