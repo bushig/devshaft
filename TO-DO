@@ -7,3 +7,4 @@ Assets:
 
 General:
     -AllAuth?
+    -make form errors display in messages
