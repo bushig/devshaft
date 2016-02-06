@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 <head>
     <title>
@@ -27,6 +28,7 @@
                 <li><a href="{% url 'assets:assets_list' %}">Assets</a></li>
                 <li><a href="#">Tutorials</a></li>
                 <li><a href="#">Wiki</a></li>
+                <li><a href="#">Forum</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/">Register</a></li>
@@ -37,18 +39,16 @@
       </nav>
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
+<div class="panel panel-default>" align="center">
           {% block content %}
-        <h1>Navbar example</h1>
-        <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
+
           {% endblock %}
-      </div>
+</div>
 </div>
 
 <!-- Latest compiled and minified JavaScript -->
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 </body>
 </html>

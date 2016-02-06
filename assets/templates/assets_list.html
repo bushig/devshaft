@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h1>Entries</h1>
     {% for entry in entries %}
-        <a href="{% url 'assets:assets_detail' entry.id %}"> <h3>{{ entry.name }}</h3></a>
-        <p>description: {{ entry.description }}</p>
-        category: {{ entry.category }}
-        <hr>
-    {% endfor %}
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-default" >
+                    <div class="panel-heading"> <h4>{{ entry.name }} <span class="label label-info">{{ entry.category }}</span></h4></div>
+                    <div class="panel-body fixed-panel">
+                    <img class="img-rounded img-responsive" src="{{ MEDIA_URL }}{{ entry.category.image }}" style="max-height:200px" alt="...">
 
+
+                        <p>{{ entry.description }}</p>
+                        <div class="panel-footer"><p><a href="{% url 'assets:assets_detail' entry.id %}" class="btn btn-primary" role="button">Detail</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% cycle '' '' '</div><div class="row"' %}
+    {% endfor %}
 {% endblock %}
