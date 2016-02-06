@@ -8,6 +8,6 @@ def assets_list(request):
 
 def assets_entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
-    versions=VersionHistory.objects.filter(entry=entry)
+    versions=VersionHistory.objects.filter(entry=entry).order_by('-timestamp')
     context={'entry':entry, 'versions':versions}
     return render(request, 'assets_detail.html', context)

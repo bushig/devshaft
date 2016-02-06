@@ -17,7 +17,7 @@
     {% for version in versions %}
         <hr>
         <h5><strong>{{ version.version }}</strong></h5>
-        {{ version.changelog }}
+        <p>{{ version.changelog| linebreaks}}</p>
     {% endfor %}
     
     </div>

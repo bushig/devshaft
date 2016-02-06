@@ -25,7 +25,18 @@
             <ul class="nav navbar-nav">
 {#              <li class="active"><a href="#">Home</a></li>#}
                 <li><a href="#">Showcase</a></li>
-                <li><a href="{% url 'assets:assets_list' %}">Assets</a></li>
+                <li class="dropdown">
+                <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assets <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'assets:assets_list' %}">Browse</a></li>
+                    <li><a href="#">Categories</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="dropdown-header">Actions</li>
+                  <li><a href="#">Add new</a></li>
+                  <li><a href="#">My assets</a></li>
+                </ul>
+              </li>
+
                 <li><a href="#">Tutorials</a></li>
                 <li><a href="#">Wiki</a></li>
                 <li><a href="#">Forum</a></li>
