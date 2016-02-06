@@ -5,13 +5,14 @@ class Category(models.Model):
     image=models.ImageField(blank=True)
 
     def __str__(self):
-        return self.categoty
+        return self.category
 
 
 class Entry(models.Model):
     category=models.ForeignKey(Category)
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
+    likes=models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name

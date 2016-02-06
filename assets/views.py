@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Category, Entry, VersionHistory
 
 def assets_list(request):
-    categories=Category.objects.all()
     entries=Entry.objects.all()
-    context={'categories':categories, 'entries':entries}
+    context={'entries':entries}
     return render(request, 'assets_list.html', context=context)
+
+def assets_entry_details(request, id):
+    entry=get_object_or_404(Entry, id=id)
+    context={'entry':entry}
+    return render(request, 'assets_detail.html', context)
