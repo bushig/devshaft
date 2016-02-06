@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{ entry.name }}</h1>
+    <div class="row">
+    <div class="well well-lg col-lg-4">
+      <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>
     <p>{{ entry.description }}</p>
-    category:{{ entry.category }}
+    </div>
+
+
+
+    <div class="panel panel-default col-lg-8">
+    {% if versions %}
+        <table class="table table-bordered table-striped"><tr><th>version</th><th>date</th><th>download</th></tr>
+            {% for version in versions %}
+                <tr><td>{{ version.version }}</td><td>{{ version.timestamp }}</td><td>{{ version.file }}</td></tr>
+                {{ version.changelog }} {% comment %} TODO: refactor changelog to be stacked all in one place {% endcomment %}
+            {% endfor %}
+
+      </table>
+    {% else %}
+    <h1>No versions yet</h1>
+    {% endif %}
+    </div>
+  </div>
 {% endblock %}

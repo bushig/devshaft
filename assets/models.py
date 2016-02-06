@@ -25,7 +25,10 @@ class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry)
     version=models.CharField(max_length=6)
     timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
+    file=models.FileField()
     changelog=models.TextField(max_length=1000)
 
     def __str__(self):
         return self.version
+
+#TODO: TAGS
