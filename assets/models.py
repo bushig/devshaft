@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Category(models.Model):
     category=models.CharField(max_length=120, unique=True)
     image=models.ImageField(blank=True)

@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm
-from django.contrib import messages
+
 
 def assets_list(request):
     entries=Entry.objects.all()

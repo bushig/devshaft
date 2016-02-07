@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+
 from .views import assets_list, assets_entry_details, assets_add_entry
 
 urlpatterns = [
