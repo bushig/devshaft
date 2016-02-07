@@ -22,7 +22,8 @@ from django.contrib.staticfiles import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^assets/', include(assets_urls, namespace='assets'))
+    url(r'^assets/', include(assets_urls, namespace='assets')),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ]
 
 if settings.DEBUG is True:

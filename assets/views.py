@@ -24,3 +24,7 @@ def assets_add_entry(request):
         return redirect('assets:assets_list')
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
+
+# def assets_user_assets(request):
+
+# def assets_edit(request)
