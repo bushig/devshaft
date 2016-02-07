@@ -6,6 +6,10 @@ class Category(models.Model):
     category=models.CharField(max_length=120, unique=True)
     image=models.ImageField(blank=True)
 
+    class Meta:
+        verbose_name_plural='categories'
+
+
     def __str__(self):
         return self.category
 
@@ -16,6 +20,9 @@ class Entry(models.Model):
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
     likes=models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name_plural='entries'
 
     def __str__(self):
         return self.name
@@ -30,6 +37,10 @@ class VersionHistory(models.Model):
     timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
     file=models.FileField()
     changelog=models.TextField(max_length=1000)
+
+    class Meta:
+        verbose_name_plural='version history'
+
 
     def __str__(self):
         return self.version
