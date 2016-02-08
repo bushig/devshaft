@@ -34,7 +34,7 @@
                   <li role="separator" class="divider"></li>
                   <li class="dropdown-header">Actions</li>
                   <li><a href="{% url 'assets:assets_add_entry' %}">Add new</a></li>
-                  <li><a href="#">My assets</a></li>
+                  <li><a href="{% url 'assets:assets_user_assets' user.id %}">My assets</a></li>
                     {% endif %}
                 </ul>
               </li>

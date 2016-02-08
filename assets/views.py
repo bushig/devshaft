@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm
@@ -29,7 +30,11 @@ def assets_add_entry(request):
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
 
-# def assets_user_assets(request):
+def assets_user_assets(request, user_id):
+    user=get_object_or_404(User, id=user_id)
+    entries=Entry.objects.filter(user=user)
+    context={'entries': entries}
+    return render(request, 'assets_list.html', context)
 
 @login_required()
 def assets_edit(request, id):

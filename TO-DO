@@ -4,6 +4,7 @@ Assets:
     -changelog and description markup
     -changelog tags with icons(for example: Core, Bug, Fix, Network, Graphics)
     -if last version of asset, then highlight it
+    -add individual template for user entries(with buttons)
 
     -if user wants to edit not his asset, throw 403 error, not 404
 
