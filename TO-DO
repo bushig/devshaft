@@ -8,3 +8,8 @@ Assets:
 General:
     -AllAuth?
     -make form errors display in messages
+
+
+Authentication:
+    -Fix forms
+    -Fix redirect to /profile/

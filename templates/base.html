@@ -30,10 +30,12 @@
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'assets:assets_list' %}">Browse</a></li>
                     <li><a href="#">Categories</a></li>
+                    {% if user.is_authenticated %}
                   <li role="separator" class="divider"></li>
                   <li class="dropdown-header">Actions</li>
                   <li><a href="{% url 'assets:assets_add_entry' %}">Add new</a></li>
                   <li><a href="#">My assets</a></li>
+                    {% endif %}
                 </ul>
               </li>
 
@@ -42,8 +44,12 @@
                 <li><a href="#">Forum</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                {% else %}
               <li><a href="{% url 'registration_register' %}">Register</a></li>
               <li><a href="{% url 'auth_login' %}">Login</a></li>
+                {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
