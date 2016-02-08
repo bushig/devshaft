@@ -3,7 +3,9 @@
 {% block content %}
     <div class="row">
     <div class="well well-sm col-lg-12">
-      <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>
+      <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>{% if entry.user == user %}
+      <a href="{% url 'assets:assets_edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
+      {% endif %} 
     <p>{{ entry.description }}</p>
     </div>
 

@@ -41,6 +41,6 @@ def assets_edit(request, id):
             messages.success(request, 'Saved')
             return redirect('assets:assets_list')
         context={'form': form}
-        return render(request, 'assets_add_entry.html', context)
+        return render(request, 'assets_entry_edit.html', context)
     else:
         redirect('assets:assets_list')

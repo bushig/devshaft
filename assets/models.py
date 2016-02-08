@@ -27,7 +27,7 @@ class Entry(models.Model):
     def __str__(self):
         return self.name
 
-class EntryImages(models.Model):
+class EntryImage(models.Model):
     entry=models.ForeignKey(Entry)
     image=models.ImageField()
 
