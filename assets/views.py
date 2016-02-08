@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm
@@ -16,6 +17,7 @@ def assets_entry_details(request, id):
     context={'entry':entry, 'versions':versions}
     return render(request, 'assets_detail.html', context)
 
+@login_required()
 def assets_add_entry(request):
     form=EntryForm(request.POST or None)
     if form.is_valid():
@@ -29,4 +31,16 @@ def assets_add_entry(request):
 
 # def assets_user_assets(request):
 
-# def assets_edit(request)
+@login_required()
+def assets_edit(request, id):
+    asset=get_object_or_404(Entry, id=id)
+    if request.user==asset.user:
+        form=EntryForm(request.POST or None, instance=asset)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Saved')
+            return redirect('assets:assets_list')
+        context={'form': form}
+        return render(request, 'assets_add_entry.html', context)
+    else:
+        redirect('assets:assets_list')
