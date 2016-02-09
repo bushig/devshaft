@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Entry,Category, VersionHistory
+from .models import Entry,Category, VersionHistory, EntryImage
 
 # class VersionHistoryAdmin(admin.ModelAdmin):
 #     # class Meta:
@@ -13,3 +13,4 @@ from .models import Entry,Category, VersionHistory
 admin.site.register(Entry)
 admin.site.register(Category)
 admin.site.register(VersionHistory)
+admin.site.register(EntryImage)

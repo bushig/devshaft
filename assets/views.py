@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django.forms.formsets import formset_factory
+from django.forms.models import modelformset_factory
 
-from .models import Category, Entry, VersionHistory
-from .forms import EntryForm, VersionForm
+from .models import Category, Entry, VersionHistory, EntryImage
+from .forms import EntryForm, VersionForm, EntryImageFormSet
 
 
 def list(request):
@@ -60,15 +62,17 @@ def entry_versions(request, id):
     return render(request, 'assets_entry_versions.html', context)
 
 @login_required()
-def edit(request, id):
+def edit(request, id):#TODO: REFACTOR!
     asset=get_object_or_404(Entry, id=id)
     if request.user==asset.user:
         form=EntryForm(request.POST or None, instance=asset)
-        if form.is_valid():
+        formset=EntryImageFormSet(request.POST or None, request.FILES or None, instance = asset)
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             messages.success(request, 'Asset saved')
             return redirect('assets:detail', id)
-        context={'form': form}
+        context={'form': form, 'formset': formset}
         return render(request, 'assets_entry_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")

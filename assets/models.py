@@ -29,8 +29,10 @@ class Entry(models.Model):
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry)
-    image=models.ImageField()
+    image=models.ImageField(blank=False)
     # is_primary=models.BooleanField()
+    def __str__(self):
+        return self.entry.name
 
 class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry)

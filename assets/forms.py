@@ -1,6 +1,7 @@
 from django import forms
+from django.forms.models import BaseModelFormSet, modelformset_factory, inlineformset_factory
 
-from .models import Entry, VersionHistory
+from .models import Entry, VersionHistory, EntryImage
 
 
 class EntryForm(forms.ModelForm):
@@ -24,3 +25,6 @@ class VersionForm(forms.ModelForm):
             'version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter version. e.g 0.0.1'}),
             'changelog': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe asset'}),
         }
+
+#Edit entry images formset TODO:REFACTOR
+EntryImageFormSet=inlineformset_factory(Entry, EntryImage, fields=('image',), extra=1)

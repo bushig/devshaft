@@ -4,7 +4,7 @@
     <div class="centerBlock">
     <div class="col-lg-6">
 
-        <form method="post">
+        <form method="post", enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in form %}
                 <label>{{ field.label }}</label>
@@ -14,7 +14,11 @@
                 {{ field.help_text }}
                 {{ field}}
             {% endfor %}
-
+            {% for form in formset %}
+                {% for field in form %}
+                    {{ field}}
+                {% endfor %}
+            {% endfor %}
             <input type="submit" class="btn btn-default" value="Save">
         </form>
     </div>
