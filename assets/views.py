@@ -48,4 +48,5 @@ def assets_edit(request, id):
         context={'form': form}
         return render(request, 'assets_entry_edit.html', context)
     else:
-        redirect('assets:assets_list')
+        messages.warning(request, "You can't edit this one.")
+        return redirect('assets:assets_list')
