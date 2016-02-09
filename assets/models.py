@@ -30,6 +30,7 @@ class Entry(models.Model):
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry)
     image=models.ImageField()
+    # is_primary=models.BooleanField()
 
 class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry)

@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 
 from .models import Category, Entry, VersionHistory
-from .forms import EntryForm
+from .forms import EntryForm, VersionForm
 
 
 def list(request):
@@ -29,6 +31,21 @@ def add_entry(request):
         return redirect('assets:assets_list')
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
+
+@login_required()
+def add_version(request, id):
+    entry=get_object_or_404(Entry, id=id)
+    if request.user!=entry.user:
+        raise PermissionDenied
+    form=VersionForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        version=form.save(commit=False)
+        version.file=request.FILES['file']
+        version.entry=entry
+        version.save()
+        return redirect('assets:detail', id)
+    context={'form': form}
+    return render(request, 'assets_add_version.html', context)
 
 def user_assets(request, user_id):
     user=get_object_or_404(User, id=user_id)

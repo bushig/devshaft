@@ -1,5 +1,7 @@
 from django import forms
-from .models import Entry
+
+from .models import Entry, VersionHistory
+
 
 class EntryForm(forms.ModelForm):
     # name=forms.CharField(max_length=120, help_text=)
@@ -13,3 +15,8 @@ class EntryForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe asset'}),
         }
 
+
+class VersionForm(forms.ModelForm):
+    class Meta:
+        model = VersionHistory
+        fields = ('version', 'changelog', 'file')

@@ -4,8 +4,9 @@
     <div class="row">
     <div class="well well-sm col-lg-12">
         <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>{% if entry.user == user %}
+        <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add version</a>
         <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
-        <a href="{% url 'assets:edit' entry.id %}" class="btn btn-danger" role="button">Delete</a>
+        <a href="{% url 'assets:edit' entry.id %}" class="btn btn-danger" role="button">Delete asset</a>
       {% endif %} 
     <p>{{ entry.description }}</p>
     </div>
@@ -28,9 +29,13 @@
     <div class="panel panel-default col-lg-6">
     <h1>Versions</h1>
     {% if versions %}
-        <table class="table table-bordered table-striped"><tr><th>version</th><th>date</th><th>download</th></tr>
+        <table class="table table-bordered table-striped"><tr><th>Version</th><th>Date</th><th>Download</th></tr>
             {% for version in versions %}
-                <tr><td>{{ version.version }}</td><td>{{ version.timestamp }}</td><td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a></td></tr>
+                <tr><td>{{ version.version }}</td><td>{{ version.timestamp | timesince }} ago</td><td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
+                {% if entry.user == user %}
+                <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
+                {% endif %}
+                </td></tr>
             {% endfor %}
 
       </table>
