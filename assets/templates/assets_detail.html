@@ -27,7 +27,7 @@
     </div>
 
     <div class="panel panel-default col-lg-6">
-    <h1>Versions</h1>
+    <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
     {% if versions %}
         <table class="table table-bordered table-striped"><tr><th>Version</th><th>Date</th><th>Download</th></tr>
             {% for version in versions %}
@@ -39,6 +39,7 @@
             {% endfor %}
 
       </table>
+{#        <a href="{% url 'assets:entry_versions' entry.id %}" class="btn btn-info" role="button">View all</a>#}
     {% else %}
     <h1>No versions yet</h1>
     {% endif %}

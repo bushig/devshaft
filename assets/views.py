@@ -53,6 +53,12 @@ def user_assets(request, user_id):
     context={'entries': entries}
     return render(request, 'assets_list.html', context)
 
+def entry_versions(request, id):
+    entry=get_object_or_404(Entry, id=id)
+    versions=VersionHistory.objects.filter(entry=entry)
+    context={'entry':entry, 'versions': versions}
+    return render(request, 'assets_entry_versions.html', context)
+
 @login_required()
 def edit(request, id):
     asset=get_object_or_404(Entry, id=id)
