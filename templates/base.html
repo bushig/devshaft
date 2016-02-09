@@ -28,13 +28,13 @@
                 <li class="dropdown">
                 <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assets <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="{% url 'assets:assets_list' %}">Browse</a></li>
+                    <li><a href="{% url 'assets:list' %}">Browse</a></li>
                     <li><a href="#">Categories</a></li>
                     {% if user.is_authenticated %}
                   <li role="separator" class="divider"></li>
                   <li class="dropdown-header">Actions</li>
-                  <li><a href="{% url 'assets:assets_add_entry' %}">Add new</a></li>
-                  <li><a href="{% url 'assets:assets_user_assets' user.id %}">My assets</a></li>
+                  <li><a href="{% url 'assets:add_entry' %}">Add new</a></li>
+                  <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>
                     {% endif %}
                 </ul>
               </li>

@@ -7,19 +7,19 @@ from .models import Category, Entry, VersionHistory
 from .forms import EntryForm
 
 
-def assets_list(request):
-    entries=Entry.objects.exclude(versionhistory__isnull=True)
+def list(request):
+    entries=Entry.objects.exclude(versionhistory__isnull=True) #Maybe move to Manager?
     context={'entries':entries}
     return render(request, 'assets_list.html', context=context)
 
-def assets_entry_details(request, id):
+def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
     versions=VersionHistory.objects.filter(entry=entry).order_by('-timestamp')
     context={'entry':entry, 'versions':versions}
     return render(request, 'assets_detail.html', context)
 
 @login_required()
-def assets_add_entry(request):
+def add_entry(request):
     form=EntryForm(request.POST or None)
     if form.is_valid():
         entry=form.save(commit=False)
@@ -30,14 +30,14 @@ def assets_add_entry(request):
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
 
-def assets_user_assets(request, user_id):
+def user_assets(request, user_id):
     user=get_object_or_404(User, id=user_id)
     entries=Entry.objects.filter(user=user)
     context={'entries': entries}
     return render(request, 'assets_list.html', context)
 
 @login_required()
-def assets_edit(request, id):
+def edit(request, id):
     asset=get_object_or_404(Entry, id=id)
     if request.user==asset.user:
         form=EntryForm(request.POST or None, instance=asset)
@@ -49,4 +49,4 @@ def assets_edit(request, id):
         return render(request, 'assets_entry_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")
-        return redirect('assets:assets_list')
+        return redirect('assets:list')

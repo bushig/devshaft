@@ -12,6 +12,7 @@ Assets:
 General:
     -AllAuth?
     -make form errors display in messages
+    -refactor url names(remove assets_)
 
 
 Authentication:
