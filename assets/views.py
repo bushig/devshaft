@@ -66,10 +66,26 @@ def edit(request, id):
         form=EntryForm(request.POST or None, instance=asset)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Saved')
-            return redirect('assets:assets_list')
+            messages.success(request, 'Asset saved')
+            return redirect('assets:detail', id)
         context={'form': form}
         return render(request, 'assets_entry_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")
-        return redirect('assets:list')
+        return redirect('assets:detail', id)
+
+@login_required()
+def edit_version(request, id, version_id):
+    asset=get_object_or_404(Entry, id=id)
+    version=get_object_or_404(VersionHistory, id=version_id)
+    if request.user==asset.user:
+        form=VersionForm(request.POST or None, instance=version)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Version saved')
+            return redirect('assets:detail', id)
+        context={'form': form}
+        return render(request, 'assets_version_edit.html', context)
+    else:
+        messages.warning(request, "You can't edit this one.")
+        return redirect('assets:detail', id)

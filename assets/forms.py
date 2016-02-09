@@ -20,3 +20,7 @@ class VersionForm(forms.ModelForm):
     class Meta:
         model = VersionHistory
         fields = ('version', 'changelog', 'file')
+        widgets = {
+            'version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter version. e.g 0.0.1'}),
+            'changelog': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe asset'}),
+        }

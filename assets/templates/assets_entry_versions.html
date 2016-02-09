@@ -8,7 +8,7 @@
             {% for version in versions %}
                 <tr><td>{{ version.version }}</td><td>{{ version.timestamp | timesince }} ago</td><td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
                 {% if entry.user == user %}
-                <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
+                <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info" role="button">Edit</a>
                 {% endif %}
                 </td></tr>
             {% endfor %}
