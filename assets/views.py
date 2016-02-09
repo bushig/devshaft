@@ -8,7 +8,7 @@ from .forms import EntryForm
 
 
 def assets_list(request):
-    entries=Entry.objects.all()
+    entries=Entry.objects.exclude(versionhistory__isnull=True)
     context={'entries':entries}
     return render(request, 'assets_list.html', context=context)
 
