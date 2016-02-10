@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
+{% block page_header %}
+        <h1>Entries</h1>
+{% endblock %}
 {% block content %}
-    <h1>Entries</h1>
     {% for entry in entries %}
         <div class="row">
             <div class="col-lg-4">
                 <div class="panel panel-default" >
                     <div class="panel-heading"> <h4>{{ entry.name }} <span class="label label-info">{{ entry.category }}</span></h4>
-                        <span class="label label-default">{{ entry.user }}</span></div>
+                        <span class="label label-default glyphicon glyphicon-user"> {{ entry.user }}</span></div>
                     <div class="panel-body fixed-panel">
                     <img class="img-rounded img-responsive" src="{% if entry.entryimage_set.first %}
                     {{ MEDIA_URL }}{{ entry.entryimage_set.first.image }}
