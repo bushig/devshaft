@@ -18,8 +18,9 @@ def list(request):
 
 def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
+    images = entry.entryimage_set.all()
     versions=VersionHistory.objects.filter(entry=entry).order_by('-timestamp')
-    context={'entry':entry, 'versions':versions}
+    context={'entry':entry, 'versions':versions, 'images': images}
     return render(request, 'assets_detail.html', context)
 
 @login_required()

@@ -3,7 +3,36 @@
 {% block content %}
     <div class="row">
     <div class="well well-sm col-lg-12">
-        <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>{% if entry.user == user %}
+        <h1>{{ entry.name }}<small>{{ entry.category }}</small></h1>
+    {% comment %} CAROUSEL {% endcomment %}
+    {% if images %}
+    <div id="carousel" class="carousel slide" data-ride="carousel">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+      {% for image in images %}
+          {% if forloop.counter == 1 %}
+              <div class="item active entryCarouselImg">
+          {% else %}
+              <div class="item entryCarouselImg">
+          {% endif %}
+      <img src="{{ MEDIA_URL }}{{ image.image }}" class="entryCarouselImg" />
+    </div>
+      {% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+    {% endif %}
+
+        {% if entry.user == user %}
         <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add version</a>
         <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
