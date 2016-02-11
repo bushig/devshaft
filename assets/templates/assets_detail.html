@@ -33,6 +33,7 @@
     {% endif %}
 
         {% if entry.user == user %}
+            <hr>
         <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add version</a>
         <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
