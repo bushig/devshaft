@@ -16,7 +16,7 @@
 
 
                         <p>{{ entry.description }}</p>
-                        <div class="panel-footer"><p><a href="{% url 'assets:detail' entry.id %}" class="btn btn-primary" role="button">Detail</a></p>
+                        <div class="panel-footer"><p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
                     </div>
                 </div>

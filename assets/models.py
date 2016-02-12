@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
 class Category(models.Model):
@@ -26,6 +27,9 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('assets:detail', args=[self.id])
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry)
