@@ -6,6 +6,10 @@ Assets:
     -if last version of asset, then highlight it
     -add individual template for user entries(with buttons)
     -momentum.js for timesince
+    -arrange versions by subversions
+    -restrict adding version that is lower then previous
+
+    -redesign template of add_entry, so you can add more than one image per save(jquery)
 
     -if user wants to edit not his asset, throw 403 error, not 404
 
@@ -13,7 +17,6 @@ Assets:
 General:
     -AllAuth?
     -make form errors display in messages
-    -refactor url names(remove assets_)
 
 
 Authentication:

@@ -31,7 +31,7 @@ def add_entry(request):
         entry.user=request.user
         entry.save()
         messages.success(request, 'Successfuly created new asset')
-        return redirect('assets:assets_list')
+        return redirect('assets:list')
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
 

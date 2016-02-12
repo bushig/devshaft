@@ -18,12 +18,15 @@ class EntryForm(forms.ModelForm):
 
 
 class VersionForm(forms.ModelForm):
+    field_order = ('major_version', 'minor_version', 'patch_version', 'changelog', 'file')
     class Meta:
         model = VersionHistory
-        fields = ('version', 'changelog', 'file')
+        fields = ('major_version', 'minor_version', 'patch_version', 'file', 'changelog')
         widgets = {
-            'version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter version. e.g 0.0.1'}),
-            'changelog': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe asset'}),
+            'major_version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Major'}),
+            'minor_version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Minor'}),
+            'patch_version': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Patch'}),
+            'changelog': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Changelog'}),
         }
 
 #Edit entry images formset TODO:REFACTOR
