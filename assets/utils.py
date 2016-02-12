@@ -3,8 +3,8 @@ from django.core.exceptions import ValidationError
 import re
 
 
-def validate_version(version):
-    #TODO: REDO
+# def validate_version(version):
+#     #TODO: REDO to have lenght<10
     # #Checking string to contain only specified chars
     # if re.match(r'^[0-9\.]+$', version) is None:
     #     raise ValidationError("Version may contain only digits and dots")
