@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from .views import list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version
+from .views import list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version, EntryCreateReadView, EntryReadUpdateDeleteView
 
 urlpatterns = [
     url(r'^$', list, name='list'),
@@ -11,5 +11,8 @@ urlpatterns = [
     url(r'^(?P<id>[\d]+)/add$', add_version, name='add_version'),
     url(r'^(?P<id>[\d]+)/versions/$', entry_versions, name='entry_versions'),
     url(r'^(?P<id>[\d]+)/versions/(?P<version_id>[\d]+)/$', edit_version, name='edit_version'),
+
+    url(r'^api/$', EntryCreateReadView.as_view(), name = 'entry_rest_api'),
+    url(r'^api/(?P<id>[\d]+)/$', EntryReadUpdateDeleteView.as_view(), name = 'entry_rest_api')
 
 ]

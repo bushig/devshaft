@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'registration',
     'crispy_forms',
+    'rest_framework',
 
     'assets',
 ]
@@ -138,3 +139,12 @@ STATICFILES_DIRS = (
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

@@ -2,13 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
-from django.forms.formsets import formset_factory
-from django.forms.models import modelformset_factory
+
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from .models import Category, Entry, VersionHistory, EntryImage
 from .forms import EntryForm, VersionForm, EntryImageFormSet
+from .serializers import EntrySerializer
 
 
 def list(request):
@@ -94,3 +94,16 @@ def edit_version(request, id, version_id):
     else:
         messages.warning(request, "You can't edit this one.")
         return redirect('assets:detail', id)
+
+
+#API VIEWS!!!
+
+class EntryCreateReadView(ListCreateAPIView):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+    lookup_field = 'id'
+
+class EntryReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+    lookup_field = 'id'
