@@ -36,7 +36,7 @@ class Entry(models.Model):
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry)
     image=models.ImageField(blank=False)
-    # is_primary=models.BooleanField()
+
     def __str__(self):
         return self.entry.name
 
@@ -56,4 +56,4 @@ class VersionHistory(models.Model):
         return str(self.major_version)+'.'+str(self.minor_version)+'.'+str(self.patch_version)
 
     def __str__(self):
-        return self.entry
+        return self.version()

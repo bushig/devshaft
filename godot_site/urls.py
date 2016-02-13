@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^assets/', include(assets_urls, namespace='assets')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^api/', include('core.api', namespace='api'))
 ]
 
 if settings.DEBUG is True:
