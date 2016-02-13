@@ -22,7 +22,10 @@ class Entry(models.Model):
     user=models.ForeignKey(User)
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
-    likes=models.PositiveIntegerField(default=0)
+
+    @property
+    def total_likes(self):
+        return EntryLikes.objects.filter(entry=self.id).count()
 
     class Meta:
         verbose_name_plural='entries'
@@ -39,6 +42,11 @@ class EntryImage(models.Model):
 
     def __str__(self):
         return self.entry.name
+
+class EntryLikes(models.Model):
+    entry=models.ForeignKey(Entry)
+    user=models.ForeignKey(User)
+
 
 class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry)

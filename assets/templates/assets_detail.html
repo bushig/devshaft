@@ -39,7 +39,12 @@
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
             Delete asset
         </button>
-      {% endif %} 
+        {% else %}
+                <button id="likes" data-entryid="{{entry.id}}" class="btn btn-default" type="button">
+                        <i class="fa fa-thumbs-up fa-rotate-270"></i>
+                    Like <span id='likes_count'>{{ entry.total_likes }}</span>
+                </button>
+        {% endif %}
     <p>{{ entry.description }}</p>
     </div>
 
@@ -68,6 +73,7 @@
                     <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info" role="button">Edit</a>
                     <button type="button" class="btn btn-danger">Delete</button>
                 {% endif %}
+
                 </td></tr>
             {% endfor %}
 

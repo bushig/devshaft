@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.views.generic import ListView
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
@@ -15,6 +16,12 @@ def list(request):
     entries=Entry.objects.exclude(versionhistory__isnull=True) #Maybe move to Manager?
     context={'entries':entries}
     return render(request, 'assets_list.html', context=context)
+
+def user_assets(request, user_id):
+    user=get_object_or_404(User, id=user_id)
+    entries=Entry.objects.filter(user=user)
+    context={'entries': entries}
+    return render(request, 'assets_list.html', context)
 
 def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
@@ -50,12 +57,6 @@ def add_version(request, id):
         return redirect('assets:detail', id)
     context={'form': form}
     return render(request, 'assets_add_version.html', context)
-
-def user_assets(request, user_id):
-    user=get_object_or_404(User, id=user_id)
-    entries=Entry.objects.filter(user=user)
-    context={'entries': entries}
-    return render(request, 'assets_list.html', context)
 
 def entry_versions(request, id):
     entry=get_object_or_404(Entry, id=id)
