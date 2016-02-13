@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="panel panel-default col-lg-6">
-    <h1>Versions</h1>
+    <div class="panel panel-default">
+    <h1>Versions <small><a href="{% url 'assets:detail' entry.id %}" class="btn btn-default">Back</a></small></h1>
     {% if versions %}
         <table class="table table-bordered table-striped"><tr><th>Version</th><th>Date</th><th>Download</th></tr>
             {% for version in versions %}
                 <tr><td>{{ version.version }}</td><td>{{ version.timestamp | timesince }} ago</td><td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
                 {% if entry.user == user %}
-                <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info" role="button">Edit</a>
+                    <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger">Delete</button>
                 {% endif %}
                 </td></tr>
             {% endfor %}

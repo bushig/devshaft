@@ -51,6 +51,7 @@ class VersionHistory(models.Model):
 
     class Meta:
         verbose_name_plural='version history'
+        get_latest_by = "timestamp"
 
     def version(self):
         return str(self.major_version)+'.'+str(self.minor_version)+'.'+str(self.patch_version)

@@ -30,8 +30,9 @@ def add_entry(request):
         entry=form.save(commit=False)
         entry.user=request.user
         entry.save()
-        messages.success(request, 'Successfuly created new asset')
-        return redirect('assets:list')
+        messages.success(request, 'Successfuly created new asset. Now add version')
+        entry.refresh_from_db()
+        return redirect('assets:add_version', id=entry.id)
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)
 
