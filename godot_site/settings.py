@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'registration',
     'crispy_forms',
     'rest_framework',
+    'debug_toolbar',
 
     'assets',
 ]

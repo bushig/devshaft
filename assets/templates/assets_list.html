@@ -17,9 +17,9 @@
 
                         <p>{{ entry.description | truncatechars_html:120 }}</p>
                         <div class="panel-footer">
-                            {% if entry.versionhistory_set.first %}
-                                {{ entry.versionhistory_set.latest.timestamp | timesince}} ago
-                            {% endif %}
+{#                            {% if entry.versionhistory_set.first %}#}
+{#                                {{ entry.versionhistory_set.latest.timestamp | timesince}} ago#}
+{#                            {% endif %}#}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
                     </div>
