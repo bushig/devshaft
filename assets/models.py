@@ -63,6 +63,13 @@ class VersionHistory(models.Model):
     changelog=models.TextField(max_length=1000)
 
     def clean(self):
+        '''Makes row checks only if model created first time and version didn didnt change'''
+
+        if self.id is not None:
+            original = VersionHistory.objects.get(id = self.id)
+            if original.major_version == self.major_version and original.minor_version == self.minor_version and original.patch_version == self.patch_version:
+                return
+
         if self.major_version+self.minor_version+self.patch_version == 0:
             raise ValidationError("Version can't be 0.0.0")
         if VersionHistory.objects.filter(entry=self.entry, major_version=self.major_version,
@@ -70,10 +77,11 @@ class VersionHistory(models.Model):
             raise ValidationError("This version already exist")
         ##TODO: REFACTOR THIS TRASH!
         last_version = VersionHistory.objects.filter(entry=self.entry).first()
-        if (last_version.major_version>=self.major_version and last_version.minor_version>self.minor_version and
-                    last_version.patch_version>self.patch_version) or (last_version.major_version>=self.major_version and
-                                                                                          last_version.minor_version>self.minor_version) or last_version.major_version>=self.major_version:
-            raise ValidationError('Version have to be greater than previous')
+        if last_version:
+            if (last_version.major_version>=self.major_version and last_version.minor_version>self.minor_version and
+                        last_version.patch_version>self.patch_version) or (last_version.major_version>=self.major_version and
+                                                                                              last_version.minor_version>self.minor_version) or last_version.major_version>=self.major_version:
+                raise ValidationError('Version have to be greater than previous')
 
     class Meta:
         verbose_name_plural='version history'

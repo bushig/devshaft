@@ -27,6 +27,11 @@ class VersionForm(forms.ModelForm):
             'patch_version': forms.TextInput(attrs={'placeholder': 'Patch'}),
             'changelog': forms.Textarea(attrs={'placeholder': 'Changelog'}),
         }
+class VersionFormEdit(forms.ModelForm):
+    field_order = ('changelog', 'file')
+    class Meta:
+        model = VersionHistory
+        fields = ('file', 'changelog')
 
 #Edit entry images formset TODO:REFACTOR
 EntryImageFormSet=inlineformset_factory(Entry, EntryImage, fields=('image',), extra=5, max_num=5)

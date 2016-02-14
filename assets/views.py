@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.mixins import DestroyModelMixin, RetrieveModelMixin
 
 from .models import Category, Entry, VersionHistory, EntryImage, EntryLikes
-from .forms import EntryForm, VersionForm, EntryImageFormSet
+from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
 
@@ -91,9 +91,9 @@ def edit_version(request, id, version_id):
     asset=get_object_or_404(Entry, id=id)
     version=get_object_or_404(VersionHistory, id=version_id)
     if request.user==asset.user:
-        form=VersionForm(request.POST or None, instance=version)
+        form=VersionFormEdit(request.POST or None, instance=version)
         if form.is_valid():
-            form.save()
+            form.save() #TODO:FIX FILE UPLOADING
             messages.success(request, 'Version saved')
             return redirect('assets:detail', id)
         context={'form': form}
