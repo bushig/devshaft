@@ -23,6 +23,9 @@ class Entry(models.Model):
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
 
+    def liked(self, user):
+        return EntryLikes.objects.filter(entry=self.id, user=user)
+
     @property
     def total_likes(self):
         return EntryLikes.objects.filter(entry=self.id).count()

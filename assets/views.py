@@ -30,8 +30,9 @@ def user_assets(request, user_id):
 def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
     images = entry.entryimage_set.all()
+    user_liked = entry.liked(request.user)
     versions=VersionHistory.objects.filter(entry=entry).order_by('-timestamp')
-    context={'entry':entry, 'versions':versions, 'images': images}
+    context={'entry':entry, 'versions':versions, 'images': images, 'user_liked': user_liked}
     return render(request, 'assets_detail.html', context)
 
 @login_required()
@@ -123,7 +124,7 @@ class EntryLikesCreateView(DestroyModelMixin, CreateAPIView):
     if there was any(204).
     '''
 
-    #TODO: return ammount of likes, refactor
+    #TODO: return ammount of likes, asset owner cant like his asset, refactor model to have one to many relation
 
     queryset = EntryLikes.objects.all()
     serializer_class = EntryLikesSerializer
