@@ -17,7 +17,7 @@ from .permissions import IsOwnerOrReadOnly
 
 
 def list(request):
-    entries=Entry.objects.exclude(versionhistory__isnull=True) #Maybe move to Manager?
+    entries=Entry.objects.exclude(versionhistory__isnull=True) #TODO: move to Manager
     context={'entries':entries}
     return render(request, 'assets_list.html', context=context)
 
@@ -31,7 +31,7 @@ def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
     images = entry.entryimage_set.all()
     user_liked = entry.liked(request.user)
-    versions=VersionHistory.objects.filter(entry=entry).order_by('-timestamp')
+    versions=VersionHistory.objects.filter(entry=entry)
     context={'entry':entry, 'versions':versions, 'images': images, 'user_liked': user_liked}
     return render(request, 'assets_detail.html', context)
 
@@ -53,7 +53,7 @@ def add_version(request, id):
     entry=get_object_or_404(Entry, id=id)
     if request.user!=entry.user:
         raise PermissionDenied
-    form=VersionForm(request.POST or None, request.FILES or None)
+    form=VersionForm(request.POST or None, request.FILES or None, initial={'entry': entry})
     if form.is_valid():
         version=form.save(commit=False)
         version.file=request.FILES['file']

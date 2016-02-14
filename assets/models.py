@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 # from .utils import validate_version
+
 
 
 class Category(models.Model):
@@ -60,8 +62,22 @@ class VersionHistory(models.Model):
     file=models.FileField()
     changelog=models.TextField(max_length=1000)
 
+    def clean(self):
+        if self.major_version+self.minor_version+self.patch_version == 0:
+            raise ValidationError("Version can't be 0.0.0")
+        if VersionHistory.objects.filter(entry=self.entry, major_version=self.major_version,
+                                         minor_version=self.minor_version, patch_version=self.patch_version).exists():
+            raise ValidationError("This version already exist")
+        ##TODO: REFACTOR THIS TRASH!
+        last_version = VersionHistory.objects.filter(entry=self.entry).first()
+        if (last_version.major_version>=self.major_version and last_version.minor_version>self.minor_version and
+                    last_version.patch_version>self.patch_version) or (last_version.major_version>=self.major_version and
+                                                                                          last_version.minor_version>self.minor_version) or last_version.major_version>=self.major_version:
+            raise ValidationError('Version have to be greater than previous')
+
     class Meta:
         verbose_name_plural='version history'
+        ordering = ('-major_version', '-minor_version', '-patch_version')
         get_latest_by = "timestamp"
 
     def version(self):

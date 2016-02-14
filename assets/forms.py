@@ -16,11 +16,12 @@ class EntryForm(forms.ModelForm):
 
 
 class VersionForm(forms.ModelForm):
-    field_order = ('major_version', 'minor_version', 'patch_version', 'changelog', 'file')
+    field_order = ('entry', 'major_version', 'minor_version', 'patch_version', 'changelog', 'file')
     class Meta:
         model = VersionHistory
-        fields = ('major_version', 'minor_version', 'patch_version', 'file', 'changelog')
+        fields = ('entry', 'major_version', 'minor_version', 'patch_version', 'file', 'changelog')
         widgets = {
+            'entry': forms.HiddenInput(),
             'major_version': forms.TextInput(attrs={'placeholder': 'Major'}),
             'minor_version': forms.TextInput(attrs={'placeholder': 'Minor'}),
             'patch_version': forms.TextInput(attrs={'placeholder': 'Patch'}),
