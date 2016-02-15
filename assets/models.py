@@ -64,7 +64,7 @@ class VersionHistory(models.Model):
 
     def clean(self):
         '''Makes row checks only if model created first time and version didn didnt change'''
-
+        #TODO: Move to utils
         if self.id is not None:
             original = VersionHistory.objects.get(id = self.id)
             if original.major_version == self.major_version and original.minor_version == self.minor_version and original.patch_version == self.patch_version:

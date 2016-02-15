@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'registration',
     'crispy_forms',
     'rest_framework',
+    'django_filters',
+
     'debug_toolbar',
 
     'assets',

@@ -11,15 +11,15 @@ from rest_framework.response import Response
 from rest_framework.mixins import DestroyModelMixin, RetrieveModelMixin
 
 from .models import Category, Entry, VersionHistory, EntryImage, EntryLikes
-from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit, AssetsSearch
+from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
+from .filters import EntryFilter
 
 
 def list(request):
-    entries=Entry.objects.exclude(versionhistory__isnull=True) #TODO: move to Manager
-    search = AssetsSearch(data=request.GET or None)
-    context={'entries':entries, 'search': search}
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.all())#TODO: move to Manager
+    context={'entries':filter}
     return render(request, 'assets_list.html', context=context)
 
 def user_assets(request, user_id):

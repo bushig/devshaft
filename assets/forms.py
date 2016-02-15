@@ -35,10 +35,3 @@ class VersionFormEdit(forms.ModelForm):
 
 #Edit entry images formset TODO:REFACTOR
 EntryImageFormSet=inlineformset_factory(Entry, EntryImage, fields=('image',), extra=5, max_num=5)
-
-
-class AssetsSearch(forms.Form):
-    q = forms.CharField(max_length=120, label='Search') #search query
-    c = forms.ModelMultipleChoiceField(Category.objects.all(), label='Categories') #category
-    class Meta:
-        fields = ('search', 'categories')
