@@ -11,9 +11,11 @@ Assets:
 
     -redesign template of add_entry, so you can add more than one image per save(jquery)
     -redesign assets list to show name, category, description, image, tags, last_updated, likes
-    -fix performance issue for asset list
+    -fix performance issues for asset list
 
     -if user wants to edit not his asset, throw 403 error, not 404
+
+    -Improve search
 
 
 General:

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import BaseModelFormSet, modelformset_factory, inlineformset_factory
 
-from .models import Entry, VersionHistory, EntryImage
+from .models import Entry, VersionHistory, EntryImage, Category
 
 
 class EntryForm(forms.ModelForm):
@@ -35,3 +35,10 @@ class VersionFormEdit(forms.ModelForm):
 
 #Edit entry images formset TODO:REFACTOR
 EntryImageFormSet=inlineformset_factory(Entry, EntryImage, fields=('image',), extra=5, max_num=5)
+
+
+class AssetsSearch(forms.Form):
+    q = forms.CharField(max_length=120, label='Search') #search query
+    c = forms.ModelMultipleChoiceField(Category.objects.all(), label='Categories') #category
+    class Meta:
+        fields = ('search', 'categories')

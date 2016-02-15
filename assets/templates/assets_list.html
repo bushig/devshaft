@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 {% block page_header %}
         <h1>Entries</h1>
+    <form method="get" action=".">
+    {{ search |crispy }}
+    <input type="submit" class="btn btn-success" value="Search">
+    </form>
 {% endblock %}
+
 {% block content %}
     <div class="row">
     {% for entry in entries %}

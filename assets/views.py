@@ -11,14 +11,15 @@ from rest_framework.response import Response
 from rest_framework.mixins import DestroyModelMixin, RetrieveModelMixin
 
 from .models import Category, Entry, VersionHistory, EntryImage, EntryLikes
-from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
+from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit, AssetsSearch
 from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
 def list(request):
     entries=Entry.objects.exclude(versionhistory__isnull=True) #TODO: move to Manager
-    context={'entries':entries}
+    search = AssetsSearch(data=request.GET or None)
+    context={'entries':entries, 'search': search}
     return render(request, 'assets_list.html', context=context)
 
 def user_assets(request, user_id):
@@ -36,7 +37,7 @@ def entry_details(request, id):
     return render(request, 'assets_detail.html', context)
 
 @login_required()
-def add_entry(request):
+def add_entry(request):  #TODO:REFACTOR to display formset
     form=EntryForm(request.POST or None)
     if form.is_valid():
         entry=form.save(commit=False)
