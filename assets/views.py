@@ -18,7 +18,7 @@ from .filters import EntryFilter
 
 
 def list(request):
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.all())#TODO: move to Manager
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True))#TODO: move to Manager
     context={'entries':filter}
     return render(request, 'assets_list.html', context=context)
 
