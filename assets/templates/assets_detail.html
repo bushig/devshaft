@@ -40,7 +40,7 @@
             Delete asset
         </button>
             <hr>Likes: {{ entry.total_likes }}
-        {% elif user.authenticated %}
+        {% elif user.is_authenticated %}
                 <button id="likes" data-entryid="{{entry.id}}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">

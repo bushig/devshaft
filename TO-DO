@@ -15,7 +15,7 @@ Assets:
 
     -if user wants to edit not his asset, throw 403 error, not 404
 
-    -Improve search
+    -Improve search(ordering by last update, likes etc)
 
 
 General:
