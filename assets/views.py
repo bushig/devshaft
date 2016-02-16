@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
@@ -18,7 +19,19 @@ from .filters import EntryFilter
 
 def list(request):
     filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True))
-    context={'entries':filter}
+
+    page = request.GET.get('page')
+    paginator = Paginator(filter, 9)
+    try:
+        paginated = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paginated = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paginated = paginator.page(paginator.num_pages)
+
+    context={'entries': paginated, 'filter': filter}
     return render(request, 'assets_list.html', context=context)
 
 def user_assets(request, user_id):

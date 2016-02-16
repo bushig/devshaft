@@ -4,12 +4,13 @@
 {% block page_header %}
         <h1>Entries</h1>
     <form method="get" action=".">
-    {{ entries.form | crispy }}
+    {{ filter.form | crispy }}
     <input type="submit" class="btn btn-success" value="Search">
     </form>
 {% endblock %}
 
 {% block content %}
+    {{ request.GET.q }}
     <div class="row">
     {% if entries %}
     {% for entry in entries %}
@@ -40,4 +41,28 @@
     {% else %}
     <h1>No entries there</h1>
     {% endif %}
+{% endblock %}
+
+{% block footer %}
+<nav>
+  <ul class="pagination">
+    <li class="
+    {% if not entries.has_previous %}
+        disabled
+    {% endif %}">
+        <a href="{% if entries.has_previous %}?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ entries.previous_page_number }}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+
+    {% for page in entries.paginator.page_range %}
+      <li class="{% if page == entries.number %}active{% endif %}"><a href="?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a></li>
+    {% endfor %}
+
+  <li class="
+    {% if not entries.has_next %}
+        disabled
+    {% endif %}">
+        <a href="{% if entries.has_next %}?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ entries.next_page_number }}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+  </ul>
+</nav>
+    Total: {{ entries.paginator.num_pages }}
 {% endblock %}

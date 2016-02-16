@@ -70,8 +70,12 @@ class VersionHistory(models.Model):
             if original.major_version == self.major_version and original.minor_version == self.minor_version and original.patch_version == self.patch_version:
                 return
 
-        if self.major_version+self.minor_version+self.patch_version == 0:
-            raise ValidationError("Version can't be 0.0.0")
+        try:
+            if self.major_version+self.minor_version+self.patch_version == 0:
+                raise ValidationError("Version can't be 0.0.0")
+        except TypeError:
+            raise ValidationError('Only numbers')
+
         if VersionHistory.objects.filter(entry=self.entry, major_version=self.major_version,
                                          minor_version=self.minor_version, patch_version=self.patch_version).exists():
             raise ValidationError("This version already exist")
