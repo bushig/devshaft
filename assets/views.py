@@ -3,14 +3,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.views.generic import ListView
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
-from rest_framework.mixins import DestroyModelMixin, RetrieveModelMixin
+from rest_framework.mixins import DestroyModelMixin
 
-from .models import Category, Entry, VersionHistory, EntryImage, EntryLikes
+from .models import Category, Entry, VersionHistory, EntryLikes
 from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
@@ -18,7 +17,7 @@ from .filters import EntryFilter
 
 
 def list(request):
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True))#TODO: move to Manager
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True))
     context={'entries':filter}
     return render(request, 'assets_list.html', context=context)
 
@@ -94,9 +93,9 @@ def edit_version(request, id, version_id):
     asset=get_object_or_404(Entry, id=id)
     version=get_object_or_404(VersionHistory, id=version_id)
     if request.user==asset.user:
-        form=VersionFormEdit(request.POST or None, instance=version)
+        form=VersionFormEdit(request.POST or None, request.FILES or None, instance=version)
         if form.is_valid():
-            form.save() #TODO:FIX FILE UPLOADING
+            form.save()
             messages.success(request, 'Version saved')
             return redirect('assets:detail', id)
         context={'form': form}
