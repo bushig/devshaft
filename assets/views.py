@@ -25,15 +25,17 @@ def list(request):
 def user_assets(request, user_id):
     user=get_object_or_404(User, id=user_id)
     entries=Entry.objects.filter(user=user)
-    context={'entries': entries}
-    return render(request, 'assets_list.html', context)
+    context={'entries': entries, 'user': user}
+    return render(request, 'user_assets.html', context)
 
 def entry_details(request, id):
     entry=get_object_or_404(Entry, id=id)
     images = entry.entryimage_set.all()
-    user_liked = entry.liked(request.user)
     versions=VersionHistory.objects.filter(entry=entry)
-    context={'entry':entry, 'versions':versions, 'images': images, 'user_liked': user_liked}
+    context={'entry':entry, 'versions':versions, 'images': images}
+    if request.user.is_authenticated():
+        user_liked = entry.liked(request.user)
+        context['user_liked'] = user_liked
     return render(request, 'assets_detail.html', context)
 
 @login_required()

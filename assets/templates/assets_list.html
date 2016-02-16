@@ -11,6 +11,7 @@
 
 {% block content %}
     <div class="row">
+    {% if entries %}
     {% for entry in entries %}
             <div class="panel panel-default col-lg-4">
                     <div class="panel-heading"> <h4>{{ entry.name }}</h4>
@@ -36,4 +37,7 @@
 
         {% cycle '' '' '</div><div class="row">' %}
     {% endfor %}
+    {% else %}
+    <h1>No entries there</h1>
+    {% endif %}
 {% endblock %}
