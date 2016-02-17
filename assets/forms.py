@@ -1,14 +1,14 @@
 from django import forms
 from django.forms.models import BaseModelFormSet, modelformset_factory, inlineformset_factory
 
-from .models import Entry, VersionHistory, EntryImage, Category
+from .models import Entry, VersionHistory, EntryImage, Category, Tag
 
 
 class EntryForm(forms.ModelForm):
     field_order = ['category', 'name', 'description']
     class Meta:
         model=Entry
-        fields=('category', 'name', 'description')
+        fields=('category', 'name', 'description', 'tags')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),

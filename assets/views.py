@@ -57,8 +57,8 @@ def add_entry(request):  #TODO:REFACTOR to display formset
         entry=form.save(commit=False)
         entry.user=request.user
         entry.save()
+        form.save_m2m()
         messages.success(request, 'Successfuly created new asset. Now add version')
-        entry.refresh_from_db()
         return redirect('assets:add_version', id=entry.id)
     context={'form': form}
     return render(request, 'assets_add_entry.html', context)

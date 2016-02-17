@@ -18,12 +18,18 @@ class Category(models.Model):
     def __str__(self):
         return self.category
 
+class Tag(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Entry(models.Model):
     category=models.ForeignKey(Category)
     user=models.ForeignKey(User)
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
+    tags=models.ManyToManyField(Tag)
 
     def liked(self, user):
         return EntryLikes.objects.filter(entry=self.id, user=user)
@@ -48,6 +54,8 @@ class EntryImage(models.Model):
     def __str__(self):
         return self.entry.name
 
+
+
 class EntryLikes(models.Model):
     entry=models.ForeignKey(Entry)
     user=models.ForeignKey(User)
@@ -55,9 +63,9 @@ class EntryLikes(models.Model):
 
 class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry)
-    major_version = models.PositiveSmallIntegerField()
-    minor_version = models.PositiveSmallIntegerField()
-    patch_version = models.PositiveSmallIntegerField()
+    major_version = models.PositiveSmallIntegerField(max_length=3)
+    minor_version = models.PositiveSmallIntegerField(max_length=3)
+    patch_version = models.PositiveSmallIntegerField(max_length=3)
     timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
     file=models.FileField()
     changelog=models.TextField(max_length=1000)

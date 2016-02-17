@@ -17,6 +17,9 @@ Assets:
 
     -Improve search(ordering by last update, likes etc)
 
+    -make pagination links nicer(no empty queries) - make custom tag
+
+    -refactor ImagesModel to be as ManyToMany field in Entry
 
 General:
     -AllAuth?
