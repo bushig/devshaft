@@ -6,24 +6,24 @@ Assets:
     -if last version of asset, then highlight it
     -add individual template for user entries(with buttons)
     -momentum.js for timesince?
-    -arrange versions by subversions
+    -arrange versions by subversions(+filter in Version list)
     -restrict adding version that is lower then previous and if sum of subversions is equal to 0
 
     -redesign template of add_entry, so you can add more than one image per save(jquery)
     -redesign assets list to show name, category, description, image, tags, last_updated, likes
-    -fix performance issues for asset list
+    -fix performance issues for asset list(make all db request on server side via JOIN)
 
     -if user wants to edit not his asset, throw 403 error, not 404
 
     -Improve search(ordering by last update, likes etc)
 
-    -make pagination links nicer(no empty queries) - make custom tag
+    -make pagination links nicer(for tags) - make custom template tag
 
     -refactor ImagesModel to be as ManyToMany field in Entry
 
 General:
     -AllAuth?
-    -make form errors display in messages
+    -make form errors display in messages?
 
 
 Authentication:

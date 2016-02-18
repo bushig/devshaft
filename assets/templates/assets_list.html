@@ -3,16 +3,16 @@
 
 {% block page_header %}
         <h1>Entries</h1>
+
     <form method="get" action=".">
     {{ filter.form | crispy }}
     <input type="submit" class="btn btn-success" value="Search">
     </form>
+
 {% endblock %}
 
 {% block content %}
-    {{ request.GET.q }}
     <div class="row">
-    {% if entries %}
     {% for entry in entries %}
             <div class="panel panel-default col-lg-4">
                     <div class="panel-heading"> <h4> {{ entry.name }} <small> {{ entry.category }}</small></h4>
@@ -20,16 +20,21 @@
 
                         <span class="label label-warning"><i class="glyphicon glyphicon-user"></i> {{ entry.user }}</span></div>
                     <div class="panel-body">
-                    <img class="img-rounded img-responsive" src="{% if entry.entryimage_set.first %}
-                    {{ MEDIA_URL }}{{ entry.entryimage_set.first.image }}
-                    {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}" style="max-height:200px">
+                    <img class="img-rounded img-responsive" src="
+                    {% with entry_image=entry.entryimage_set.first %}
+                    {% if entry_image %}
+                    {{ MEDIA_URL }}{{ entry_image.image }}
+                    {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
+                    {% endwith %}" style="max-height:200px">
 
 
                         <p>{{ entry.description | truncatechars_html:120 }}</p>
                         <div class="panel-footer">
-{#                            {% if entry.versionhistory_set.first %}#}
-{#                                {{ entry.versionhistory_set.latest.timestamp | timesince}} ago#}
-{#                            {% endif %}#}
+                            {% with last_updated=entry.versionhistory_set.latest %}
+                                {% if last_updated %}
+                                Last updated: {{ last_updated.timestamp | timesince}} ago<br>
+                                {% endif %}
+                            {% endwith %}
                             Likes: {{ entry.total_likes }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
@@ -38,10 +43,9 @@
 
 
         {% cycle '' '' '</div><div class="row">' %}
+        {% empty %}
+        <h1>No entries there</h1>
     {% endfor %}
-    {% else %}
-    <h1>No entries there</h1>
-    {% endif %}
 {% endblock %}
 
 {% block footer %}
@@ -51,19 +55,18 @@
     {% if not entries.has_previous %}
         disabled
     {% endif %}">
-        <a href="{% if entries.has_previous %}?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ entries.previous_page_number }}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        <a href="{% if entries.has_previous %}?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.previous_page_number }}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
 
 
     {% for page in entries.paginator.page_range %}
-      <li class="{% if page == entries.number %}active{% endif %}"><a href="?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a></li>
+      <li class="{% if page == entries.number %}active{% endif %}"><a href="?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a></li>
     {% endfor %}
 
   <li class="
     {% if not entries.has_next %}
         disabled
     {% endif %}">
-        <a href="{% if entries.has_next %}?q={{ request.GET.q }}&category={{ request.GET.category }}&page={{ entries.next_page_number }}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        <a href="{% if entries.has_next %}?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.next_page_number }}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
   </ul>
 </nav>
-    Total: {{ entries.paginator.num_pages }}
 {% endblock %}

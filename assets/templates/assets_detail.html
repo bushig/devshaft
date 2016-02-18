@@ -57,6 +57,7 @@
         {% else %}
             <hr>Likes: {{ entry.total_likes }}
         {% endif %}
+    <br>Tags:{% for tag in entry.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<br>
     <p>{{ entry.description }}</p>
     </div>
 
