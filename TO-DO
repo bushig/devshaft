@@ -13,6 +13,8 @@ Assets:
     -redesign assets list to show name, category, description, image, tags, last_updated, likes
     -fix performance issues for asset list(make all db request on server side via JOIN)
 
+    -when file saved rename it to smth like: [0.0.2]Asset_name
+
     -if user wants to edit not his asset, throw 403 error, not 404
 
     -Improve search(ordering by last update, likes etc)

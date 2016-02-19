@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Count
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
@@ -18,8 +19,7 @@ from .filters import EntryFilter
 
 
 def list(request):
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True))
-
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).annotate(num_likes=Count('entrylikes')).select_related())
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)
     try:

@@ -21,7 +21,7 @@
                         <span class="label label-warning"><i class="glyphicon glyphicon-user"></i> {{ entry.user }}</span></div>
                     <div class="panel-body">
                     <img class="img-rounded img-responsive" src="
-                    {% with entry_image=entry.entryimage_set.first %}
+                    {% with entry_image=entry.entryimage.first %}
                     {% if entry_image %}
                     {{ MEDIA_URL }}{{ entry_image.image }}
                     {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
@@ -30,12 +30,12 @@
 
                         <p>{{ entry.description | truncatechars_html:120 }}</p>
                         <div class="panel-footer">
-                            {% with last_updated=entry.versionhistory_set.latest %}
+                            {% with last_updated=entry.versionhistory.latest %}
                                 {% if last_updated %}
                                 Last updated: {{ last_updated.timestamp | timesince}} ago<br>
                                 {% endif %}
                             {% endwith %}
-                            Likes: {{ entry.total_likes }}
+                            Likes: {{ entry.num_likes }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
                     </div>
