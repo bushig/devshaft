@@ -1,7 +1,10 @@
-from django.core.exceptions import ValidationError
+# from django.utils
 
-import re
 
+def version_filename_save(instance, filename):
+    ext=filename.split('.')[-1]
+    filename=str(instance.version())+str(instance.entry.name)+'.'+ext
+    return filename
 
 # def validate_version(version):
 #     #TODO: REDO to have lenght<10

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
-# from .utils import validate_version
+from .utils import version_filename_save
 
 
 
@@ -67,7 +67,7 @@ class VersionHistory(models.Model):
     minor_version = models.PositiveSmallIntegerField()
     patch_version = models.PositiveSmallIntegerField()
     timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
-    file=models.FileField()
+    file=models.FileField(upload_to=version_filename_save)
     changelog=models.TextField(max_length=1000)
 
     def clean(self):
