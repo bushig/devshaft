@@ -1,14 +1,13 @@
 Assets:
-    -TAGS(alpha, beta, stable)
-    -right versioning(+validation)
-    -changelog and description markup
+    -TESTS TESTS!
+    -Tags by subcategories(release status, etc), only one tag from category can be picked
+    -changelog and description(?) markup
     -changelog tags with icons(for example: Core, Bug, Fix, Network, Graphics)
     -if last version of asset, then highlight it
-    -add individual template for user entries(with buttons)
-    -momentum.js for timesince?
     -arrange versions by subversions(+filter in Version list)
-    -restrict adding version that is lower then previous and if sum of subversions is equal to 0
+    -comments for entries via AJAX
 
+    -momentum.js for timesince?
     -redesign template of add_entry, so you can add more than one image per save(jquery)
     -redesign assets list to show name, category, description, image, tags, last_updated, likes
     -fix performance issues for asset list(make all db request on server side via JOIN)
@@ -23,9 +22,9 @@ Assets:
 
 General:
     -AllAuth?
-    -make form errors display in messages?
 
 
 Authentication:
+    -Make user profiles
     -Fix forms
     -Fix redirect to /profile/
