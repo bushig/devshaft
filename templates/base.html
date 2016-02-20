@@ -26,7 +26,7 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 {#              <li class="active"><a href="#">Home</a></li>#}
-                <li><a href="#">Showcase</a></li>
+                <li class="disabled"><a href="#">Showcase</a></li>
                 <li class="dropdown">
                 <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assets <span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -41,9 +41,9 @@
                 </ul>
               </li>
 
-                <li><a href="#">Tutorials</a></li>
-                <li><a href="#">Wiki</a></li>
-                <li><a href="#">Forum</a></li>
+                <li class="disabled"><a href="#">Tutorials</a></li>
+                <li class="disabled"><a href="#">Wiki</a></li>
+                <li class="disabled"><a href="#">Forum</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}

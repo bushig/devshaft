@@ -23,6 +23,8 @@ Assets:
 General:
     -AllAuth?
 
+API:
+    -When asset liked, should return likecount
 
 Authentication:
     -Make user profiles

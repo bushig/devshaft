@@ -90,9 +90,8 @@ class VersionHistory(models.Model):
         ##TODO: REFACTOR THIS TRASH!
         last_version = VersionHistory.objects.filter(entry=self.entry).first()
         if last_version:
-            if (last_version.major_version>=self.major_version and last_version.minor_version>self.minor_version and
-                        last_version.patch_version>self.patch_version) or (last_version.major_version>=self.major_version and
-                                                                                              last_version.minor_version>self.minor_version) or last_version.major_version>=self.major_version:
+            if (last_version.major_version>=self.major_version and last_version.minor_version>=self.minor_version and
+                        last_version.patch_version>=self.patch_version):
                 raise ValidationError('Version have to be greater than previous')
 
     class Meta:

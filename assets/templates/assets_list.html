@@ -30,12 +30,12 @@
 
                         <p>{{ entry.description | truncatechars_html:120 }}</p>
                         <div class="panel-footer">
-                            {% with last_updated=entry.versionhistory.latest %}
+                            {% with last_updated=entry.versionhistory_set.latest.timestamp %}
                                 {% if last_updated %}
-                                Last updated: {{ last_updated.timestamp | timesince}} ago<br>
+                                Last updated: {{ last_updated | timesince}} ago<br>
                                 {% endif %}
                             {% endwith %}
-                            Likes: {{ entry.num_likes }}
+                            Likes: {{ entry.total_likes }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
                     </div>

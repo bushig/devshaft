@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count
+from django.db.models import Count, F
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
@@ -19,7 +19,7 @@ from .filters import EntryFilter
 
 
 def list(request):
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).annotate(num_likes=Count('entrylikes')).select_related())
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.select_related('user','category').defer('user__password').prefetch_related('tags').exclude(versionhistory__isnull=True))
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)
     try:
@@ -36,7 +36,7 @@ def list(request):
 
 def user_assets(request, user_id):
     user=get_object_or_404(User, id=user_id)
-    entries=Entry.objects.filter(user=user)
+    entries=Entry.objects.filter(user=user).select_related().annotate(num_likes=Count('entrylikes'))
     context={'entries': entries, 'user': user}
     return render(request, 'user_assets.html', context)
 

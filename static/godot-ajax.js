@@ -43,3 +43,7 @@ $('#likes').click(function() {
         }
     })
 });
+
+$('#deleteEntry').click(function() {
+    $(this).toggle(1000);
+});
