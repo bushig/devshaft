@@ -14,7 +14,7 @@ Assets:
 
     -if user wants to edit not his asset, throw 403 error, not 404
 
-    -Improve search(ordering by last update, likes etc)
+    -Improve search(ordering by last update, likes etc): Fix this + make SearchMixin
 
     -make pagination links nicer(for tags) - make custom template tag
 
