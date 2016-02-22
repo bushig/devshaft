@@ -18,8 +18,8 @@ from .permissions import IsOwnerOrReadOnly
 from .filters import EntryFilter
 
 
-def list(request):#TODO:Move to manager
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).select_related('category', 'user').annotate(Max('versionhistory__timestamp'), Count('entrylikes', distinct=True)))
+def list(request):#TODO:Move to manager, improve image perform
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).select_related('category', 'user').prefetch_related('tags').annotate(Max('versionhistory__timestamp'), Count('entrylikes', distinct=True)))
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)
     try:
