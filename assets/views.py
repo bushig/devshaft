@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count, F
+from django.db.models import Count, F, Max
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
@@ -18,8 +18,8 @@ from .permissions import IsOwnerOrReadOnly
 from .filters import EntryFilter
 
 
-def list(request):
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.select_related('user','category').defer('user__password').prefetch_related('tags').exclude(versionhistory__isnull=True))
+def list(request):#TODO:Move to manager
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).select_related('category', 'user').annotate(Max('versionhistory__timestamp'), Count('entrylikes', distinct=True)))
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)
     try:

@@ -12,15 +12,15 @@ class EntryFilter(django_filters.FilterSet):
     class Meta:
         model = Entry
         fields = ('q', 'category', 'tags') #TODO: Rename tags filter to t and category to c/ FIX ordering
-        # order_by = (('entrylikes','Likes'),
-        #             ('versionhistory', 'Last updated'))
+        order_by = (('likes','Most liked'),
+                    ('version', 'Last updated'))
 
-    # def get_order_by(self, order_choice):
-    #     if order_choice=='likes':
-    #         return ['entrylikes']
-    #     elif order_choice=='version':
-    #         return ['-versionhistory'] #by most recent version
-    #     return super(EntryFilter, self).get_order_by(order_choice)
+    def get_order_by(self, order_choice):
+        if order_choice=='likes':
+            return ['-entrylikes__count']
+        elif order_choice=='version':
+            return ['-versionhistory__timestamp__max'] #by most recent version
+        return super(EntryFilter, self).get_order_by(order_choice)
 
     def filter_search(self, queryset, value):
         return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value) | Q(user__username=value))
