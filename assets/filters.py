@@ -2,15 +2,17 @@ import django_filters
 from django.db.models import Q
 
 from .models import Entry, Category,  Tag
+from .forms import SearchForm
 
 class EntryFilter(django_filters.FilterSet):
     '''
     Filtering for Entries
     '''
-    q=django_filters.MethodFilter(action='filter_search', label='Search')
-    tags=django_filters.ModelMultipleChoiceFilter(queryset=Tag.objects.all(), label='Tags')
+    q=django_filters.MethodFilter(action='filter_search', label='Search', help_text='You can search by asset name, description or asset creator')
+    tags=django_filters.ModelMultipleChoiceFilter(queryset=Tag.objects.all(), label='Tags', help_text='Shows asset if any of tags occurs in it')
     class Meta:
         model = Entry
+        form = SearchForm
         fields = ('q', 'category', 'tags') #TODO: Rename tags filter to t and category to c/ FIX ordering
         order_by = (('likes','Most liked'),
                     ('version', 'Last updated'))
