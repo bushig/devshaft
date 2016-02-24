@@ -45,5 +45,20 @@ $('#likes').click(function() {
 });
 
 $('#deleteEntry').click(function() {
+    var entryid = $(this).data()['entryid'];
+    console.log(entryid, csrftoken);
     $(this).toggle(1000);
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/assets/'+entryid+'/',
+        data: {csrfmiddlewaretoken: csrftoken},
+
+        success: function (response) {
+        console.log(response);
+      },
+
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(thrownError);
+        }
+    })
 });

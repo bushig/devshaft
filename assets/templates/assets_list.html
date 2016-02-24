@@ -13,7 +13,7 @@
     <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filter-panel">
         <span class="glyphicon glyphicon-cog"></span> Open Search </button>
     </div>
-
+<br>
 
 
 
@@ -37,8 +37,7 @@
                     {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
                     {% endwith %}" style="max-height:200px">
 
-
-                        <p>{{ entry.description | truncatechars_html:120 }}</p>
+                        <div class="well well-sm">{{ entry.description | truncatechars_html:120 }}</div>
                         <div class="panel-footer">
                                 {% if entry.versionhistory__timestamp__max %}
                                 Last updated: {{ entry.versionhistory__timestamp__max | timesince}} ago<br>

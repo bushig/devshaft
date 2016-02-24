@@ -133,7 +133,7 @@ class EntryReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
-class EntryLikesCreateView(DestroyModelMixin, CreateAPIView):
+class EntryLikesCreateView(CreateAPIView):
     '''
     API to post like if is there is no likes from user for this particular asset(201) and to delete it
     if there was any(204).
