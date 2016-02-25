@@ -38,6 +38,7 @@
                     {% endwith %}" style="max-height:200px">
 
                         <div class="well well-sm">{{ entry.description | truncatechars_html:120 }}</div>
+                    </div>
                         <div class="panel-footer">
                                 {% if entry.versionhistory__timestamp__max %}
                                 Last updated: {{ entry.versionhistory__timestamp__max | timesince}} ago<br>
@@ -45,7 +46,7 @@
                             Likes: {{ entry.entrylikes__count }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
-                    </div>
+
                 </div>
         </div>
 
