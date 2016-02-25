@@ -77,7 +77,8 @@ class SearchForm(forms.Form):
     q=forms.CharField(max_length=120, required=False)
     tags=forms.ModelMultipleChoiceField(Tag.objects.all(), required=False)
     category=forms.ModelChoiceField(Category.objects.all(), required=False)
-    field_order = ('q', 'tags', 'category')
+    o=forms.ChoiceField(choices=('version', 'Last updated'))
+    field_order = ('q', 'tags', 'category', 'o')
 
     helper = FormHelper()
     helper.form_id = 'id-searchForm'
@@ -86,11 +87,11 @@ class SearchForm(forms.Form):
     helper.label_class = 'col-lg-2'
     helper.field_class = 'col-lg-8'
     helper.layout = Layout(
-        'q', 'tags', 'category', Submit('', 'Search', css_class='btn-success')
+        'q', 'tags', 'category', 'o', Submit('', 'Search', css_class='btn-success')
     )
 
     class Meta:
-        fields = ('q', 'category', 'tags')
+        fields = ('q', 'category', 'tags', 'o')
         # widgets = {'q': forms.TextInput(attrs={'help-block': "Type in asset name, description or creator's name"})}
 
 

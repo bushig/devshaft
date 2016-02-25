@@ -14,8 +14,8 @@ class EntryFilter(django_filters.FilterSet):
         model = Entry
         form = SearchForm
         fields = ('q', 'category', 'tags') #TODO: Rename tags filter to t and category to c/ FIX ordering
-        order_by = (('likes','Most liked'),
-                    ('version', 'Last updated'))
+        order_by = (('version', 'Last updated'),
+                    ('likes','Most liked'))
 
     def get_order_by(self, order_choice):
         if order_choice=='likes':
