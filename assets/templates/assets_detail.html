@@ -2,118 +2,111 @@
 
 {% block content %}
     <div class="row">
-    <div class="well well-sm col-lg-12">
-        <h1>{{ entry.name }} <small>{{ entry.category }}</small></h1>
-    {% comment %} CAROUSEL {% endcomment %}
-    {% if images %}
-    <div id="carousel" class="carousel slide" data-ride="carousel">
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-      {% for image in images %}
-          {% if forloop.counter == 1 %}
-              <div class="item active entryCarouselImg">
-          {% else %}
-              <div class="item entryCarouselImg">
-          {% endif %}
-      <img src="{{ MEDIA_URL }}{{ image.image }}" class="entryCarouselImg" />
-    </div>
-      {% endfor %}
-  </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>{{ entry.name }}
+                    <small>{{ entry.category }}</small>
+                </h1>
+            </div>
+            {% comment %} CAROUSEL {% endcomment %}
+            <div class="panel-body">
+                {% include 'carousel.html' %}
+                <div class="well well-sm">{{ entry.description }}</div>
+            </div>
+            <div class="panel-footer">
+                {% if entry.user == user %}
+                    <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
+                        version</a>
+                    <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
+                        Delete asset
+                    </button>
+                    <br>Likes: {{ entry.total_likes }}
 
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-    {% endif %}
-
-        {% if entry.user == user %}
-            <hr>
-        <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add version</a>
-        <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
-            Delete asset
-        </button>
-            <hr>Likes: {{ entry.total_likes }}
-        {% elif user.is_authenticated %}
-                <button id="likes" data-entryid="{{entry.id}}" class="btn
+                {% elif user.is_authenticated %}
+                    <button id="likes" data-entryid="{{ entry.id }}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">
                         <i class="fa fa-thumbs-up"></i>
-                    <span id="liked">Liked </span> <span id='likes_count'>{{ entry.total_likes }}</span>
+                        <span id="liked">Liked </span> <span id='likes_count'>{{ entry.total_likes }}</span>
 
-                {% else %}
-                btn-default
-                    " type="button">
+                    {% else %}
+                        btn-default
+                        " type="button">
                         <i class="fa fa-thumbs-up fa-rotate-270"></i>
-                    <span id="liked">Like </span><span id='likes_count'>{{ entry.total_likes }}</span>
-                        {% endif %}
-                </button>
-        {% else %}
-            <hr>Likes: {{ entry.total_likes }}
-        {% endif %}
-    <br>Tags:{% for tag in entry.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<br>
-    <p>{{ entry.description }}</p>
-    </div>
-
-
-
-
-    </div>
-    <div class="row">
-    <div class="panel panel-default col-lg-6">
-    <h1>Changelog</h1>
-    {% for version in versions %}
-        <hr>
-        <h5><strong>{{ version.version }}</strong></h5>
-        <p>{{ version.changelog| linebreaks}}</p>
-    {% endfor %}
-    
-    </div>
-
-    <div class="panel panel-default col-lg-6">
-    <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
-    {% if versions %}
-        <table class="table table-bordered table-striped"><tr><th>Version</th><th>Date</th><th>Download</th></tr>
-            {% for version in versions %}
-                <tr><td>{{ version.version }}</td><td>{{ version.timestamp | timesince }} ago</td><td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
-                {% if entry.user == user %}
-                    <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info" role="button">Edit</a>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                        <span id="liked">Like </span><span id='likes_count'>{{ entry.total_likes }}</span>
+                    {% endif %}
+                    </button>
+                {% else %}
+                    <hr>Likes: {{ entry.total_likes }}
                 {% endif %}
+                <br>Tags:{% for tag in entry.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<br>
+            </div>
+        </div>
+    </div>
 
-                </td></tr>
+    <div class="row">
+
+        <div class="panel panel-default col-lg-6">
+            <h1>Changelog</h1>
+            {% for version in versions %}
+                <hr>
+                <h5><strong>{{ version.version }}</strong></h5>
+                <p>{{ version.changelog| linebreaks }}</p>
             {% endfor %}
 
-      </table>
-{#        <a href="{% url 'assets:entry_versions' entry.id %}" class="btn btn-info" role="button">View all</a>#}
-    {% else %}
-    <h1>No versions yet</h1>
-    {% endif %}
-    </div>
+        </div>
+
+        <div class="panel panel-default col-lg-6">
+            <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
+            {% if versions %}
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Version</th>
+                        <th>Date</th>
+                        <th>Download</th>
+                    </tr>
+                    {% for version in versions %}
+                        <tr>
+                            <td>{{ version.version }}</td>
+                            <td>{{ version.timestamp | timesince }} ago</td>
+                            <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
+                                {% if entry.user == user %}
+                                    <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info"
+                                       role="button">Edit</a>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+                {#        <a href="{% url 'assets:entry_versions' entry.id %}" class="btn btn-info" role="button">View all</a>#}
+            {% else %}
+                <h1>No versions yet</h1>
+            {% endif %}
+        </div>
     </div>
 
     {% comment %} MODAL {% endcomment %}
     <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="DeleteEntryButton">Delete</h4>
-      </div>
-      <div class="modal-body">
-        Do you want to delete this asset?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="deleteEntry" type="button" data-entryid="{{entry.id}}" class="btn btn-danger">Delete</button>
-      </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="DeleteEntryButton">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this asset?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="deleteEntry" type="button" data-entryid="{{ entry.id }}" class="btn btn-danger">Delete
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}

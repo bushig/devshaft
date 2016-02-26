@@ -3,14 +3,14 @@
 
 {% block content %}
     <div class="centerBlock">
-    <div class="col-lg-6">
+        <div class="col-lg-6">
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form | crispy }}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form | crispy }}
 
-            <input type="submit" class="btn btn-default" value="Save">
-        </form>
-    </div>
+                <input type="submit" class="btn btn-default" value="Save">
+            </form>
+        </div>
     </div>
 {% endblock %}
