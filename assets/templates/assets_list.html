@@ -41,7 +41,9 @@
                     </div>
                         <div class="panel-footer">
                                 {% if entry.versionhistory__timestamp__max %}
-                                Last updated: {{ entry.versionhistory__timestamp__max | timesince}} ago<br>
+                                    Last updated: {{ entry.versionhistory__timestamp__max | timesince}} ago<br>
+                                {% else %}
+                                    Entry don't have any version <br>
                                 {% endif %}
                             Likes: {{ entry.entrylikes__count }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>

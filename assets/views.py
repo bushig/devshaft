@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count, F, Max
+from django.db.models import Count
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
@@ -19,7 +19,7 @@ from .filters import EntryFilter
 
 
 def list(request):#TODO:Move to manager, improve image perform
-    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.exclude(versionhistory__isnull=True).select_related('category', 'user').prefetch_related('tags').annotate(Max('versionhistory__timestamp'), Count('entrylikes', distinct=True)))
+    filter =  EntryFilter(request.GET or None, queryset=Entry.objects.not_null())
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)
     try:
@@ -36,7 +36,7 @@ def list(request):#TODO:Move to manager, improve image perform
 
 def user_assets(request, user_id):
     user=get_object_or_404(User, id=user_id)
-    entries=Entry.objects.filter(user=user).select_related().annotate(num_likes=Count('entrylikes'))
+    entries=Entry.objects.filter(user=user)
     context={'entries': entries, 'user': user}
     return render(request, 'user_assets.html', context)
 
@@ -121,7 +121,11 @@ def edit_version(request, id, version_id):
 #API VIEWS!!!
 
 class EntryCreateReadView(ListCreateAPIView):
-    queryset = Entry.objects.all()
+    '''
+    List of all assets and endpoint for creating assets.
+    '''
+
+    queryset = Entry.objects.not_null()
     serializer_class = EntrySerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     lookup_field = 'id'

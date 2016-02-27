@@ -1,10 +1,18 @@
 from django.db import models
+from django.db.models import Count, F, Max
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
 from .utils import version_filename_save
 
+
+class EntryManager(models.Manager):
+    def get_queryset(self):
+        return super(EntryManager, self).get_queryset().select_related('category', 'user').prefetch_related('tags').defer('user__password').annotate(Max('versionhistory__timestamp', distinct=True), Count('entrylikes', distinct=True))
+
+    def not_null(self):
+        return self.get_queryset().exclude(versionhistory__isnull=True)
 
 
 class Category(models.Model):
@@ -30,6 +38,9 @@ class Entry(models.Model):
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
     tags=models.ManyToManyField(Tag)
+
+    #managers
+    objects = EntryManager()
 
     def liked(self, user):
         return EntryLikes.objects.filter(entry=self.id, user=user)
