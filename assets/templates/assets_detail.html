@@ -12,8 +12,7 @@
             <div class="panel-body">
                 {% include 'carousel.html' %}
                 <div class="well well-sm">{{ entry.description }}</div>
-            </div>
-            <div class="panel-footer">
+
                 {% if entry.user == user %}
                     <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
                         version</a>

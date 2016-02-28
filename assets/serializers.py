@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
-from .models import Entry, EntryLikes
+from .models import Entry, EntryLikes, Category
 
 
 class EntrySerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField(read_only=True)
+    # category = serializers.IntegerField(source='category')
     user = serializers.ReadOnlyField(source='user.username')
     # total_likes = serializers.ReadOnlyField()
     class Meta:
