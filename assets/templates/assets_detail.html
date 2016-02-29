@@ -11,7 +11,7 @@
             {% comment %} CAROUSEL {% endcomment %}
             <div class="panel-body">
                 {% include 'carousel.html' %}
-                <div class="well well-sm">{{ entry.description }}</div>
+                <p>{{ entry.description }}</p>
 
                 {% if entry.user == user %}
                     <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add

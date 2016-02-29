@@ -149,7 +149,7 @@ class EntryLikesCreateView(CreateAPIView):
     serializer_class = EntryLikesSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):#TODO: Move to perform_create
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
