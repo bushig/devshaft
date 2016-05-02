@@ -27,10 +27,24 @@ def list(request):#TODO:Move to manager, improve image perform
     context={'entries': paginated, 'filter': filter}
     return render(request, 'assets_list.html', context=context)
 
-def user_assets(request, user_id):
+def user_assets(request, user_id): #TODO: Make it DRYer
     user=get_object_or_404(User, id=user_id)
-    entries=Entry.objects.filter(user=user)
-    context={'entries': entries, 'user': user}
+    if request.user == user:
+        entries=Entry.objects.filter(user=user)
+    else:
+        entries=Entry.objects.not_null().filter(user=user)
+    page = request.GET.get('page')
+    paginator = Paginator(entries, 9)
+    try:
+        paginated = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paginated = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paginated = paginator.page(paginator.num_pages)
+
+    context={'entries': paginated, 'user': user}
     return render(request, 'user_assets.html', context)
 
 def entry_details(request, id):

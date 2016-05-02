@@ -60,24 +60,5 @@
 {% endblock %}
 
 {% block footer %}
-<nav>
-  <ul class="pagination">
-    <li class="
-    {% if not entries.has_previous %}
-        disabled
-    {% endif %}">
-        <a href="{% if entries.has_previous %}?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.previous_page_number }}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-
-
-    {% for page in entries.paginator.page_range %}
-      <li class="{% if page == entries.number %}active{% endif %}"><a href="?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a></li>
-    {% endfor %}
-
-  <li class="
-    {% if not entries.has_next %}
-        disabled
-    {% endif %}">
-        <a href="{% if entries.has_next %}?q={{ request.GET.q }}&category={{ request.GET.category }}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.next_page_number }}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-  </ul>
-</nav>
+    {% include 'pagination.html' with entries=entries %}
 {% endblock %}
