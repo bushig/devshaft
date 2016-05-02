@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import routers, serializers, viewsets
 
-from assets import views as assets_views
+from assets.api import views as assets_views
 
 
 urlpatterns = [

@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from .views import list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version, EntryCreateReadView, EntryReadUpdateDeleteView
+from .views import list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version
 
 urlpatterns = [
     url(r'^$', list, name='list'),

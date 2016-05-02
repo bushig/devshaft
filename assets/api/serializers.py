@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Entry, EntryLikes, Category
+from ..models import Entry, EntryLikes, Category
 
 
 class EntrySerializer(serializers.ModelSerializer):

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     'debug_toolbar',
+    'autofixture',
 
     'assets',
 ]
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'godot_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'bushig',
-        'PASSWORD': 'qwerty1',
+        'NAME': 'godot_site',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
