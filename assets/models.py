@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Count, F, Max
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
@@ -9,7 +10,8 @@ from .utils import version_filename_save
 
 class EntryManager(models.Manager):
     def get_queryset(self):
-        return super(EntryManager, self).get_queryset().select_related('category', 'user').prefetch_related('tags').defer('user__password').annotate(Max('versionhistory__timestamp', distinct=True), Count('entrylikes', distinct=True))
+        return super(EntryManager, self).get_queryset().select_related('category', 'user').prefetch_related('entryimage_set').\
+            defer('user__password').annotate(Max('versionhistory__timestamp', distinct=True), Count('users_liked', distinct=True))
 
     def not_null(self):
         return self.get_queryset().exclude(versionhistory__isnull=True)
@@ -26,28 +28,23 @@ class Category(models.Model):
     def __str__(self):
         return self.category
 
-class Tag(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-
-    def __str__(self):
-        return self.name
 
 class Entry(models.Model):
     category=models.ForeignKey(Category)
     user=models.ForeignKey(User)
     name=models.CharField(max_length=120)
     description=models.TextField(max_length=1000)
-    tags=models.ManyToManyField(Tag)
+    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
 
     #managers
     objects = EntryManager()
 
     def liked(self, user):
-        return EntryLikes.objects.filter(entry=self.id, user=user)
+        return Entry.objects.filter(id=self.id, users_liked=user).exists()
 
     @property
     def total_likes(self):
-        return EntryLikes.objects.filter(entry=self.id).count()
+        return Entry.objects.first(id=self.id).users_liked.count()
 
     class Meta:
         verbose_name_plural='entries'
@@ -64,12 +61,6 @@ class EntryImage(models.Model):
 
     def __str__(self):
         return self.entry.name
-
-
-
-class EntryLikes(models.Model):
-    entry=models.ForeignKey(Entry)
-    user=models.ForeignKey(User)
 
 
 class VersionHistory(models.Model):

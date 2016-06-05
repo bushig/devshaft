@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 
-from .models import Category, Entry, VersionHistory, EntryLikes
+from .models import Category, Entry, VersionHistory
 from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .filters import EntryFilter
 

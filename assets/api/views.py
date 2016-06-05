@@ -33,7 +33,7 @@ class EntryLikesCreateView(CreateAPIView):
 
     #TODO: return ammount of likes, asset owner cant like his asset, refactor model to have one to many relation
 
-    queryset = EntryLikes.objects.all()
+    queryset = Entry.objects.all()
     serializer_class = EntryLikesSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 

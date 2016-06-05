@@ -26,7 +26,6 @@
         <div class="col-lg-4">
             <div class="panel panel-default">
                     <div class="panel-heading"> <h4 class="panel-title"> {{ entry.name }} <small> {{ entry.category }}</small></h4>
-                        Tags:{% for tag in entry.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<br>
 
                         <span class="label label-warning"><i class="glyphicon glyphicon-user"></i> {{ entry.user }}</span></div>
                     <div class="panel-body">
@@ -45,7 +44,7 @@
                                 {% else %}
                                     Entry don't have any version <br>
                                 {% endif %}
-                            Likes: {{ entry.entrylikes__count }}
+                            Likes: {{ entry.users_liked__count }}
                             <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
                         </div>
 

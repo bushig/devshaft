@@ -1,19 +1,20 @@
-import django_filters
 from django.db.models import Q
 
-from .models import Entry, Category,  Tag
+import django_filters
+
+from .models import Entry
 from .forms import SearchForm
 
+#TODO: Move this somewhere else (forms)
 class EntryFilter(django_filters.FilterSet):
     '''
     Filtering for Entries
     '''
     q=django_filters.MethodFilter(action='filter_search', label='Search', help_text='You can search by asset name, description or asset creator')
-    tags=django_filters.ModelMultipleChoiceFilter(queryset=Tag.objects.all(), label='Tags', help_text='Shows asset if any of tags occurs in it')
     class Meta:
         model = Entry
         form = SearchForm
-        fields = ('q', 'category', 'tags') #TODO: Rename tags filter to t and category to c/ FIX ordering
+        fields = ('q', 'category') #TODO: Rename category to c/ FIX ordering
         order_by = (('version', 'Last updated'),
                     ('likes','Most liked'))
 
@@ -28,3 +29,5 @@ class EntryFilter(django_filters.FilterSet):
         return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value) | Q(user__username=value))
 
     #TODO: Greatly improve this to have fields search query(includes name, descript, user), category and tags
+
+

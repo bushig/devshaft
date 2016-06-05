@@ -6,11 +6,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
 
 
-from .models import Entry, VersionHistory, EntryImage, Category, Tag
+from .models import Entry, VersionHistory, EntryImage, Category
 
 
 class EntryForm(forms.ModelForm):
-    field_order = ['category', 'name', 'description', 'tags']
+    field_order = ['category', 'name', 'description']
 
     helper = FormHelper()
     helper.form_id = 'id-addEntryForm'
@@ -26,13 +26,12 @@ class EntryForm(forms.ModelForm):
         'category',
         'name',
         'description',
-        'tags',
     )
 
 
     class Meta:
         model=Entry
-        fields=('category', 'name', 'description', 'tags')
+        fields=('category', 'name', 'description')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
@@ -75,10 +74,9 @@ class VersionFormEdit(forms.ModelForm):
 
 class SearchForm(forms.Form):
     q=forms.CharField(max_length=120, required=False)
-    tags=forms.ModelMultipleChoiceField(Tag.objects.all(), required=False)
     category=forms.ModelChoiceField(Category.objects.all(), required=False)
     o=forms.ChoiceField(choices=('version', 'Last updated'))
-    field_order = ('q', 'tags', 'category', 'o')
+    field_order = ('q', 'category', 'o')
 
     helper = FormHelper()
     helper.form_id = 'id-searchForm'
@@ -87,7 +85,7 @@ class SearchForm(forms.Form):
     helper.label_class = 'col-lg-2'
     helper.field_class = 'col-lg-8'
     helper.layout = Layout(
-        'q', 'tags', 'category', 'o', Submit('', 'Search', css_class='btn-success')
+        'q', 'category', 'o', Submit('', 'Search', css_class='btn-success')
     )
 
     class Meta:

@@ -20,26 +20,25 @@
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
                         Delete asset
                     </button>
-                    <br>Likes: {{ entry.total_likes }}
+                    <br>Likes: {{ entry.users_liked__count }}
 
                 {% elif user.is_authenticated %}
                     <button id="likes" data-entryid="{{ entry.id }}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">
                         <i class="fa fa-thumbs-up"></i>
-                        <span id="liked">Liked </span> <span id='likes_count'>{{ entry.total_likes }}</span>
+                        <span id="liked">Liked </span> <span id='likes_count'>{{ entry.users_liked__count }}</span>
 
                     {% else %}
                         btn-default
                         " type="button">
                         <i class="fa fa-thumbs-up fa-rotate-270"></i>
-                        <span id="liked">Like </span><span id='likes_count'>{{ entry.total_likes }}</span>
+                        <span id="liked">Like </span><span id='likes_count'>{{ entry.users_liked__count }}</span>
                     {% endif %}
                     </button>
                 {% else %}
-                    <hr>Likes: {{ entry.total_likes }}
+                    <hr>Likes: {{ entry.users_liked__count }}
                 {% endif %}
-                <br>Tags:{% for tag in entry.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<br>
             </div>
         </div>
     </div>
