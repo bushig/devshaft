@@ -20,7 +20,7 @@ class EntryFilter(django_filters.FilterSet):
 
     def get_order_by(self, order_choice):
         if order_choice=='likes':
-            return ['-entrylikes__count']
+            return ['-users_liked__count']
         elif order_choice=='version':
             return ['-versionhistory__timestamp__max'] #by most recent version
         return super(EntryFilter, self).get_order_by(order_choice)
