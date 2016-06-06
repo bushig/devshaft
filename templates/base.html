@@ -7,78 +7,86 @@
             Godot site
         {% endblock %}
     </title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-<link rel="stylesheet" href="/static/custom.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/custom.css">
 </head>
 <body>
 <div class="container">
 
-      <!-- Static navbar -->
-      <nav class="navbar navbar-default">
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">Godot assets</a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="disabled"><a href="#">Showcase</a></li>
-                <li class="dropdown">
-                <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assets <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'assets:list' %}">Browse</a></li>
-                    <li><a href="#">Categories</a></li>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Godot assets</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="disabled"><a href="#">Showcase</a></li>
+                    <li class="disabled"><a href="#">Frameworks</a></li>
+
+                    <li class="dropdown">
+                        <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Assets <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'assets:list' %}">Browse</a></li>
+                            <li><a href="#">Categories</a></li>
+                            {% if user.is_authenticated %}
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Actions</li>
+                                <li><a href="{% url 'assets:add_entry' %}">Add new</a></li>
+                                <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>
+                                <li><a href="{% url 'assets:user_assets' user.id %}">Liked assets</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li class="disabled"><a href="#">Tutorials</a></li>
+                    <li class="disabled"><a href="#">Wiki</a></li>
+                    <li class="disabled"><a href="#">Forum</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                  <li role="separator" class="divider"></li>
-                  <li class="dropdown-header">Actions</li>
-                  <li><a href="{% url 'assets:add_entry' %}">Add new</a></li>
-                  <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>
+                        <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'registration_register' %}">Register</a></li>
+                        <li><a href="{% url 'auth_login' %}">Login</a></li>
                     {% endif %}
                 </ul>
-              </li>
-
-                <li class="disabled"><a href="#">Tutorials</a></li>
-                <li class="disabled"><a href="#">Wiki</a></li>
-                <li class="disabled"><a href="#">Forum</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'auth_logout' %}">Logout</a></li>
-                {% else %}
-              <li><a href="{% url 'registration_register' %}">Register</a></li>
-              <li><a href="{% url 'auth_login' %}">Login</a></li>
-                {% endif %}
-            </ul>
-          </div><!--/.nav-collapse -->
+            </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
-      </nav>
+    </nav>
 
-      <!-- Main component for a primary marketing message or call to action -->
-<div class="container" align="center">
-{#<div class="page-header">#}
-    {% include 'messages.html' %}
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="container" align="center">
+        {#<div class="page-header">#}
+        {% include 'messages.html' %}
         {% block page_header %}
 
         {% endblock %}
 
-{#    </div>#}
+        {#    </div>#}
 
-          {% block content %}
+        {% block content %}
 
-          {% endblock %}
+        {% endblock %}
 
-</div>
+    </div>
 
-{% block footer %}
-{% endblock %}
+    {% block footer %}
+    {% endblock %}
 </div>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
 <script src="/static/godot-ajax.js"></script>
 </body>
 </html>

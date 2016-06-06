@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'autofixture',
 
+    'common',
     'assets',
+    'frameworks',
 ]
 
 MIDDLEWARE_CLASSES = [
