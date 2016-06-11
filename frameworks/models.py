@@ -9,6 +9,10 @@ class Framework(models.Model):
     name = models.CharField(max_length=40)
     description = models.TextField(max_length=1000)
     license = models.ForeignKey(License, blank=True, null=True)
+    open_sourced = models.BooleanField()
+    #languages = many2many
+    #images
+    #likes
 
     class Meta:
         verbose_name_plural = 'frameworks'

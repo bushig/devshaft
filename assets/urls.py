@@ -1,9 +1,9 @@
 from django.conf.urls import url, include
 
-from .views import list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version
+from .views import assets_list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version
 
 urlpatterns = [
-    url(r'^$', list, name='list'),
+    url(r'^$', assets_list, name='list'),
     url(r'^(?P<id>[\d]+)/$', entry_details, name='detail'),
     url(r'^add/$', add_entry, name='add_entry'),
     url(r'^(?P<id>[\d]+)/edit/$', edit, name='edit'),

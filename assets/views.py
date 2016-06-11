@@ -11,7 +11,7 @@ from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .filters import EntryFilter
 
 
-def list(request):#TODO:Move to manager, improve image perform
+def assets_list(request):#TODO:Move to manager, improve image perform
     filter =  EntryFilter(request.GET or None, queryset=Entry.objects.not_null())
     page = request.GET.get('page')
     paginator = Paginator(filter, 9)

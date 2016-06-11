@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'common',
     'assets',
     'frameworks',
+    'languages',
 ]
 
 MIDDLEWARE_CLASSES = [

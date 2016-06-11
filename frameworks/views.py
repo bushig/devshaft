@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def frameworks_list(request):
+    return False
