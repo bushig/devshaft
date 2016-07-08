@@ -17,15 +17,15 @@ ORIENTATION_CHOICES = ((1, '2D&3D'),
 
 
 class Platform(models.Model):
-    name = models.CharField(max_length=20)
+    title = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Framework(models.Model):
     user = models.ForeignKey(User)
-    name = models.CharField(max_length=40)
+    title = models.CharField(max_length=40)
     description = models.TextField(max_length=1000)
     license = models.ForeignKey(License, blank=True, null=True)
     orientation = models.IntegerField(choices=ORIENTATION_CHOICES, default=1)
@@ -39,4 +39,4 @@ class Framework(models.Model):
         verbose_name_plural = 'frameworks'
 
     def __str__(self):
-        return self.name
+        return self.title

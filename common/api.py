@@ -9,7 +9,10 @@ from assets.api import views as assets_views
 
 
 urlpatterns = [
+    #Assets app
     url(r'^assets/$', assets_views.EntryCreateReadView.as_view(), name='assets'),
     url(r'^assets/(?P<id>[\d]+)/$', assets_views.EntryReadUpdateDeleteView.as_view(), name = 'assets'),
     #url(r'^assets/(?P<id>[\d]+)/likes/$', assets_views.EntryLikesCreateView.as_view(), name='assets'),
+
+    #Framework app
 ]

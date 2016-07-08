@@ -82,8 +82,8 @@ class SearchForm(forms.Form):
     helper.form_id = 'id-searchForm'
     helper.form_method = 'get'
     helper.form_class = 'form-horizontal'
-    helper.label_class = 'col-lg-2'
-    helper.field_class = 'col-lg-8'
+    #helper.label_class = 'col-lg-2jj'
+    #helper.field_class = 'col-lg-8'
     helper.layout = Layout(
         'q', 'category', 'o', Submit('', 'Search', css_class='btn-success')
     )

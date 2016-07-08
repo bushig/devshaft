@@ -30,11 +30,12 @@ def assets_list(request):#TODO:Move to manager, improve image perform
 def user_assets(request, user_id): #TODO: Make it DRYer
     user=get_object_or_404(User, id=user_id)
     if request.user == user:
-        entries=Entry.objects.filter(user=user)
+        queryset=Entry.objects.filter(user=user)
     else:
-        entries=Entry.objects.not_null().filter(user=user)
+        queryset=Entry.objects.not_null().filter(user=user)
+    filter =  EntryFilter(request.GET or None, queryset=queryset)
     page = request.GET.get('page')
-    paginator = Paginator(entries, 9)
+    paginator = Paginator(filter, 9)
     try:
         paginated = paginator.page(page)
     except PageNotAnInteger:
@@ -44,7 +45,7 @@ def user_assets(request, user_id): #TODO: Make it DRYer
         # If page is out of range (e.g. 9999), deliver last page of results.
         paginated = paginator.page(paginator.num_pages)
 
-    context={'entries': paginated, 'user': user}
+    context={'entries': paginated, 'user': user, 'filter': filter}
     return render(request, 'user_assets.html', context)
 
 def entry_details(request, id):
@@ -123,5 +124,7 @@ def edit_version(request, id, version_id):
     else:
         messages.warning(request, "You can't edit this one.")
         return redirect('assets:detail', id)
+
+#TODO: make asset list, user asset list and liked assets CBV
 
 

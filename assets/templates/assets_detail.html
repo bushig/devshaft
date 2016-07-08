@@ -67,7 +67,7 @@
                     {% for version in versions %}
                         <tr>
                             <td>{{ version.version }}</td>
-                            <td>{{ version.timestamp | timesince }} ago</td>
+                            <td><p href="#" data-toggle="tooltip" title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
                             <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
                                 {% if entry.user == user %}
                                     <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info"
@@ -107,4 +107,13 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {% endblock %}

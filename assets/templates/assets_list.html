@@ -1,62 +1,55 @@
-{% extends 'base.html' %}
+{% extends 'base_list.html' %}
 {% load crispy_forms_tags %}
 
-{% block page_header %}
-<div class="row">
-        <div id="filter-panel" class="collapse filter-panel">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    {% crispy filter.form %}
+
+{% block search %}
+    {% crispy filter.form %}
+{% endblock search %}
+
+{% block list %}
+    {% for entry in entries %}
+        {% cycle 'start' '' 'end' as row_cycle silent %}
+        {% if row_cycle == 'start' %}
+            <div class="row">
+        {% endif %}
+    <!-- CONTENT -->
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="panel-title"> {{ entry.name }}</h4>
+                <span class="label label-default"><i class="glyphicon glyphicon-tag"></i> {{ entry.category }}</span>
+
+                <span class="label label-info"><i class="glyphicon glyphicon-user"></i> {{ entry.user }}</span></div>
+            <div class="panel-body">
+                <img class="img-thumbnail img-responsive asset-img" src="
+                        {% with entry_image=entry.entryimage_set.first %}
+                        {% if entry_image %}
+                        {{ MEDIA_URL }}{{ entry_image.image }}
+                        {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
+                        {% endwith %}">
+            </div>
+            <div class="panel-footer">
+                {% if entry.versionhistory__timestamp__max %}
+                    Last updated: {{ entry.versionhistory__timestamp__max | timesince }} ago<br>
+                {% else %}
+                    Entry don't have any version <br>
+                {% endif %}
+                Likes: {{ entry.users_liked__count }}
+                <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filter-panel">
-        <span class="glyphicon glyphicon-cog"></span> Open Search </button>
-    </div>
-<br>
-
-
-
-
-{% endblock %}
-
-{% block content %}
-    <div class="row">
-    {% for entry in entries %}
-        <div class="col-lg-4">
-            <div class="panel panel-default">
-                    <div class="panel-heading"> <h4 class="panel-title"> {{ entry.name }} <small> {{ entry.category }}</small></h4>
-
-                        <span class="label label-warning"><i class="glyphicon glyphicon-user"></i> {{ entry.user }}</span></div>
-                    <div class="panel-body">
-                    <img class="img-rounded img-responsive" src="
-                    {% with entry_image=entry.entryimage_set.first %}
-                    {% if entry_image %}
-                    {{ MEDIA_URL }}{{ entry_image.image }}
-                    {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
-                    {% endwith %}" style="max-height:200px">
-
-                        <div class="well well-sm">{{ entry.description | truncatechars_html:120 }}</div>
-                    </div>
-                        <div class="panel-footer">
-                                {% if entry.versionhistory__timestamp__max %}
-                                    Last updated: {{ entry.versionhistory__timestamp__max | timesince}} ago<br>
-                                {% else %}
-                                    Entry don't have any version <br>
-                                {% endif %}
-                            Likes: {{ entry.users_liked__count }}
-                            <p><a href="{{ entry.get_absolute_url }}" class="btn btn-primary" role="button">Detail</a></p>
-                        </div>
-
-                </div>
+    <!-- CONTENT -->
+    {% if row_cycle == 'end' %}
         </div>
+    {% endif %}
 
 
-        {% cycle '' '' '</div><div class="row">' %}
-        {% empty %}
+
+    {% empty %}
         <h1>No entries there</h1>
+
     {% endfor %}
-{% endblock %}
+{% endblock list %}
 
 {% block footer %}
     {% include 'pagination.html' with entries=entries %}

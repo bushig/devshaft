@@ -3,3 +3,24 @@
   height: 225px;
   max-height: 225px;
 }
+.navbar-brand {
+    color: white !important;
+}
+
+.body {
+    font-size: 13px !important;
+}
+
+.container-fluid {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+.asset-img{
+    max-height:200px;
+    min-width: 100%;
+}

@@ -32,7 +32,7 @@ class Category(models.Model):
 class Entry(models.Model):
     category=models.ForeignKey(Category)
     user=models.ForeignKey(User)
-    name=models.CharField(max_length=120)
+    name=models.CharField(max_length=40)
     description=models.TextField(max_length=1000)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
