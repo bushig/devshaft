@@ -6,7 +6,7 @@ from ..models import Entry
 class EntrySerializer(serializers.ModelSerializer):
     # id = serializers.IntegerField(read_only=True)
     # category = serializers.IntegerField(source='category')
-    user = serializers.ReadOnlyField(source='user.username')
+    user = serializers.ReadOnlyField(source='user.username')#create user serializer
     # category = serializers.CharField(source='category')
     total_likes=serializers.ReadOnlyField(source='assets_liked__count')
     last_update=serializers.ReadOnlyField(source='versionhistory__timestamp__max')

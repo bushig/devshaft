@@ -29,7 +29,7 @@ class Category(models.Model):
         return self.category
 
 
-class Entry(models.Model):
+class Entry(models.Model): #make it assets again!
     category=models.ForeignKey(Category)
     user=models.ForeignKey(User)
     name=models.CharField(max_length=40)

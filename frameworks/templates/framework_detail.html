@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>{{ framework.name }}
+                    <small>{{ framework.category }}</small>
+                </h1>
+            </div>
+            {% comment %} CAROUSEL {% endcomment %}
+            <div class="panel-body">
+                {% include 'carousel.html' %}
+                <p>{{ framework.description }}</p>
+
+                {% if framework.user == user %}
+                    <a href="#" class="btn btn-success" role="button">Add
+                        version</a>
+                    <a href="#" class="btn btn-info" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
+                        Delete asset
+                    </button>
+                    <br>Likes: {{ framework.users_liked__count }}
+
+                {% elif user.is_authenticated %}
+                    <button id="likes" data-frameworkid="{{ framework.id }}" class="btn
+                {% if user_liked %}
+                btn-success active" type="button">
+                        <i class="fa fa-thumbs-up"></i>
+                        <span id="liked">Liked </span> <span id='likes_count'>{{ framework.likes__count }}</span>
+
+                    {% else %}
+                        btn-default
+                        " type="button">
+                        <i class="fa fa-thumbs-up fa-rotate-270"></i>
+                        <span id="liked">Like </span><span id='likes_count'>{{ framework.likes__count }}</span>
+                    {% endif %}
+                    </button>
+                {% else %}
+                    <hr>Likes: {{ framework.likes__count }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="panel panel-default col-lg-6">
+            <h1>Changelog</h1>
+            <h5>Hell ye dud</h5>
+
+        </div>
+
+        <div class="panel panel-default col-lg-6">
+            <a href="#"><h1>Versions</h1></a>
+            {% if versions %}
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Version</th>
+                        <th>Date</th>
+                        <th>Download</th>
+                    </tr>
+                    {% for version in versions %}
+                        <tr>
+                            <td>{{ version.version }}</td>
+                            <td><p href="#" data-toggle="tooltip" title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
+                            <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
+                                {% if framework.user == user %}
+                                    <a href="#" class="btn btn-info"
+                                       role="button">Edit</a>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+                {#        <a href="{% url 'frameworks:framework_versions' framework.id %}" class="btn btn-info" role="button">View all</a>#}
+            {% else %}
+                <h1>No versions yet</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

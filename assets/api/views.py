@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
@@ -8,9 +8,9 @@ from .permissions import IsOwnerOrReadOnly
 
 
 
-class EntryCreateReadView(ListCreateAPIView):
+class EntryListView(ListAPIView):
     '''
-    List of all assets and endpoint for creating assets.
+    List of all assets
     '''
 
     queryset = Entry.objects.not_null()
