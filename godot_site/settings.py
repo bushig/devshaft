@@ -61,6 +61,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'godot_site.urls'
@@ -94,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'godot_site',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'qwerty1',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
