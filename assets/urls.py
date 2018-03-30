@@ -2,6 +2,8 @@ from django.conf.urls import url, include
 
 from .views import assets_list, entry_details, add_entry, edit, user_assets, add_version, entry_versions, edit_version
 
+app_name = 'assets'
+
 urlpatterns = [
     url(r'^$', assets_list, name='list'),
     url(r'^(?P<id>[\d]+)/$', entry_details, name='detail'),

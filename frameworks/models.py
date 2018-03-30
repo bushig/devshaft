@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from common.models import License
 from languages.models import Language
@@ -25,10 +25,10 @@ class Platform(models.Model):
 
 
 class Framework(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=1000)
-    license = models.ForeignKey(License)
+    license = models.ForeignKey(License, on_delete=models.CASCADE)
     is_2d = models.BooleanField()
     is_3d = models.BooleanField()
     languages = models.ManyToManyField(Language)

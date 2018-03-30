@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Count, F, Max
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 from .utils import version_filename_save
@@ -30,8 +30,8 @@ class Category(models.Model):
 
 
 class Entry(models.Model): #make it assets again!
-    category=models.ForeignKey(Category)
-    user=models.ForeignKey(User)
+    category=models.ForeignKey(Category, on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=40)
     description=models.TextField(max_length=1000)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
@@ -58,7 +58,7 @@ class Entry(models.Model): #make it assets again!
         return reverse('assets:detail', args=[self.id])
 
 class EntryImage(models.Model):
-    entry=models.ForeignKey(Entry)
+    entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
     image=models.ImageField(blank=False)
 
     def __str__(self):
@@ -66,7 +66,7 @@ class EntryImage(models.Model):
 
 
 class VersionHistory(models.Model):
-    entry=models.ForeignKey(Entry)
+    entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
     major_version = models.PositiveSmallIntegerField()
     minor_version = models.PositiveSmallIntegerField()
     patch_version = models.PositiveSmallIntegerField()
