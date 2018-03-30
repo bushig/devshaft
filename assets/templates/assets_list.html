@@ -3,7 +3,11 @@
 
 
 {% block search %}
-    {% crispy filter.form %}
+    <form method="get">
+        {{ filter.form | crispy }}
+        <button type="submit" class="btn btn-success">Search</button>
+
+    </form>
 {% endblock search %}
 
 {% block list %}
