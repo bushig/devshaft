@@ -25,7 +25,7 @@ SECRET_KEY = '2f-+^+jlqdaw-846d%&qkw&vqy_d3ed1a)7$w2g#-ryd8)8#m4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['devshaft.com']
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'django_filters',
+    'mptt',
 
     'autofixture',
     'debug_toolbar',

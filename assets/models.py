@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import version_filename_save
 
@@ -17,24 +20,26 @@ class EntryManager(models.Manager):
         return self.get_queryset().exclude(versionhistory__isnull=True)
 
 
-class Category(models.Model):
-    category=models.CharField(max_length=120, unique=True)
-    image=models.ImageField(blank=True)
+class Category(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    image = models.ImageField(blank=True)
 
     class Meta:
         verbose_name_plural='categories'
 
 
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class Entry(models.Model): #make it assets again!
-    category=models.ForeignKey(Category, on_delete=models.CASCADE)
+    category=TreeForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=40)
     description=models.TextField(max_length=1000)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
+    updated = models.DateTimeField(default=timezone.now)
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
     #image in EntryImage for that asset
 
@@ -56,6 +61,9 @@ class Entry(models.Model): #make it assets again!
 
     def get_absolute_url(self):
         return reverse('assets:detail', args=[self.id])
+
+class EntrySettings(models.Model):
+    pass
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry, on_delete=models.CASCADE)

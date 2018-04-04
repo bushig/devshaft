@@ -4,7 +4,7 @@ from django.forms.models import BaseModelFormSet, modelformset_factory, inlinefo
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
-
+from mptt.forms import TreeNodeChoiceField
 
 from .models import Entry, VersionHistory, EntryImage, Category
 
@@ -74,22 +74,12 @@ class VersionFormEdit(forms.ModelForm):
 
 class SearchForm(forms.Form):
     q=forms.CharField(max_length=120, required=False)
-    category=forms.ModelChoiceField(Category.objects.all(), required=False)
-    o=forms.ChoiceField(choices=('version', 'Last updated'))
+    category=TreeNodeChoiceField(Category.objects.all(), required=False)
+    # o=forms.ChoiceField(choices=('version', 'Last updated'))
     field_order = ('q', 'category', 'o')
 
-    helper = FormHelper()
-    helper.form_id = 'id-searchForm'
-    helper.form_method = 'get'
-    helper.form_class = 'form-horizontal'
-    #helper.label_class = 'col-lg-2jj'
-    #helper.field_class = 'col-lg-8'
-    helper.layout = Layout(
-        'q', 'category', 'o', Submit('', 'Search', css_class='btn-success')
-    )
-
     class Meta:
-        fields = ('q', 'category', 'tags', 'o')
+        fields = ('q', 'category', 'o')
         # widgets = {'q': forms.TextInput(attrs={'help-block': "Type in asset name, description or creator's name"})}
 
 
