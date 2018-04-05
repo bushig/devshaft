@@ -14,8 +14,8 @@
                 <p>{{ entry.description }}</p>
 
                 {% if entry.user == user %}
-                    <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
-                        version</a>
+                    {% if entry.settings.entry_type == 1 %}<a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
+                        version</a> {% endif %}
                     <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
                         Delete asset
@@ -45,46 +45,50 @@
 
     <div class="row">
 
-        <div class="panel panel-default col-lg-6">
-            <h1>Changelog</h1>
-            {% for version in versions %}
-                <hr>
-                <h5><strong>{{ version.version }}</strong></h5>
-                <p>{{ version.changelog| linebreaks }}</p>
-            {% endfor %}
-
-        </div>
-
-        <div class="panel panel-default col-lg-6">
-            <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
-            {% if versions %}
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>Version</th>
-                        <th>Date</th>
-                        <th>Download</th>
-                    </tr>
-                    {% for version in versions %}
+        {% if entry.settings.changelog %}
+            <div class="panel panel-default col-lg-6">
+                <h1>Changelog</h1>
+                {% for version in versions %}
+                    <hr>
+                    <h5><strong>{{ version.version }}</strong></h5>
+                    <p>{{ version.changelog| linebreaks }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if entry.settings.entry_type == 1 %}
+            <div class="panel panel-default col-lg-6">
+                <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
+                {% if versions %}
+                    <table class="table table-bordered table-striped">
                         <tr>
-                            <td>{{ version.version }}</td>
-                            <td><p href="#" data-toggle="tooltip" title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
-                            <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
-                                {% if entry.user == user %}
-                                    <a href="{% url 'assets:edit_version' entry.id version.id %}" class="btn btn-info"
-                                       role="button">Edit</a>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                {% endif %}
-
-                            </td>
+                            <th>Version</th>
+                            <th>Date</th>
+                            <th>Download</th>
                         </tr>
-                    {% endfor %}
+                        {% for version in versions %}
+                            <tr>
+                                <td>{{ version.version }}</td>
+                                <td><p href="#" data-toggle="tooltip"
+                                       title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
+                                <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
+                                    {% if entry.user == user %}
+                                        <a href="{% url 'assets:edit_version' entry.id version.id %}"
+                                           class="btn btn-info"
+                                           role="button">Edit</a>
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    {% endif %}
 
-                </table>
-                {#        <a href="{% url 'assets:entry_versions' entry.id %}" class="btn btn-info" role="button">View all</a>#}
-            {% else %}
-                <h1>No versions yet</h1>
-            {% endif %}
-        </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                    {#        <a href="{% url 'assets:entry_versions' entry.id %}" class="btn btn-info" role="button">View all</a>#}
+                {% else %}
+                    <h1>No versions yet</h1>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 
     {% comment %} MODAL {% endcomment %}
@@ -112,7 +116,7 @@
 {% block scripts %}
     {{ block.super }}
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

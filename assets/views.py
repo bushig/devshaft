@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 
 from .models import Category, Entry, VersionHistory
-from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
+from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit, EntrySettingsForm
 from .filters import EntryFilter
 
 
@@ -64,21 +64,28 @@ def entry_details(request, id):
 @login_required()
 def add_entry(request):  # TODO:REFACTOR to display formset
     form = EntryForm(request.POST or None)
-    if form.is_valid():
+    form2 = EntrySettingsForm(request.POST or None)
+    if form.is_valid() and form2.is_valid():
+        settings = form2.save()
         entry = form.save(commit=False)
         entry.user = request.user
+        entry.settings = settings
         entry.save()
         form.save_m2m()
-        messages.success(request, 'Successfuly created new asset. Now add version')
-        return redirect('assets:add_version', id=entry.id)
-    context = {'form': form}
+        if form2.cleaned_data['entry_type'] == 1:
+            messages.success(request, 'Successfully created new asset. Now add version.')
+            return redirect('assets:add_version', id=entry.id)
+        else:
+            messages.success(request, 'Successfully created new asset.')
+            return redirect('assets:detail', id=entry.id)
+    context = {'form': form, 'form2': form2}
     return render(request, 'assets_add_entry.html', context)
 
 
 @login_required()
 def add_version(request, id):
     entry = get_object_or_404(Entry, id=id)
-    if request.user != entry.user:
+    if request.user != entry.user or entry.settings.entry_type != 1:
         raise PermissionDenied
     form = VersionForm(request.POST or None, request.FILES or None, initial={'entry': entry})
     if form.is_valid():
@@ -103,13 +110,14 @@ def edit(request, id):  # TODO: REFACTOR!
     asset = get_object_or_404(Entry, id=id)
     if request.user == asset.user:
         form = EntryForm(request.POST or None, instance=asset)
+        form2 = EntrySettingsForm(request.POST or None, instance=asset.settings)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and form2.is_valid() and formset.is_valid():
             form.save()
             formset.save()
             messages.success(request, 'Asset saved')
             return redirect('assets:detail', id)
-        context = {'form': form, 'formset': formset}
+        context = {'form': form, 'form2':form2, 'formset': formset}
         return render(request, 'assets_entry_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")

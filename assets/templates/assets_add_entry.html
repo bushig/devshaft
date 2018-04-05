@@ -4,12 +4,13 @@
 {% block content %}
     <div class="col-lg-6 col-lg-offset-3">
 
-        {#        <form method="post" enctype="multipart/form-data">#}
-        {#            {% csrf_token %}#}
-        {% crispy form form.helper %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+        {{ form | crispy }}
+        {{ form2 | crispy }}
         {#            {{ tagform | crispy }}#}
 
-        {#            <input type="submit" class="btn btn-default" value="Add">#}
+                    <button type="submit" class="btn btn-success">Submit</button>
         {#        </form>#}
     </div>
 {% endblock %}

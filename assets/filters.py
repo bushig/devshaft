@@ -21,7 +21,7 @@ class EntryFilter(django_filters.FilterSet):
         fields = ('q', 'category') #TODO: Rename category to c/ FIX ordering
 
     def filter_search(self, queryset, name, value):
-        return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value) | Q(user__username=value))
+        return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value) | Q(user__username__iexact=value))
 
     #TODO: Greatly improve this to have fields search query(includes name, descript, user), category and tags
 

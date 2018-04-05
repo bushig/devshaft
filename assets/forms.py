@@ -6,32 +6,13 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
 from mptt.forms import TreeNodeChoiceField
 
-from .models import Entry, VersionHistory, EntryImage, Category
+from .models import Entry, VersionHistory, EntryImage, Category, EntrySettings
 
 
 class EntryForm(forms.ModelForm):
-    field_order = ['category', 'name', 'description']
-
-    helper = FormHelper()
-    helper.form_id = 'id-addEntryForm'
-    helper.form_method = 'post'
-    helper.form_action = 'assets:add_entry'
-
-    helper.add_input(Submit('submit', 'Submit'))
-
-    helper.form_class = 'form-horizontal'
-    helper.label_class = 'col-lg-2'
-    helper.field_class = 'col-lg-8'
-    helper.layout = Layout(
-        'category',
-        'name',
-        'description',
-    )
-
-
     class Meta:
         model=Entry
-        fields=('category', 'name', 'description')
+        fields=('category', 'name', 'description', 'repository', 'site')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
@@ -66,6 +47,12 @@ class VersionForm(forms.ModelForm):
             'patch_version': forms.TextInput(attrs={'placeholder': 'Patch'}),
             'changelog': forms.Textarea(attrs={'placeholder': 'Changelog'}),
         }
+
+class EntrySettingsForm(forms.ModelForm):
+    class Meta:
+        model = EntrySettings
+        fields = ('entry_type', 'github_releases', 'changelog')
+
 class VersionFormEdit(forms.ModelForm):
     field_order = ('changelog', 'file')
     class Meta:
