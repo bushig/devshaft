@@ -24,7 +24,7 @@ from frameworks import urls as frameworks_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('assets.urls')),
-    path('accounts/', include('registration.backends.simple.urls')),
+    path('accounts/', include('allauth.urls')),
     path('frameworks/', include('frameworks.urls')),
     path('api/', include('common.api')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

@@ -9,7 +9,7 @@ from django.utils import timezone
 from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import version_filename_save
-
+from common.models import License
 
 class EntryManager(models.Manager):
     def get_queryset(self):
@@ -38,8 +38,9 @@ class Entry(models.Model): #make it assets again!
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=40)
     description=models.TextField(max_length=5000)
-    repository = models.CharField(blank=True, null=True, max_length=100)
-    site = models.CharField(blank=True, null=True, max_length=100)
+    license = models.ForeignKey(License, on_delete=models.PROTECT)
+    repository = models.URLField(blank=True, null=True, unique=True, max_length=100)
+    site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
     updated = models.DateTimeField(default=timezone.now)

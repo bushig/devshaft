@@ -25,6 +25,8 @@ SECRET_KEY = '2f-+^+jlqdaw-846d%&qkw&vqy_d3ed1a)7$w2g#-ryd8)8#m4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_ID = 1
+
 ALLOWED_HOSTS = ['devshaft.com']
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -38,15 +40,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
-    'registration',
     'crispy_forms',
     'rest_framework',
     'django_filters',
     'mptt',
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.bitbucket',
+
     'autofixture',
     'debug_toolbar',
+    'django_extensions',
 
     'common',
     'assets',
@@ -130,6 +139,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
