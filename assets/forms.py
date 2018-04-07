@@ -5,6 +5,7 @@ from django.forms.models import BaseModelFormSet, modelformset_factory, inlinefo
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
 from mptt.forms import TreeNodeChoiceField
+from image_cropping import ImageCropWidget
 
 from .models import Entry, VersionHistory, EntryImage, Category, EntrySettings
 
@@ -69,7 +70,10 @@ class SearchForm(forms.Form):
         fields = ('q', 'category', 'o')
         # widgets = {'q': forms.TextInput(attrs={'help-block': "Type in asset name, description or creator's name"})}
 
-
+class EntryImageForm(forms.ModelForm):
+    class Meta:
+        model = EntryImage
+        fields = ('image', 'cropping')
 
 #Edit entry images formset TODO:REFACTOR
-EntryImageFormSet=inlineformset_factory(Entry, EntryImage, fields=('image',), extra=5, max_num=5)
+EntryImageFormSet=inlineformset_factory(Entry, EntryImage, extra=5, max_num=5, form=EntryImageForm)

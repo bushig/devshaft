@@ -1,6 +1,7 @@
 {% extends 'base_list.html' %}
 {% load crispy_forms_tags %}
-
+{% load cropping %}
+{% load cropping thumbnail %}
 
 {% block search %}
     <form method="get">
@@ -27,7 +28,7 @@
                 <img class="img-thumbnail img-responsive asset-img" src="
                         {% with entry_image=entry.entryimage_set.first %}
                         {% if entry_image %}
-                        {{ MEDIA_URL }}{{ entry_image.image }}
+                        {% cropped_thumbnail entry_image "cropping" %}
                         {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}
                         {% endwith %}">
             </div>

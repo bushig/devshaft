@@ -10,6 +10,7 @@ from django.core.validators import validate_comma_separated_integer_list
 from django.utils import timezone
 
 from mptt.models import MPTTModel, TreeForeignKey
+from image_cropping import ImageRatioField, ImageCropField
 
 from .utils import version_filename_save
 from common.models import License
@@ -101,7 +102,8 @@ class EntrySettings(models.Model):
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
-    image=models.ImageField(blank=False)
+    image=ImageCropField(blank=True, upload_to='uploaded_images')
+    cropping = ImageRatioField('image', '300x300')
 
     def __str__(self):
         return self.entry.name
@@ -113,7 +115,7 @@ class VersionHistory(models.Model):
     minor_version = models.PositiveSmallIntegerField()
     patch_version = models.PositiveSmallIntegerField()
     timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
-    file=models.FileField(upload_to=version_filename_save)
+    file=models.FileField(upload_to=version_filename_save) # TODO: upload to VERSIONS
     changelog=models.TextField(max_length=1000)
 
     def clean(self):

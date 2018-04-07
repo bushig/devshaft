@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from image_cropping import ImageCroppingMixin
+
 from .models import Entry,Category, VersionHistory, EntryImage
 
 # class VersionHistoryAdmin(admin.ModelAdmin):
@@ -15,7 +17,10 @@ class EntryAdmin(admin.ModelAdmin):
     fields = ('category', 'user', 'name', 'description')
     list_display = ('name', 'category', 'user', 'total_likes')
 
+class EntryImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
+    pass
+
 admin.site.register(Entry, EntryAdmin)
 admin.site.register(Category)
 admin.site.register(VersionHistory)
-admin.site.register(EntryImage)
+admin.site.register(EntryImage, EntryImageAdmin)

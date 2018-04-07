@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'mptt',
+    'easy_thumbnails',
+    'image_cropping',
 
     'allauth',
     'allauth.account',
@@ -177,6 +179,11 @@ STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+from easy_thumbnails.conf import Settings as thumbnail_settings
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
