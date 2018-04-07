@@ -10,35 +10,65 @@
             </div>
             {% comment %} CAROUSEL {% endcomment %}
             <div class="panel-body">
-                {% include 'carousel.html' %}
-                <p>{{ entry.description }}</p>
+                <div class="row">
+                    <div class="col-lg-5">
+                        {% include 'carousel.html' %}
+                    </div>
+                    <div class="col-lg-7">
+                        <p>{{ entry.description }}</p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Stars</th>
+                                <th>Forks</th>
+                                <th>Repo updated</th>
+                                <th>Stats</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ entry.repo_stars }}</td>
+                                <td>{{ entry.repo_forks }}</td>
+                                <td>{{ entry.repo_updated | timesince }} ago</td>
+                                <td><img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ entry.commits }}&chco=666666&chbh=1,1,1&chds=0,20"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        {% if entry.user == user %}
+                            {% if entry.settings.entry_type == 1 %}
+                                <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
+                                    version</a> {% endif %}
+                            <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
+                                Delete asset
+                            </button>
+                            <br>Likes: {{ entry.users_liked__count }}
+                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs">Fetch
+                                metadata</a>
 
-                {% if entry.user == user %}
-                    {% if entry.settings.entry_type == 1 %}<a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
-                        version</a> {% endif %}
-                    <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
-                        Delete asset
-                    </button>
-                    <br>Likes: {{ entry.users_liked__count }}
-
-                {% elif user.is_authenticated %}
-                    <button id="likes" data-entryid="{{ entry.id }}" class="btn
+                        {% elif user.is_authenticated %}
+                            <button id="likes" data-entryid="{{ entry.id }}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">
-                        <i class="fa fa-thumbs-up"></i>
-                        <span id="liked">Liked </span> <span id='likes_count'>{{ entry.users_liked__count }}</span>
+                                <i class="fa fa-thumbs-up"></i>
+                                <span id="liked">Liked </span>
+                                <span id='likes_count'>{{ entry.users_liked__count }}</span>
 
-                    {% else %}
-                        btn-default
-                        " type="button">
-                        <i class="fa fa-thumbs-up fa-rotate-270"></i>
-                        <span id="liked">Like </span><span id='likes_count'>{{ entry.users_liked__count }}</span>
-                    {% endif %}
-                    </button>
-                {% else %}
-                    <hr>Likes: {{ entry.users_liked__count }}
-                {% endif %}
+                            {% else %}
+                                btn-default
+                                " type="button">
+                                <i class="fa fa-thumbs-up fa-rotate-270"></i>
+                                <span id="liked">Like </span>
+                                <span id='likes_count'>{{ entry.users_liked__count }}</span>
+                            {% endif %}
+                            </button>
+                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs">Fetch
+                                metadata</a>
+                        {% else %}
+                            <hr>Likes: {{ entry.users_liked__count }}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

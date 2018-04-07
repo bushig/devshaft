@@ -1,15 +1,19 @@
+import re
+
 from django.db import models
 from django.db.models import Count, F, Max
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils import timezone
 
 from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import version_filename_save
 from common.models import License
+from .repos import get_repo_for_repo_url
 
 class EntryManager(models.Manager):
     def get_queryset(self):
@@ -43,6 +47,14 @@ class Entry(models.Model): #make it assets again!
     site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
+
+    repo_stars = models.IntegerField("Stars", default=0)
+    repo_forks = models.IntegerField("Repo forks", default=0)
+    repo_description = models.CharField("Repo description", null=True, max_length=1000)
+    repo_updated = models.DateTimeField(null=True)
+    commits = models.CharField(null=True, blank=True, max_length=500, validators=[validate_comma_separated_integer_list])
+
+    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(default=timezone.now)
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
     #image in EntryImage for that asset
@@ -56,6 +68,17 @@ class Entry(models.Model): #make it assets again!
     @property
     def total_likes(self):
         return Entry.objects.get(id=self.id).users_liked.count()
+
+    @property
+    def repo(self):
+        return get_repo_for_repo_url(self.repository)
+
+    def repo_name(self):
+        return re.sub(self.repo.url_regex, '', self.repository)
+
+    def fetch_metadata(self):
+        self.repo.fetch_metadata(self)
+        self.save()
 
     class Meta:
         verbose_name_plural='entries'

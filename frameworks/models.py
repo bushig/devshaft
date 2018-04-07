@@ -37,7 +37,7 @@ class Framework(models.Model):
     site = models.URLField(blank=True)
     repository_url = models.URLField(blank=True) #if not null then its open source
     # images
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='framework_likes')
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='framework_likes', blank=True)
 
     class Meta:
         verbose_name_plural = 'frameworks'

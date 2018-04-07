@@ -140,4 +140,10 @@ def edit_version(request, id, version_id):
         messages.warning(request, "You can't edit this one.")
         return redirect('assets:detail', id)
 
+
+@login_required()
+def fetch_asset_metadata(request, id):
+    asset = get_object_or_404(Entry, id=id)
+    asset.fetch_metadata()
+    return redirect('assets:detail', id)
 # TODO: make asset list, user asset list and liked assets CBV
