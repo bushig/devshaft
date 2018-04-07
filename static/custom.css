@@ -1,7 +1,7 @@
 .entryCarouselImg img {
-  width: auto;
-  height: 225px;
-  max-height: 225px;
+  width: 300px;
+  height: 300px;
+  max-height: 300px;
 }
 .navbar-brand {
     color: white !important;
@@ -21,7 +21,7 @@
 }
 
 .asset-img{
-    max-height:200px;
+    max-height:300px;
     min-width: 100%;
 }
 
