@@ -115,6 +115,7 @@ def edit(request, id):  # TODO: REFACTOR!
         if form.is_valid() and form2.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+            form2.save()
             messages.success(request, 'Asset saved')
             return redirect('assets:detail', id)
         context = {'form': form, 'form2':form2, 'formset': formset}

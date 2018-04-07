@@ -30,7 +30,9 @@
                                 <td>{{ entry.repo_stars }}</td>
                                 <td>{{ entry.repo_forks }}</td>
                                 <td>{{ entry.repo_updated | timesince }} ago</td>
-                                <td><img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ entry.commits }}&chco=666666&chbh=1,1,1&chds=0,20"></td>
+                                <td><img
+                                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ entry.commits }}&chco=666666&chbh=1,1,1&chds=0,20">
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -43,7 +45,8 @@
                                 Delete asset
                             </button>
                             <br>Likes: {{ entry.users_liked__count }}
-                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs">Fetch
+                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs"><i
+                                    class="fab fa-github"></i> Fetch
                                 metadata</a>
 
                         {% elif user.is_authenticated %}
@@ -62,7 +65,8 @@
                                 <span id='likes_count'>{{ entry.users_liked__count }}</span>
                             {% endif %}
                             </button>
-                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs">Fetch
+                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs"><i
+                                    class="fab fa-github"></i> Fetch
                                 metadata</a>
                         {% else %}
                             <hr>Likes: {{ entry.users_liked__count }}

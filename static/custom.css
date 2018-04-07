@@ -24,3 +24,14 @@
     max-height:200px;
     min-width: 100%;
 }
+
+.field-button {
+  background-color: #4cbac1;
+  border-radius: 0 4px 4px 0;
+  border: none;
+  color: white;
+  float: left;
+  font-size: 0.714rem;
+  outline: none;
+  padding: 0.6rem 1rem;
+}

@@ -13,14 +13,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="/static/custom.css" rel="stylesheet" type="text/css">
     <!-- Optional theme -->
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"#}
-{#          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">#}
-{#    <link rel="stylesheet" href="/static/custom.css">#}
+    {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"#}
+    {#          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">#}
+    {#    <link rel="stylesheet" href="/static/custom.css">#}
 </head>
 <body>
 
-    <!-- Static navbar -->
-    <nav class="navbar navbar-inverse navbar-static-top">
+<!-- Static navbar -->
+<nav class="navbar navbar-inverse navbar-static-top">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">DevShaft</a>
@@ -67,7 +67,6 @@
 <div class="container-fluid" align="center">
 
 
-
     {#<div class="page-header">#}
     {% include 'messages.html' %}
     {% block page_header %}
@@ -87,12 +86,21 @@
 {% endblock footer %}
 
 {% block scripts %}
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
-<script src="/static/godot-ajax.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/solid.js"
+            integrity="sha384-P4tSluxIpPk9wNy8WSD8wJDvA8YZIkC6AQ+BfAFLXcUZIPQGu4Ifv4Kqq+i2XzrM"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/fontawesome.js"
+            integrity="sha384-2IUdwouOFWauLdwTuAyHeMMRFfeyy4vqYNjodih+28v2ReC+8j+sLF9cK339k5hY"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/brands.js"
+            integrity="sha384-qJKAzpOXfvmSjzbmsEtlYziSrpVjh5ROPNqb8UZ60myWy7rjTObnarseSKotmJIx"
+            crossorigin="anonymous"></script>
+    <script src="/static/godot-ajax.js"></script>
 {% endblock scripts %}
 </body>
 </html>

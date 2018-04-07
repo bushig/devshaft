@@ -25,17 +25,15 @@ class GitHubHandler:
 
     def _get_repo(self, asset):
         repo_name = asset.repo_name()
+        print(repo_name)
         if repo_name.endswith("/"):
             repo_name = repo_name[:-1]
-        try:
-            username, repo_name = asset.repo_name().split('/')
-        except ValueError:
-            return None
-        return self.github.get_repo(asset.repo_name())
+        return self.github.get_repo(repo_name)
 
     def fetch_metadata(self, asset):
         self.manage_ratelimit()
         repo = self._get_repo(asset)
+        print(repo)
         if repo is None:
             return asset
 
