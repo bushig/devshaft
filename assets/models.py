@@ -44,7 +44,7 @@ class Entry(models.Model): #make it assets again!
     name=models.CharField(max_length=40)
     description=models.TextField(max_length=5000)
     license = models.ForeignKey(License, on_delete=models.PROTECT)
-    repository = models.URLField(blank=True, null=True, unique=True, max_length=100)
+    repository = models.URLField(blank=True, null=True, max_length=100)
     site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
@@ -98,7 +98,7 @@ class EntrySettings(models.Model):
     entry_type = models.PositiveSmallIntegerField(choices=choices)
     github_releases = models.BooleanField(default=False)
     changelog = models.BooleanField(default=False)
-
+    locked = models.BooleanField(default=False)
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry, on_delete=models.CASCADE)

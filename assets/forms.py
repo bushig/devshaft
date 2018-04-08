@@ -62,7 +62,7 @@ class SearchForm(forms.Form):
     q=forms.CharField(max_length=120, required=False)
     category=TreeNodeChoiceField(Category.objects.all(), required=False)
     # o=forms.ChoiceField(choices=('version', 'Last updated'))
-    field_order = ('q', 'category', 'o')
+    field_order = ('q', 'category')
 
     class Meta:
         fields = ('q', 'category', 'o')

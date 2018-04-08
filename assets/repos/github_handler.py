@@ -41,10 +41,12 @@ class GitHubHandler:
         asset.repo_description = repo.description
         asset.repo_updated = timezone.now()
         commit_activity = []
-        for stat in repo.get_stats_commit_activity():
-            commit_activity.append(str(sum(stat.days)))
-        asset.commits = ",".join(commit_activity)
-
+        try:
+            for stat in repo.get_stats_commit_activity():
+                commit_activity.append(str(sum(stat.days)))
+            asset.commits = ",".join(commit_activity)
+        except TypeError as e:
+            print('Commits not fetched')
         #TODO: get releases
         if asset.settings.entry_type == 0:
             releases = repo.get_releases()
@@ -54,10 +56,14 @@ class GitHubHandler:
                 if version:
                     continue
                 version = VersionHistory(entry=asset, is_github_release=True)
+                version.release_id = release.id
                 version.changelog = release.body
                 version.version = release.tag_name
                 version.timestamp = release.published_at
-                version.download_url = release.upload_url
+                # try:
+                #     version.download_url = release.get_assets()[0]
+                # except:
+                #     version.download_url = release.zipball_url #TODO: fix it
                 version.save()
         # contributors = []
         # for contributor in repo.iter_contributors():

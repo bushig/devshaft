@@ -104,7 +104,9 @@
                                 <td>{{ version.version }}</td>
                                 <td><p href="#" data-toggle="tooltip"
                                        title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
-                                <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
+                                <td><a href="
+                                        {% if not version.is_github_release %}{{ MEDIA_URL }}{{ version.file }}{% else %}{{ version.download_url }}{% endif %}"
+                                       class="btn btn-default" role="button">Download</a>
                                     {% if entry.user == user %}
                                         <a href="{% url 'assets:edit_version' entry.id version.id %}"
                                            class="btn btn-info"
