@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2f-+^+jlqdaw-846d%&qkw&vqy_d3ed1a)7$w2g#-ryd8)8#m4'
 
-GITHUB_TOKEN = ''
+GITHUB_TOKEN = '59219140f0d8fcce1a412ff6e05c7d555f08041e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

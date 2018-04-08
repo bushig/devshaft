@@ -3,8 +3,7 @@ from time import sleep
 from django.conf import settings
 from django.utils import timezone
 
-from github import Github
-
+from github import Github, GitRelease
 
 class GitHubHandler:
     url_regex = '(http|https|git)://github.com/'
@@ -47,6 +46,19 @@ class GitHubHandler:
         asset.commits = ",".join(commit_activity)
 
         #TODO: get releases
+        if asset.settings.entry_type == 0:
+            releases = repo.get_releases()
+            for release in releases:
+                from ..models import VersionHistory
+                version = VersionHistory.objects.filter(release_id=release.id)
+                if version:
+                    continue
+                version = VersionHistory(entry=asset, is_github_release=True)
+                version.changelog = release.body
+                version.version = release.tag_name
+                version.timestamp = release.published_at
+                version.download_url = release.upload_url
+                version.save()
         # contributors = []
         # for contributor in repo.iter_contributors():
         #     contributors.append(contributor.login)

@@ -111,44 +111,18 @@ class EntryImage(models.Model):
 
 class VersionHistory(models.Model):
     entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
-    major_version = models.PositiveSmallIntegerField()
-    minor_version = models.PositiveSmallIntegerField()
-    patch_version = models.PositiveSmallIntegerField()
-    timestamp=models.DateTimeField(auto_now=False, auto_now_add=True)
-    file=models.FileField(upload_to=version_filename_save) # TODO: upload to VERSIONS
-    changelog=models.TextField(max_length=1000)
-
-    def clean(self):
-        '''Makes row checks only if model created first time and version didn didnt change'''
-        #TODO: Move to utils
-        if self.id is not None:
-            original = VersionHistory.objects.get(id = self.id)
-            if original.major_version == self.major_version and original.minor_version == self.minor_version and original.patch_version == self.patch_version:
-                return
-
-        try:
-            if self.major_version+self.minor_version+self.patch_version == 0:
-                raise ValidationError("Version can't be 0.0.0")
-        except TypeError:
-            raise ValidationError('Only numbers')
-
-        if VersionHistory.objects.filter(entry=self.entry, major_version=self.major_version,
-                                         minor_version=self.minor_version, patch_version=self.patch_version).exists():
-            raise ValidationError("This version already exist")
-        ##TODO: REFACTOR THIS TRASH!
-        last_version = VersionHistory.objects.filter(entry=self.entry).first()
-        if last_version:
-            if (last_version.major_version>=self.major_version and last_version.minor_version>=self.minor_version and
-                        last_version.patch_version>=self.patch_version):
-                raise ValidationError('Version have to be greater than previous')
+    version = models.CharField(max_length=25)
+    is_github_release = models.BooleanField(default=False)
+    release_id = models.IntegerField("Github release ID", db_index=True, null=True, blank=True)
+    download_url = models.URLField(null=True, blank=True)
+    timestamp=models.DateTimeField(auto_now=False, auto_now_add=False, default=timezone.now)
+    file=models.FileField(upload_to=version_filename_save, blank=True) # TODO: upload to VERSIONS
+    changelog=models.TextField(max_length=1000, blank=True)
 
     class Meta:
         verbose_name_plural='version history'
-        ordering = ('-major_version', '-minor_version', '-patch_version')
+        ordering = ("-timestamp",)
         get_latest_by = "timestamp"
 
-    def version(self):
-        return str(self.major_version)+'.'+str(self.minor_version)+'.'+str(self.patch_version)
-
     def __str__(self):
-        return self.version()
+        return self.version

@@ -31,7 +31,7 @@
                                 <td>{{ entry.repo_forks }}</td>
                                 <td>{{ entry.repo_updated | timesince }} ago</td>
                                 <td><img
-                                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ entry.commits }}&chco=666666&chbh=1,1,1&chds=0,20">
+                                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ entry.commits }}&chco=666666&chbh=1,1,1&chds=0,50">
                                 </td>
                             </tr>
                             </tbody>
@@ -89,7 +89,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {% if entry.settings.entry_type == 1 %}
+        {% if entry.settings.entry_type == 1 or entry.settings.github_releases %}
             <div class="panel panel-default col-lg-6">
                 <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
                 {% if versions %}

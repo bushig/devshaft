@@ -35,18 +35,16 @@ class VersionForm(forms.ModelForm):
     helper.label_class = 'col-lg-2'
     helper.field_class = 'col-lg-8'
     helper.layout = Layout(
-        'entry', 'major_version', 'minor_version', 'patch_version', 'changelog', 'file'
+        'entry', 'version', 'changelog', 'file'
     )
 
     class Meta:
         model = VersionHistory
-        fields = ('entry', 'major_version', 'minor_version', 'patch_version', 'file', 'changelog')
+        fields = ('version', 'file', 'changelog')
         widgets = {
-            'entry': forms.HiddenInput(),
-            'major_version': forms.TextInput(attrs={'placeholder': 'Major'}),
-            'minor_version': forms.TextInput(attrs={'placeholder': 'Minor'}),
-            'patch_version': forms.TextInput(attrs={'placeholder': 'Patch'}),
+            'version': forms.TextInput(attrs={'placeholder': 'v0.0.1'}),
             'changelog': forms.Textarea(attrs={'placeholder': 'Changelog'}),
+            'file': forms.FileInput(attrs={'required': True}),
         }
 
 class EntrySettingsForm(forms.ModelForm):
