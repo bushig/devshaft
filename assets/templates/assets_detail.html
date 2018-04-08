@@ -7,6 +7,15 @@
                 <h1>{{ entry.name }}
                     <small>{{ entry.category }}</small>
                 </h1>
+            {% if user.is_authenticated %}
+                {% if entry.settings.entry_type == 1 %}
+                    <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success btn-xs" role="button">Add
+                        version</a> {% endif %}
+                <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
+                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ModalDelete">
+                    Delete asset
+                </button>
+            {% endif %}
             </div>
             {% comment %} CAROUSEL {% endcomment %}
             <div class="panel-body">
@@ -37,14 +46,7 @@
                             </tbody>
                         </table>
                         {% if entry.user == user %}
-                            {% if entry.settings.entry_type == 1 %}
-                                <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success" role="button">Add
-                                    version</a> {% endif %}
-                            <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info" role="button">Edit</a>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
-                                Delete asset
-                            </button>
-                            <br>Likes: {{ entry.users_liked__count }}
+                            <br><i class="fas fa-thumbs-up"></i> {{ entry.users_liked__count }}
                             <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs"><i
                                     class="fab fa-github"></i> Fetch
                                 metadata</a>
@@ -105,6 +107,7 @@
                                 <td><p href="#" data-toggle="tooltip"
                                        title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
                                 <td><a href="
+
                                         {% if not version.is_github_release %}{{ MEDIA_URL }}{{ version.file }}{% else %}{{ version.download_url }}{% endif %}"
                                        class="btn btn-default" role="button">Download</a>
                                     {% if entry.user == user %}

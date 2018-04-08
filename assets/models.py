@@ -50,7 +50,7 @@ class Entry(models.Model): #make it assets again!
     site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     languages = models.ManyToManyField(Language, related_name="assets")
-    frameworks = models.ManyToManyField(Framework, related_name="assets")
+    frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
     settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
 
     repo_stars = models.IntegerField("Stars", default=0)

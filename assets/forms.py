@@ -13,7 +13,7 @@ from .models import Entry, VersionHistory, EntryImage, Category, EntrySettings
 class EntryForm(forms.ModelForm):
     class Meta:
         model=Entry
-        fields=('category', 'name', 'description', 'repository', 'site', 'license')
+        fields=('category', 'name', 'description', 'languages', 'frameworks','repository', 'site', 'license')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
