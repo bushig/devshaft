@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.forms.widgets import SelectMultiple, CheckboxSelectMultiple
 
 import django_filters
 from mptt.forms import TreeNodeChoiceField, TreeNodeMultipleChoiceField
@@ -17,7 +18,7 @@ class EntryFilter(django_filters.FilterSet):
     q=django_filters.CharFilter(method='filter_search', label='Search', help_text='You can search by asset name, description or asset creator')
     o = django_filters.OrderingFilter(fields=[('users_liked__count', 'likes'),
                                               ('versionhistory__timestamp__max', 'updated')])
-    category = TreeeMultipleFilter(queryset=Category.objects.all())
+    category = TreeeMultipleFilter(queryset=Category.objects.all(), widget=SelectMultiple(attrs={'style': 'height:500px'}))
     class Meta:
         model = Entry
         form = SearchForm

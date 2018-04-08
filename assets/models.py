@@ -15,6 +15,8 @@ from image_cropping import ImageRatioField, ImageCropField
 from .utils import version_filename_save
 from common.models import License
 from .repos import get_repo_for_repo_url
+from languages.models import Language
+from frameworks.models import Framework
 
 class EntryManager(models.Manager):
     def get_queryset(self):
@@ -47,6 +49,8 @@ class Entry(models.Model): #make it assets again!
     repository = models.URLField(blank=True, null=True, max_length=100)
     site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
+    languages = models.ManyToManyField(Language, related_name="assets")
+    frameworks = models.ManyToManyField(Framework, related_name="assets")
     settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
 
     repo_stars = models.IntegerField("Stars", default=0)

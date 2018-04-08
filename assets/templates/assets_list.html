@@ -2,9 +2,11 @@
 {% load crispy_forms_tags %}
 {% load cropping %}
 {% load cropping thumbnail %}
-
+{% block head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
 {% block search %}
-    <form method="get">
+    <form method="get" id="filterForm">
         {{ filter.form | crispy }}
         <button type="submit" class="btn btn-success">Search</button>
 
@@ -58,4 +60,18 @@
 
 {% block footer %}
     {% include 'pagination.html' with entries=entries %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    <script>
+    function formatState(state){
+        return state.text.replace(/-/g, "")
+    }
+       $(document).ready(function() {
+    $('#id_category').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+
+});
+    </script>
 {% endblock %}
