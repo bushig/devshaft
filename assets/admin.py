@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from image_cropping import ImageCroppingMixin
+from reversion.admin import VersionAdmin
 
 from .models import Entry,Category, VersionHistory, EntryImage
 
@@ -11,10 +12,10 @@ from .models import Entry,Category, VersionHistory, EntryImage
 #     fields = ('entry', 'version', 'timestamp', 'changelog')
 #     list_display = ('entry', 'version')
 
-class EntryAdmin(admin.ModelAdmin):
+class EntryAdmin(VersionAdmin):
     class Meta:
         model = Entry
-    fields = ('category', 'user', 'name', 'description')
+    # fields = ('category', 'user', 'name', 'description')
     list_display = ('name', 'category', 'user', 'total_likes')
 
 class EntryImageAdmin(ImageCroppingMixin, admin.ModelAdmin):

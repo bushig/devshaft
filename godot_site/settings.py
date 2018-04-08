@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'mptt',
     'easy_thumbnails',
     'image_cropping',
+    'reversion',
 
     'allauth',
     'allauth.account',

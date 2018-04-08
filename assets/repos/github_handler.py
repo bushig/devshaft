@@ -46,6 +46,7 @@ class GitHubHandler:
             commit_activity.append(str(sum(stat.days)))
         asset.commits = ",".join(commit_activity)
 
+        #TODO: get releases
         # contributors = []
         # for contributor in repo.iter_contributors():
         #     contributors.append(contributor.login)

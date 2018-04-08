@@ -6,6 +6,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 
+import reversion
+
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit, EntrySettingsForm
 from .filters import EntryFilter
@@ -66,12 +68,17 @@ def add_entry(request):  # TODO:REFACTOR to display formset
     form = EntryForm(request.POST or None)
     form2 = EntrySettingsForm(request.POST or None)
     if form.is_valid() and form2.is_valid():
-        settings = form2.save()
-        entry = form.save(commit=False)
-        entry.user = request.user
-        entry.settings = settings
-        entry.save()
-        form.save_m2m()
+        with reversion.create_revision():
+            settings = form2.save()
+            entry = form.save(commit=False)
+            entry.user = request.user
+            entry.settings = settings
+            entry.save()
+            form.save_m2m()
+
+            reversion.set_user(request.user)
+            reversion.set_comment("Initial revision")
+
         if form2.cleaned_data['entry_type'] == 1:
             messages.success(request, 'Successfully created new asset. Now add version.')
             return redirect('assets:add_version', id=entry.id)
@@ -113,7 +120,12 @@ def edit(request, id):  # TODO: REFACTOR!
         form2 = EntrySettingsForm(request.POST or None, instance=asset.settings)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
         if form.is_valid() and form2.is_valid() and formset.is_valid():
-            form.save()
+            with reversion.create_revision():
+                form.save()
+
+                reversion.set_user(request.user)
+                reversion.set_comment("Edited by user")
+
             formset.save()
             form2.save()
             messages.success(request, 'Asset saved')

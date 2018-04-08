@@ -1,5 +1,7 @@
 import json
 
+from django.utils import timezone
+
 import requests
 
 from warnings import warn
@@ -73,6 +75,7 @@ class BitbucketHandler():
         # except requests.exceptions.HTTPError:
         #     return asset
         asset.repo_stars = data['followers_count']
+        asset.repo_updated = timezone.now()
 
         return asset
 
