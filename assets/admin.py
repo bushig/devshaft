@@ -3,7 +3,7 @@ from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from reversion.admin import VersionAdmin
 
-from .models import Entry,Category, VersionHistory, EntryImage, EntrySettings
+from .models import Entry,Category, VersionHistory, EntryImage
 
 # class VersionHistoryAdmin(admin.ModelAdmin):
 #     # class Meta:
@@ -25,4 +25,3 @@ admin.site.register(Entry, EntryAdmin)
 admin.site.register(Category)
 admin.site.register(VersionHistory)
 admin.site.register(EntryImage, EntryImageAdmin)
-admin.site.register(EntrySettings)

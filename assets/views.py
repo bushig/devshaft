@@ -5,18 +5,19 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
+from django.utils import timezone
 
 import reversion
 
 from .models import Category, Entry, VersionHistory
-from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit, EntrySettingsForm
+from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .filters import EntryFilter
 
 
 def assets_list(request):  # TODO:Move to manager, improve image perform
-    filter = EntryFilter(request.GET or None, queryset=Entry.objects.not_null())
+    filter = EntryFilter(request.GET or None, queryset=Entry.objects.all())
     page = request.GET.get('page')
-    paginator = Paginator(filter.qs, 9)
+    paginator = Paginator(filter.qs, 16)
     try:
         paginated = paginator.page(page)
     except PageNotAnInteger:
@@ -35,10 +36,10 @@ def user_assets(request, user_id):  # TODO: Make it DRYer
     if request.user == user:
         queryset = Entry.objects.filter(user=user)
     else:
-        queryset = Entry.objects.not_null().filter(user=user)
+        queryset = Entry.objects.filter(user=user)
     filter = EntryFilter(request.GET or None, queryset=queryset)
     page = request.GET.get('page')
-    paginator = Paginator(filter.qs, 9)
+    paginator = Paginator(filter.qs, 16)
     try:
         paginated = paginator.page(page)
     except PageNotAnInteger:
@@ -66,39 +67,37 @@ def entry_details(request, id):
 @login_required()
 def add_entry(request):  # TODO:REFACTOR to display formset
     form = EntryForm(request.POST or None)
-    form2 = EntrySettingsForm(request.POST or None)
-    if form.is_valid() and form2.is_valid():
+    if form.is_valid():
         with reversion.create_revision():
-            settings = form2.save()
             entry = form.save(commit=False)
             entry.user = request.user
-            entry.settings = settings
             entry.save()
             form.save_m2m()
 
             reversion.set_user(request.user)
             reversion.set_comment("Initial revision")
 
-        if form2.cleaned_data['entry_type'] == 1:
+        if entry.cleaned_data['entry_type'] == 1:
             messages.success(request, 'Successfully created new asset. Now add version.')
             return redirect('assets:add_version', id=entry.id)
         else:
             messages.success(request, 'Successfully created new asset.')
             return redirect('assets:detail', id=entry.id)
-    context = {'form': form, 'form2': form2}
+    context = {'form': form}
     return render(request, 'assets_add_entry.html', context)
 
 
 @login_required()
 def add_version(request, id):
     entry = get_object_or_404(Entry, id=id)
-    if request.user != entry.user or entry.settings.entry_type != 1:
+    if request.user != entry.user or entry.entry_type != 1:
         raise PermissionDenied
     form = VersionForm(request.POST or None, request.FILES or None, initial={'entry': entry})
     if form.is_valid():
         version = form.save(commit=False)
         version.file = request.FILES['file']
         version.entry = entry
+        entry.updated = timezone.now()
         version.save()
         return redirect('assets:detail', id)
     context = {'form': form}
@@ -117,9 +116,8 @@ def edit(request, id):  # TODO: REFACTOR!
     asset = get_object_or_404(Entry, id=id)
     if request.user == asset.user:
         form = EntryForm(request.POST or None, instance=asset)
-        form2 = EntrySettingsForm(request.POST or None, instance=asset.settings)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
-        if form.is_valid() and form2.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid():
             with reversion.create_revision():
                 form.save()
 
@@ -127,7 +125,6 @@ def edit(request, id):  # TODO: REFACTOR!
                 reversion.set_comment("Edited by user")
 
             formset.save()
-            form2.save()
             messages.success(request, 'Asset saved')
             return redirect('assets:detail', id)
         context = {'form': form, 'form2':form2, 'formset': formset}

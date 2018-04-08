@@ -8,7 +8,7 @@
                     <small>{{ entry.category }}</small>
                 </h1>
             {% if user.is_authenticated %}
-                {% if entry.settings.entry_type == 1 %}
+                {% if entry.entry_type == 1 %}
                     <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success btn-xs" role="button">Add
                         version</a> {% endif %}
                 <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
@@ -91,7 +91,7 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {% if entry.settings.entry_type == 1 or entry.settings.github_releases %}
+        {% if entry.entry_type == 1 or entry.settings.github_releases %}
             <div class="panel panel-default col-lg-6">
                 <a href="{% url 'assets:entry_versions' entry.id %}"><h1>Versions</h1></a>
                 {% if versions %}

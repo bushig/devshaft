@@ -5,15 +5,16 @@ from django.forms.models import BaseModelFormSet, modelformset_factory, inlinefo
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
 from mptt.forms import TreeNodeChoiceField
-from image_cropping import ImageCropWidget
 
-from .models import Entry, VersionHistory, EntryImage, Category, EntrySettings
+from .models import Entry, VersionHistory, EntryImage, Category
 
 
 class EntryForm(forms.ModelForm):
     class Meta:
-        model=Entry
-        fields=('category', 'name', 'description', 'languages', 'frameworks','repository', 'site', 'license')
+        model = Entry
+        fields = (
+        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license', 'entry_type',
+        'github_releases', 'changelog', 'locked')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
@@ -21,14 +22,13 @@ class EntryForm(forms.ModelForm):
 
 
 class VersionForm(forms.ModelForm):
-    field_order = ('entry', 'major_version', 'minor_version', 'patch_version', 'changelog', 'file')
+    field_order = ('entry', 'version', 'changelog', 'file')
 
     helper = FormHelper()
     helper.form_id = 'id-addVersionForm'
     helper.form_method = 'post'
 
     helper.add_input(Submit('submit', 'Submit'))
-
 
     helper.form_class = 'form-horizontal'
     # helper.form_show_labels=False
@@ -47,20 +47,18 @@ class VersionForm(forms.ModelForm):
             'file': forms.FileInput(attrs={'required': True}),
         }
 
-class EntrySettingsForm(forms.ModelForm):
-    class Meta:
-        model = EntrySettings
-        fields = ('entry_type', 'github_releases', 'changelog')
 
 class VersionFormEdit(forms.ModelForm):
     field_order = ('changelog', 'file')
+
     class Meta:
         model = VersionHistory
         fields = ('file', 'changelog')
 
+
 class SearchForm(forms.Form):
-    q=forms.CharField(max_length=120, required=False)
-    category=TreeNodeChoiceField(Category.objects.all(), required=False)
+    q = forms.CharField(max_length=120, required=False)
+    category = TreeNodeChoiceField(Category.objects.all(), required=False)
     # o=forms.ChoiceField(choices=('version', 'Last updated'))
     field_order = ('q', 'category')
 
@@ -68,10 +66,12 @@ class SearchForm(forms.Form):
         fields = ('q', 'category', 'o')
         # widgets = {'q': forms.TextInput(attrs={'help-block': "Type in asset name, description or creator's name"})}
 
+
 class EntryImageForm(forms.ModelForm):
     class Meta:
         model = EntryImage
         fields = ('image', 'cropping')
 
-#Edit entry images formset TODO:REFACTOR
-EntryImageFormSet=inlineformset_factory(Entry, EntryImage, extra=5, max_num=5, form=EntryImageForm)
+
+# Edit entry images formset TODO:REFACTOR
+EntryImageFormSet = inlineformset_factory(Entry, EntryImage, extra=5, max_num=5, form=EntryImageForm)

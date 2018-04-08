@@ -20,8 +20,8 @@ from frameworks.models import Framework
 
 class EntryManager(models.Manager):
     def get_queryset(self):
-        return super(EntryManager, self).get_queryset().select_related('category', 'user', 'settings').prefetch_related('entryimage_set').\
-            defer('user__password').annotate(Max('versionhistory__timestamp', distinct=True), Count('users_liked', distinct=True))
+        return super(EntryManager, self).get_queryset().select_related('category', 'user').prefetch_related('entryimage_set').\
+            defer('user__password').annotate(Count('users_liked', distinct=True))
 
     def not_null(self):
         return self.get_queryset().exclude(versionhistory__isnull=True)
@@ -51,7 +51,6 @@ class Entry(models.Model): #make it assets again!
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     languages = models.ManyToManyField(Language, related_name="assets")
     frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
-    settings = models.OneToOneField('EntrySettings', on_delete=models.CASCADE)
 
     repo_stars = models.IntegerField("Stars", default=0)
     repo_forks = models.IntegerField("Repo forks", default=0)
@@ -63,6 +62,17 @@ class Entry(models.Model): #make it assets again!
     updated = models.DateTimeField(default=timezone.now)
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
     #image in EntryImage for that asset
+
+    # Settings
+    choices = ((0, 'Github'),
+               (1, 'Versions'),
+               (2, 'Link')
+               )
+    entry_type = models.PositiveSmallIntegerField(choices=choices)
+    github_releases = models.BooleanField(default=False)
+    changelog = models.BooleanField(default=False)
+    locked = models.BooleanField(default=True)
+
 
     #managers
     objects = EntryManager()
@@ -93,16 +103,6 @@ class Entry(models.Model): #make it assets again!
 
     def get_absolute_url(self):
         return reverse('assets:detail', args=[self.id])
-
-class EntrySettings(models.Model):
-    choices = ((0, 'Github'),
-               (1, 'Versions'),
-               (2, 'Link')
-               )
-    entry_type = models.PositiveSmallIntegerField(choices=choices)
-    github_releases = models.BooleanField(default=False)
-    changelog = models.BooleanField(default=False)
-    locked = models.BooleanField(default=False)
 
 class EntryImage(models.Model):
     entry=models.ForeignKey(Entry, on_delete=models.CASCADE)

@@ -48,7 +48,7 @@ class GitHubHandler:
         except TypeError as e:
             print('Commits not fetched')
         #TODO: get releases
-        if asset.settings.entry_type == 0:
+        if asset.entry_type == 0:  # github type
             releases = repo.get_releases()
             for release in releases:
                 from ..models import VersionHistory
