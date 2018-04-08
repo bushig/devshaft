@@ -18,14 +18,16 @@ class EntryFilter(django_filters.FilterSet):
     q=django_filters.CharFilter(method='filter_search', label='Search', help_text='You can search by asset name, description or asset creator')
     o = django_filters.OrderingFilter(fields=[('users_liked__count', 'likes'),
                                               ('versionhistory__timestamp__max', 'updated')])
-    category = TreeeMultipleFilter(queryset=Category.objects.all(), widget=SelectMultiple(attrs={'style': 'height:500px'}))
+    category = TreeeMultipleFilter(method='filter_category', queryset=Category.objects.all(), widget=SelectMultiple(attrs={'style': 'height:500px'}))
     class Meta:
         model = Entry
         form = SearchForm
         fields = ('q', 'category') #TODO: Rename category to c/ FIX ordering
 
-    # def filter_category(self, queryset, name, value):
-    #     return queryset.filter(name=va)
+    def filter_category(self, queryset, name, value):
+        print(name, value.get_descendants(include_self=True))
+        value = value.get_descendants(include_self=True)
+        return queryset.filter(category__in=value)
 
     def filter_search(self, queryset, name, value):
         return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value) | Q(user__username__iexact=value))
