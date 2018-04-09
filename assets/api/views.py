@@ -1,14 +1,18 @@
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView, ListCreateAPIView
+from rest_framework.views import APIView
 from rest_framework import permissions, status
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+
+from django.contrib.auth.models import User
 
 from ..models import Entry
-from .serializers import EntrySerializer
+from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
-
-class EntryListView(ListAPIView):
+class EntryListView(ListCreateAPIView):
     '''
     List of all assets
     '''
@@ -18,6 +22,7 @@ class EntryListView(ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     lookup_field = 'id'
 
+
 class EntryReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
@@ -25,28 +30,47 @@ class EntryReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
-# class EntryLikesCreateView(CreateAPIView):
-#     '''
-#     API to post like if is there is no likes from user for this particular asset(201) and to delete it
-#     if there was any(204).
-#     '''
-#
-#     #TODO: return ammount of likes, asset owner cant like his asset, refactor model to have one to many relation
-#
-#     queryset = Entry.objects.all()
-#     serializer_class = EntryLikesSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-#
-#     def create(self, request, *args, **kwargs):#TODO: Move to perform_create
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#
-#         entry = Entry.objects.get(id = kwargs['id'])
-#         queryset=EntryLikes.objects.filter(user=request.user, entry = kwargs['id'])
-#
-#         if queryset.exists():
-#             queryset.delete()
-#             return Response(status=status.HTTP_204_NO_CONTENT)
-#         else:
-#             serializer.save(user = request.user, entry = entry)
-#             return Response(status=status.HTTP_201_CREATED)
+class EntryLikesCreateView(APIView):
+    '''
+    API to post like if is there is no likes from user for this particular asset(201) and to delete it
+    if there was any(204).
+    '''
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        id = self.kwargs.get('id')
+        return Entry.objects.filter(id=id)
+
+
+    def get(self, request, format=None, *args, **kwargs):
+        """
+        Returns list of users liked asset
+        :param request:
+        :param format:
+        :return:
+        """
+        id = self.kwargs.get('id')
+        asset = Entry.objects.get(id=id)
+        serializer = EntryLikesSerializer(asset)
+        return Response(data=serializer.data)
+
+
+    def post(self, request, format=None, *args, **kwargs):
+        serializer = EntryLikesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # entry = Entry.objects.get(id = kwargs['id'])
+        try:
+            entry = Entry.objects.get(users_liked=request.user, id=kwargs['id'])
+        except Entry.DoesNotExist:
+            print('Failed')
+            entry = None
+        if entry:
+            entry.users_liked.remove(request.user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            entry = Entry.objects.get(id=kwargs['id'])
+            entry.users_liked.add(request.user)
+            # serializer.save(users_liked = request.user, id = kwargs['id'])
+            return Response(status=status.HTTP_201_CREATED)

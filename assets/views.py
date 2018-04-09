@@ -72,6 +72,7 @@ def add_entry(request):  # TODO:REFACTOR to display formset
             entry = form.save(commit=False)
             entry.user = request.user
             entry.save()
+            entry.updated = timezone.now()
             form.save_m2m()
 
             reversion.set_user(request.user)
