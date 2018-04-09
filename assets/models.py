@@ -1,11 +1,10 @@
 import re
 
 from django.db import models
-from django.db.models import Count, F, Max
+from django.db.models import Count
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 from django.core.validators import validate_comma_separated_integer_list
 from django.utils import timezone
 
@@ -14,7 +13,7 @@ from image_cropping import ImageRatioField, ImageCropField
 
 from .utils import version_filename_save
 from common.models import License
-from .repos import get_repo_for_repo_url
+from common.repos import get_repo_for_repo_url
 from languages.models import Language
 from frameworks.models import Framework
 
@@ -49,7 +48,7 @@ class Entry(models.Model): #make it assets again!
     repository = models.URLField(blank=True, null=True, max_length=100)
     site = models.URLField(blank=True, null=True, max_length=100)
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
-    languages = models.ManyToManyField(Language, related_name="assets")
+    languages = models.ManyToManyField(Language, related_name="assets", blank=True)
     frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
 
     repo_stars = models.IntegerField("Stars", default=0)

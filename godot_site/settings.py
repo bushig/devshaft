@@ -186,6 +186,8 @@ THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
+IMAGE_CROPPING_JQUERY_URL = None
+
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 

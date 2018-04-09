@@ -8,11 +8,13 @@ from django.db.models import Count
 from django.utils import timezone
 
 import reversion
+from reversion.models import Version
 
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .filters import EntryFilter
-
+from languages.models import Language
+from frameworks.models import Framework
 
 def assets_list(request):  # TODO:Move to manager, improve image perform
     filter = EntryFilter(request.GET or None, queryset=Entry.objects.all())
@@ -78,7 +80,7 @@ def add_entry(request):  # TODO:REFACTOR to display formset
             reversion.set_user(request.user)
             reversion.set_comment("Initial revision")
 
-        if entry.cleaned_data['entry_type'] == 1:
+        if entry.entry_type == 1: # version type
             messages.success(request, 'Successfully created new asset. Now add version.')
             return redirect('assets:add_version', id=entry.id)
         else:
@@ -128,7 +130,7 @@ def edit(request, id):  # TODO: REFACTOR!
             formset.save()
             messages.success(request, 'Asset saved')
             return redirect('assets:detail', id)
-        context = {'form': form, 'form2':form2, 'formset': formset}
+        context = {'form': form, 'formset': formset}
         return render(request, 'assets_entry_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")
@@ -158,3 +160,18 @@ def fetch_asset_metadata(request, id):
     asset.fetch_metadata()
     return redirect('assets:detail', id)
 # TODO: make asset list, user asset list and liked assets CBV
+
+def revisions_list(request, id):
+    entry = get_object_or_404(Entry, id=id)
+    revisions = Version.objects.get_for_object(entry)
+    results = []
+    for revision in revisions:
+        res = revision.field_dict
+        entry = Entry.objects.get(id=id)
+        res['category'] = Category.objects.get(id = revision.field_dict['category_id'])
+        res['entry_type'] = entry.get_entry_type_display()
+        res['languages'] = [Language.objects.get(id=i) for i in revision.field_dict['languages']]
+        res['frameworks'] = [Framework.objects.get(id=i) for i in revision.field_dict['frameworks']]
+        results.append(res)
+    context = {'revisions': results}
+    return render(request, 'assets_reversion_list.html', context=context)

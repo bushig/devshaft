@@ -57,6 +57,7 @@ class EntryLikesCreateView(APIView):
 
 
     def post(self, request, format=None, *args, **kwargs):
+        #TODO: Protect from liking by owner
         serializer = EntryLikesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

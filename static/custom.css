@@ -23,7 +23,13 @@
 
 .asset-img {
     max-height: 300px;
-    min-width: 100%;
+    max-width: 300px;
+    width: 100%;
+    padding: 0;
+}
+
+.panel-no-padding{
+    padding: 0;
 }
 
 /*dropdown in filter search*/

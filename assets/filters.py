@@ -16,8 +16,8 @@ class EntryFilter(django_filters.FilterSet):
     Filtering for Entries
     '''
     q=django_filters.CharFilter(method='filter_search', label='Search', help_text='You can search by asset name, description or asset creator')
-    o = django_filters.OrderingFilter(fields=[('users_liked__count', 'likes'),
-                                              ('updated', 'updated')])
+    o = django_filters.OrderingFilter(fields=[('-users_liked__count', 'likes'),
+                                              ('-updated', 'updated')])
     category = TreeeMultipleFilter(method='filter_category', queryset=Category.objects.all(), widget=SelectMultiple(attrs={'style': 'height:500px'}))
     class Meta:
         model = Entry
