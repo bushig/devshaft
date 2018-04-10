@@ -88,7 +88,7 @@ class Framework(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('frameworks:detail', kwargs={'pk': self.pk})
+        return reverse('frameworks:detail', kwargs={'id': self.id})
 
 class FrameworkImage(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE)

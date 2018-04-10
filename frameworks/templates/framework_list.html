@@ -1,11 +1,11 @@
 {% extends 'base_list.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block search %}
     <h5>Search</h5>
     <form class="form-horizontal">
-        <div class="form-group">
-            <input class='form-control' name="q" placeholder="Framework name">
-        </div>
+        {{ filter.form | crispy }}
 
         <button class="btn btn-success" type="submit">Search</button>
     </form>
@@ -19,33 +19,32 @@
         {% endif %}
     <!-- CONTENT -->
     <div class="col-lg-4">
-    <a href="{{ framework.get_absolute_url }}" class="nohover-link">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="panel-title"> {{ framework.title }}</h4>
-                <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
-                <span class="label label-warning"><i class="fas fa-balance-scale"></i> {{ framework.license }}</span></div>
+        <a href="{{ framework.get_absolute_url }}" class="nohover-link">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="panel-title"> {{ framework.title }}</h4>
+                    <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
+                    <span class="label label-warning"><i
+                            class="fas fa-balance-scale"></i> {{ framework.license }}</span></div>
             </div>
             <div class="panel-body">
-{#                <img class="img-thumbnail img-responsive asset-img" src="#}
-{#                        {% with entry_image=entry.entryimage_set.first %}#}
-{#                        {% if entry_image %}#}
-{#                        {{ MEDIA_URL }}{{ entry_image.image }}#}
-{#                        {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}#}
-{#                        {% endwith %}">#}
+                {#                <img class="img-thumbnail img-responsive asset-img" src="#}
+                {#                        {% with entry_image=entry.entryimage_set.first %}#}
+                {#                        {% if entry_image %}#}
+                {#                        {{ MEDIA_URL }}{{ entry_image.image }}#}
+                {#                        {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}#}
+                {#                        {% endwith %}">#}
             </div>
             <div class="panel-footer">
             </div>
-        </div>
     </div>
-    </div>
-    <!-- CONTENT -->
-    {% if row_cycle == 'end' %}
-        </div>
-    {% endif %}
+        <!-- CONTENT -->
+        {% if row_cycle == 'end' %}
+            </div>
+        {% endif %}
 
 
 
-    {% empty %}
+        {% empty %}
         <h1>Nothing there</h1>
 
     {% endfor %}

@@ -63,10 +63,10 @@ class GitHubHandler:
                     version.changelog = release.body
                     version.version = release.tag_name
                     version.timestamp = release.published_at
-                    # try:
-                    #     version.download_url = release.get_assets()[0]
-                    # except:
-                    #     version.download_url = release.zipball_url #TODO: fix it
+                    try:
+                        version.download_url = release.get_assets()[0]
+                    except:
+                        version.download_url = release.zipball_url
                     version.save()
         except AttributeError:
             pass
