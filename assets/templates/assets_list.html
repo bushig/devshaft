@@ -26,7 +26,9 @@
             <div class="panel-heading"><h4 class="panel-title"> {{ entry.name }}</h4>
                 <span class="label label-default"><i class="fas fa-tags"></i> {{ entry.category }}</span>
 
-                <span class="label label-info"><i class="fas fa-user"></i> {{ entry.user }}</span></div>
+                <span class="label label-info"><i class="fas fa-user"></i> {{ entry.user }}</span>
+                <span class="label label-warning"><i class="fas fa-balance-scale"></i> {{ entry.license }}</span></div>
+
             <div class="panel-body panel-no-padding">
                 <img class="img-thumbnail img-responsive asset-img" src="
                         {% with entry_image=entry.entryimage_set.first %}

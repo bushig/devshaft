@@ -48,23 +48,28 @@ class GitHubHandler:
         except TypeError as e:
             print('Commits not fetched')
         #TODO: get releases
-        if asset.entry_type == 0:  # github type
-            releases = repo.get_releases()
-            for release in releases:
-                from ..models import VersionHistory
-                version = VersionHistory.objects.filter(release_id=release.id)
-                if version:
-                    continue
-                version = VersionHistory(entry=asset, is_github_release=True)
-                version.release_id = release.id
-                version.changelog = release.body
-                version.version = release.tag_name
-                version.timestamp = release.published_at
-                # try:
-                #     version.download_url = release.get_assets()[0]
-                # except:
-                #     version.download_url = release.zipball_url #TODO: fix it
-                version.save()
+        print('test')
+
+        try:
+            if asset.entry_type == 0:  # github type
+                releases = repo.get_releases()
+                for release in releases:
+                    from assets.models import VersionHistory
+                    version = VersionHistory.objects.filter(release_id=release.id)
+                    if version:
+                        continue
+                    version = VersionHistory(entry=asset, is_github_release=True)
+                    version.release_id = release.id
+                    version.changelog = release.body
+                    version.version = release.tag_name
+                    version.timestamp = release.published_at
+                    # try:
+                    #     version.download_url = release.get_assets()[0]
+                    # except:
+                    #     version.download_url = release.zipball_url #TODO: fix it
+                    version.save()
+        except AttributeError:
+            pass
         # contributors = []
         # for contributor in repo.iter_contributors():
         #     contributors.append(contributor.login)

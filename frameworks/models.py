@@ -2,7 +2,13 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.core.validators import validate_comma_separated_integer_list
+from django.utils import timezone
 
+import re
+
+from image_cropping import ImageRatioField, ImageCropField
+
+from common.repos import get_repo_for_repo_url
 from common.models import License
 from languages.models import Language
 
@@ -17,6 +23,8 @@ ORIENTATION_CHOICES = ((1, '2D&3D'),
                        (2, '2D'),
                        (3, '3D'))
 
+# class Orientation(models.Model):
+    # title = models.CharField(max_length=2)
 
 class Platform(models.Model):
     title = models.CharField(max_length=20)
@@ -37,6 +45,8 @@ class Framework(models.Model):
     editor_platforms = models.ManyToManyField(Platform, related_name='editor_platforms')
     site = models.URLField(blank=True)
     repository_url = models.URLField(blank=True) #if not null then its open source
+    created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=False, default=timezone.now)
 
     repo_stars = models.IntegerField("Stars", default=0)
     repo_forks = models.IntegerField("Repo forks", default=0)
@@ -55,6 +65,22 @@ class Framework(models.Model):
     def liked(self, user):
         return self.objects.filter(pk=self.pk, likes=user).exists()
 
+    @property
+    def total_likes(self):
+        return Framework.objects.get(id=self.id).likes.count()
+
+    @property
+    def repo(self):
+        return get_repo_for_repo_url(self.repository_url)
+
+    def repo_name(self):
+        return re.sub(self.repo.url_regex, '', self.repository_url)
+
+    def fetch_metadata(self):
+        self.repo.fetch_metadata(self)
+        self.save()
+
+
     def is_author(self, user):
         return self.user == user
 
@@ -62,4 +88,9 @@ class Framework(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('frameworks.views.detail', kwargs={'pk': self.pk})
+        return reverse('frameworks:detail', kwargs={'pk': self.pk})
+
+class FrameworkImage(models.Model):
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE)
+    image=ImageCropField(blank=True, upload_to='uploaded_images')
+    cropping = ImageRatioField('image', '300x300')

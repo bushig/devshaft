@@ -7,79 +7,157 @@
                 <h1>{{ framework.name }}
                     <small>{{ framework.category }}</small>
                 </h1>
+            {% if user.is_authenticated %}
+                {% if framework.framework_type == 1 %}
+                    <a href="{% url 'assets:add_version' framework.id %}" class="btn btn-success btn-xs" role="button">Add
+                        version</a> {% endif %}
+                <a href="{% url 'frameworks:edit' framework.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
+                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ModalDelete">
+                    Delete asset
+                </button>
+            {% endif %}
+            <a class="btn btn-info btn-xs" href=""><i class="far fa-save"></i> Revisions</a>
             </div>
             {% comment %} CAROUSEL {% endcomment %}
             <div class="panel-body">
-                {% include 'carousel.html' %}
-                <p>{{ framework.description }}</p>
+                <div class="row">
+                    <div class="col-lg-5">
+                        {% include 'carousel.html' %}
+                    </div>
+                    <div class="col-lg-7">
+                        <p>{{ framework.description }}</p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-star"></i>Stars</th>
+                                <th><i class="fas fa-code-branch"></i>Forks</th>
+                                <th><i class="far fa-calendar-alt"></i> Repo fetched</th>
+                                <th><i class="fas fa-chart-bar"></i>Stats</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ framework.repo_stars }}</td>
+                                <td>{{ framework.repo_forks }}</td>
+                                <td>{{ framework.repo_updated | timesince }} ago</td>
+                                <td><img
+                                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ framework.commits }}&chco=666666&chbh=1,1,1&chds=0,50">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        {% if framework.user == user %}
+                            <br><i class="fas fa-thumbs-up"></i> {{ framework.likes.count }}
+                            <a href="{% url 'frameworks:fetch_metadata' framework.id %}" class="btn btn-default btn-xs"><i
+                                    class="fab fa-github"></i> Fetch
+                                metadata</a>
 
-                {% if framework.user == user %}
-                    <a href="#" class="btn btn-success" role="button">Add
-                        version</a>
-                    <a href="#" class="btn btn-info" role="button">Edit</a>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
-                        Delete asset
-                    </button>
-                    <br>Likes: {{ framework.users_liked__count }}
-
-                {% elif user.is_authenticated %}
-                    <button id="likes" data-frameworkid="{{ framework.id }}" class="btn
+                        {% elif user.is_authenticated %}
+                            <button id="likes" data-frameworkid="{{ framework.id }}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">
-                        <i class="fa fa-thumbs-up"></i>
-                        <span id="liked">Liked </span> <span id='likes_count'>{{ framework.likes__count }}</span>
+                                <i class="fa fa-thumbs-up"></i>
+                                <span id="liked">Liked </span>
+                                <span id='likes_count'>{{ framework.likes__count }}</span>
 
-                    {% else %}
-                        btn-default
-                        " type="button">
-                        <i class="fa fa-thumbs-up fa-rotate-270"></i>
-                        <span id="liked">Like </span><span id='likes_count'>{{ framework.likes__count }}</span>
-                    {% endif %}
-                    </button>
-                {% else %}
-                    <hr>Likes: {{ framework.likes__count }}
-                {% endif %}
+                            {% else %}
+                                btn-default
+                                " type="button">
+                                <i class="fa fa-thumbs-up"></i>
+                                <span id="liked">Like </span>
+                                <span id='likes_count'>{{ framework.likes__count }}</span>
+                            {% endif %}
+                            </button>
+                            <a href="{% url 'assets:fetch_metadata' framework.id %}" class="btn btn-default btn-xs"><i
+                                    class="fab fa-github"></i> Fetch
+                                metadata</a>
+                        {% else %}
+                            <hr>Likes: {{ framework.likes__count }}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row">
 
-        <div class="panel panel-default col-lg-6">
-            <h1>Changelog</h1>
-            <h5>Hell ye dud</h5>
-
-        </div>
-
-        <div class="panel panel-default col-lg-6">
-            <a href="#"><h1>Versions</h1></a>
-            {% if versions %}
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>Version</th>
-                        <th>Date</th>
-                        <th>Download</th>
-                    </tr>
-                    {% for version in versions %}
+        {% if framework.settings.changelog %}
+            <div class="panel panel-default col-lg-6">
+                <h1>Changelog</h1>
+                {% for version in versions %}
+                    <hr>
+                    <h5><strong>{{ version.version }}</strong></h5>
+                    <p>{{ version.changelog| linebreaks }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if framework.framework_type == 1 or framework.settings.github_releases %}
+            <div class="panel panel-default col-lg-6">
+                <a href="{% url 'assets:framework_versions' framework.id %}"><h1>Versions</h1></a>
+                {% if versions %}
+                    <table class="table table-bordered table-striped">
                         <tr>
-                            <td>{{ version.version }}</td>
-                            <td><p href="#" data-toggle="tooltip" title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
-                            <td><a href="{{ MEDIA_URL }}{{ version.file }}" class="btn btn-default" role="button">Download</a>
-                                {% if framework.user == user %}
-                                    <a href="#" class="btn btn-info"
-                                       role="button">Edit</a>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                {% endif %}
-
-                            </td>
+                            <th>Version</th>
+                            <th>Date</th>
+                            <th>Download</th>
                         </tr>
-                    {% endfor %}
+                        {% for version in versions %}
+                            <tr>
+                                <td>{{ version.version }}</td>
+                                <td><p href="#" data-toggle="tooltip"
+                                       title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
+                                <td><a href="
 
-                </table>
-                {#        <a href="{% url 'frameworks:framework_versions' framework.id %}" class="btn btn-info" role="button">View all</a>#}
-            {% else %}
-                <h1>No versions yet</h1>
-            {% endif %}
+                                        {% if not version.is_github_release %}{{ MEDIA_URL }}{{ version.file }}{% else %}{{ version.download_url }}{% endif %}"
+                                       class="btn btn-default" role="button">Download</a>
+                                    {% if framework.user == user %}
+                                        <a href="{% url 'assets:edit_version' framework.id version.id %}"
+                                           class="btn btn-info"
+                                           role="button">Edit</a>
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                    {#        <a href="{% url 'assets:framework_versions' framework.id %}" class="btn btn-info" role="button">View all</a>#}
+                {% else %}
+                    <h1>No versions yet</h1>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% comment %} MODAL {% endcomment %}
+    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="DeleteframeworkButton">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this asset?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="deleteframework" type="button" data-frameworkid="{{ framework.id }}" class="btn btn-danger">Delete
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 {% endblock %}

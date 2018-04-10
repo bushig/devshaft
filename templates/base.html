@@ -33,14 +33,21 @@
             <ul class="nav navbar-nav">
                 <li class="disabled"><a href="#">Showcase</a></li>
                 <li class="disabled"><a href="#">Languages</a></li>
-                <li><a href="{% url 'frameworks:list' %}">Frameworks</a></li>
+                <li class="dropdown"><a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Frameworks <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'frameworks:list' %}">Browse</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'frameworks:add' %}">Add framework</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
 
                 <li class="dropdown">
                     <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Assets <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'assets:list' %}">Browse</a></li>
-                        <li><a href="#">Categories</a></li>
                         {% if user.is_authenticated %}
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Actions</li>
