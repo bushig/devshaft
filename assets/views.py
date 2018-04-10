@@ -54,6 +54,24 @@ def user_assets(request, user_id):  # TODO: Make it DRYer
     context = {'entries': paginated, 'user': user, 'filter': filter}
     return render(request, 'user_assets.html', context)
 
+def assets_liked(request, user_id):  # TODO: Make it DRYer
+    user = get_object_or_404(User, id=user_id)
+    queryset = Entry.objects.filter(users_liked=user)
+    filter = EntryFilter(request.GET or None, queryset=queryset)
+    page = request.GET.get('page')
+    paginator = Paginator(filter.qs, 16)
+    try:
+        paginated = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paginated = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paginated = paginator.page(paginator.num_pages)
+
+    context = {'entries': paginated, 'user': user, 'filter': filter}
+    return render(request, 'user_assets.html', context)
+
 
 def entry_details(request, id):
     entry = get_object_or_404(Entry, id=id)

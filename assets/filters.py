@@ -22,7 +22,7 @@ class EntryFilter(django_filters.FilterSet):
     class Meta:
         model = Entry
         form = SearchForm
-        fields = ('q', 'category', 'languages', 'frameworks') #TODO: Rename category to c/ FIX ordering
+        fields = ('q', 'category', 'languages', 'frameworks', 'tags') #TODO: Rename category to c/ FIX ordering
 
     def filter_category(self, queryset, name, value):
         if value:

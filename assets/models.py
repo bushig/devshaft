@@ -38,6 +38,8 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
+class Tag(models.Model):
+    title = models.CharField(max_length=40)
 
 class Entry(models.Model): #make it assets again!
     category=TreeForeignKey(Category, on_delete=models.CASCADE)
@@ -50,6 +52,7 @@ class Entry(models.Model): #make it assets again!
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
     languages = models.ManyToManyField(Language, related_name="assets", blank=True)
     frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     repo_stars = models.IntegerField("Stars", default=0)
     repo_forks = models.IntegerField("Repo forks", default=0)

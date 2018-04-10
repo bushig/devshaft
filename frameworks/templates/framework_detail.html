@@ -80,57 +80,6 @@
         </div>
     </div>
 
-    <div class="row">
-
-        {% if framework.settings.changelog %}
-            <div class="panel panel-default col-lg-6">
-                <h1>Changelog</h1>
-                {% for version in versions %}
-                    <hr>
-                    <h5><strong>{{ version.version }}</strong></h5>
-                    <p>{{ version.changelog| linebreaks }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% if framework.framework_type == 1 or framework.settings.github_releases %}
-            <div class="panel panel-default col-lg-6">
-                <a href="{% url 'assets:framework_versions' framework.id %}"><h1>Versions</h1></a>
-                {% if versions %}
-                    <table class="table table-bordered table-striped">
-                        <tr>
-                            <th>Version</th>
-                            <th>Date</th>
-                            <th>Download</th>
-                        </tr>
-                        {% for version in versions %}
-                            <tr>
-                                <td>{{ version.version }}</td>
-                                <td><p href="#" data-toggle="tooltip"
-                                       title="{{ version.timestamp }}">{{ version.timestamp | timesince }} ago</p></td>
-                                <td><a href="
-
-                                        {% if not version.is_github_release %}{{ MEDIA_URL }}{{ version.file }}{% else %}{{ version.download_url }}{% endif %}"
-                                       class="btn btn-default" role="button">Download</a>
-                                    {% if framework.user == user %}
-                                        <a href="{% url 'assets:edit_version' framework.id version.id %}"
-                                           class="btn btn-info"
-                                           role="button">Edit</a>
-                                        <button type="button" class="btn btn-danger">Delete</button>
-                                    {% endif %}
-
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    </table>
-                    {#        <a href="{% url 'assets:framework_versions' framework.id %}" class="btn btn-info" role="button">View all</a>#}
-                {% else %}
-                    <h1>No versions yet</h1>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
-
     {% comment %} MODAL {% endcomment %}
     <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

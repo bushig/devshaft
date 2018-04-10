@@ -13,7 +13,7 @@ class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = (
-        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license', 'entry_type',
+        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license', 'tags', 'entry_type',
         'github_releases', 'changelog', 'locked')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
