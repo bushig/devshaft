@@ -47,6 +47,11 @@ class Framework(models.Model):
     repository_url = models.URLField(blank=True) #if not null then its open source
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=False, default=timezone.now)
+    TYPE_CHOICES = ((1, 'Free'),
+                    (2, 'Open Source'),
+                    (3, 'Paid'),
+                    (4, 'Partially Free'))
+    framework_type = models.IntegerField(choices=TYPE_CHOICES)
 
     repo_stars = models.IntegerField("Stars", default=0)
     repo_forks = models.IntegerField("Repo forks", default=0)

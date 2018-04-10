@@ -8,8 +8,8 @@ class FrameworkForm(forms.ModelForm):
     class Meta:
         model = Framework
         fields = (
-        'title', 'description', 'license', 'is_2d', 'is_3d', 'languages', 'editor_platforms', 'target_platforms',
-        'site', 'repository_url')
+            'title', 'description', 'license', 'is_2d', 'is_3d', 'languages', 'framework_type', 'editor_platforms',
+            'target_platforms', 'site', 'repository_url')
 
 
 class FrameworkImageForm(forms.ModelForm):

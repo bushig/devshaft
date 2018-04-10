@@ -1,6 +1,12 @@
 {% extends 'base_list.html' %}
 
 {% load crispy_forms_tags %}
+{% load cropping %}
+{% load cropping thumbnail %}
+
+{% block head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
 
 {% block search %}
     <h5>Search</h5>
@@ -25,17 +31,20 @@
                     <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
                     <span class="label label-warning"><i
                             class="fas fa-balance-scale"></i> {{ framework.license }}</span></div>
-            </div>
-            <div class="panel-body">
-                {#                <img class="img-thumbnail img-responsive asset-img" src="#}
-                {#                        {% with entry_image=entry.entryimage_set.first %}#}
-                {#                        {% if entry_image %}#}
-                {#                        {{ MEDIA_URL }}{{ entry_image.image }}#}
-                {#                        {% else %}{{ MEDIA_URL }}{{ entry.category.image }}{% endif %}#}
-                {#                        {% endwith %}">#}
+            <div class="panel-body panel-no-padding">
+                <img class="img-thumbnail img-responsive asset-img" src="
+                {% with framework_image=framework.frameworkimage_set.first %}
+                        {% if framework_image %}
+                        {% cropped_thumbnail framework_image "cropping" %}
+                        {% else %}
+                        /static/placeholder.jpg
+                        {% endif %}
+                        {% endwith %}">
             </div>
             <div class="panel-footer">
             </div>
+            </div>
+        </a>
     </div>
         <!-- CONTENT -->
         {% if row_cycle == 'end' %}
@@ -49,4 +58,20 @@
 
     {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    <script>
+    function formatState(state){
+        return state.text.replace(/-/g, "")
+    }
+       $(document).ready(function() {
+    $('#id_languages').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+    $('#id_target_platforms').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+    $('#id_editor_platforms').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+
+});
+    </script>
 {% endblock %}

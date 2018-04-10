@@ -95,6 +95,7 @@ class Entry(models.Model): #make it assets again!
         self.save()
 
     class Meta:
+        ordering = ['-updated']
         verbose_name_plural='entries'
 
     def __str__(self):

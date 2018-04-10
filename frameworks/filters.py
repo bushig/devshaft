@@ -17,7 +17,7 @@ class FrameworkFilter(django_filters.FilterSet):
                                               ('-updated', 'updated')])
     class Meta:
         model = Framework
-        fields = ('q', 'languages', 'target_platforms', 'editor_platforms', 'is_2d', 'is_3d') #TODO: Rename category to c/ FIX ordering
+        fields = ('q', 'languages', 'target_platforms', 'editor_platforms', 'framework_type', 'is_2d', 'is_3d')
 
     def filter_search(self, queryset, name, value):
         return queryset.filter(Q(title__icontains=value) | Q(description__icontains=value) | Q(user__username__iexact=value))

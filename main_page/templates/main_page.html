@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Hello there!</h1>
+        <p>This is asset sharing site</p>
+        <p><a class="btn btn-primary btn-lg" href="{% url 'assets:list' %}" role="button">Check assets</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'frameworks:list' %}" role="button">Check frameworks</a>
+        </p>
+    </div>
+{% endblock %}

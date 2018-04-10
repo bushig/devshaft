@@ -23,7 +23,8 @@ from frameworks import urls as frameworks_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('assets.urls')),
+    path('', include('main_page.urls')),
+    path('assets/', include('assets.urls')),
     path('accounts/', include('allauth.urls')),
     path('frameworks/', include('frameworks.urls')),
     path('api/', include('common.api')),
