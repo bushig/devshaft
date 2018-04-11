@@ -37,3 +37,4 @@ selenium==3.11.0
 six==1.11.0
 sqlparse==0.2.4
 Werkzeug==0.14.1
+whitenoise==3.3.1

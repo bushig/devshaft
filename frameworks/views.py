@@ -52,7 +52,7 @@ def add_framework(request):  # TODO:REFACTOR to display formset
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
     framework = get_object_or_404(Framework, id=id)
-    if request.user == framework.user:
+    if request.user.is_authenticated:
         form = FrameworkForm(request.POST or None, instance=framework)
         formset = FrameworkImageFormSet(request.POST or None, request.FILES or None, instance=framework)
         if form.is_valid() and formset.is_valid():
@@ -60,7 +60,7 @@ def edit(request, id):  # TODO: REFACTOR!
                 form.save()
 
                 reversion.set_user(request.user)
-                reversion.set_comment("Edited by user")
+                reversion.set_comment("Edited by {}".format(request.user))
 
             formset.save()
             messages.success(request, 'Asset saved')

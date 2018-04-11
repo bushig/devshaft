@@ -41,6 +41,9 @@ class Category(MPTTModel):
 class Tag(models.Model):
     title = models.CharField(max_length=40)
 
+    def __str__(self):
+        return self.title
+
 class Entry(models.Model): #make it assets again!
     category=TreeForeignKey(Category, on_delete=models.CASCADE)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
@@ -49,24 +52,24 @@ class Entry(models.Model): #make it assets again!
     license = models.ForeignKey(License, on_delete=models.PROTECT)
     repository = models.URLField(blank=True, null=True, max_length=100)
     site = models.URLField(blank=True, null=True, max_length=100)
-    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked')
+    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked', blank=True)
     languages = models.ManyToManyField(Language, related_name="assets", blank=True)
     frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
-    repo_stars = models.IntegerField("Stars", default=0)
-    repo_forks = models.IntegerField("Repo forks", default=0)
-    repo_description = models.CharField("Repo description", null=True, max_length=1000)
+    repo_stars = models.IntegerField("Stars", blank=True, null=True)
+    repo_forks = models.IntegerField("Repo forks", blank=True, null=True)
+    repo_description = models.CharField("Repo description", null=True, max_length=1000, blank=True)
     repo_updated = models.DateTimeField(null=True)
     commits = models.CharField(null=True, blank=True, max_length=500, validators=[validate_comma_separated_integer_list])
 
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(default=timezone.now, blank=True)
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
     #image in EntryImage for that asset
 
     # Settings
-    choices = ((0, 'Github'),
+    choices = ((0, 'Github releases'),
                (1, 'Versions'),
                (2, 'Link')
                )

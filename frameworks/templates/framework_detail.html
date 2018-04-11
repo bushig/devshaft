@@ -72,8 +72,14 @@
                                     class="fab fa-github"></i> Fetch
                                 metadata</a>
                         {% else %}
-                            <hr>Likes: {{ framework.likes__count }}
+                            <hr><i class="fa fa-thumbs-up"></i> {{ framework.likes__count }}
                         {% endif %}
+                    {% if framework.repository_url %}
+                        <br><a href="{{ framework.repository_url }}">Repo</a>
+                    {% endif %}
+                    {% if framework.site %}
+                        <br><a href="{{ framework.site }}">Site</a>
+                    {% endif %}
                     </div>
                 </div>
             </div>

@@ -60,3 +60,7 @@
     text-decoration:none;
     box-shadow: none;
 }
+
+#select2-id_category-results{
+    max-height: 500px;
+}

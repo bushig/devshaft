@@ -42,6 +42,8 @@
                         {% endwith %}">
             </div>
             <div class="panel-footer">
+                <i class="fas fa-thumbs-up"></i> {{ framework.likes.count }}
+                <small><i class="far fa-calendar-alt"></i> {{ entry.updated | timesince }} ago</small>
             </div>
             </div>
         </a>

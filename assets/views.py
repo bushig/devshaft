@@ -135,7 +135,7 @@ def entry_versions(request, id):
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
     asset = get_object_or_404(Entry, id=id)
-    if request.user == asset.user:
+    if request.user.is_authenticated:
         form = EntryForm(request.POST or None, instance=asset)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
         if form.is_valid() and formset.is_valid():
@@ -143,7 +143,7 @@ def edit(request, id):  # TODO: REFACTOR!
                 form.save()
 
                 reversion.set_user(request.user)
-                reversion.set_comment("Edited by user")
+                reversion.set_comment("Edited by {}".format(request.user))
 
             formset.save()
             messages.success(request, 'Asset saved')

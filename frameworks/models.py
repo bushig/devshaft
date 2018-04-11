@@ -53,10 +53,10 @@ class Framework(models.Model):
                     (4, 'Partially Free'))
     framework_type = models.IntegerField(choices=TYPE_CHOICES)
 
-    repo_stars = models.IntegerField("Stars", default=0)
-    repo_forks = models.IntegerField("Repo forks", default=0)
-    repo_description = models.CharField("Repo description", null=True, max_length=1000)
-    repo_updated = models.DateTimeField(null=True)
+    repo_stars = models.IntegerField("Stars", null=True, blank=True)
+    repo_forks = models.IntegerField("Repo forks", null=True, blank=True)
+    repo_description = models.CharField("Repo description", null=True, blank=True, max_length=1000)
+    repo_updated = models.DateTimeField(null=True, blank=True)
     commits = models.CharField(null=True, blank=True, max_length=500,
                                validators=[validate_comma_separated_integer_list])
 
