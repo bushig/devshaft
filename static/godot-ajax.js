@@ -15,11 +15,43 @@ function getCookie(name) {
     return cookieValue;
 }
 var csrftoken = getCookie('csrftoken');
-$('#likes').click(function() {
+
+// assets likes
+$('#likes_asset').click(function() {
     var entryid = $(this).data()['entryid'];
     $.ajax({
         type: 'POST',
         url: '/api/assets/'+entryid+'/likes/',
+        data: {csrfmiddlewaretoken: csrftoken},
+        statusCode: {
+            201: function () {
+                $('#likes').toggleClass('btn-default');
+                $('#likes').toggleClass('btn-success active');
+                $('#likes').find('i').toggleClass('fa-rotate-270');
+                $('#liked').html('Liked ');
+                $('#likes_count').html(function (i, val) {
+                    return +val + 1
+                });
+            },
+            204: function () {
+                $('#likes').toggleClass('btn-default');
+                $('#likes').toggleClass('btn-success active');
+                $('#likes').find('i').toggleClass('fa-rotate-270');
+                $('#liked').html('Like ');
+                $('#likes_count').html(function (i, val) {
+                    return +val - 1
+                });
+            }
+        }
+    })
+});
+
+// framework likes
+$('#likes_framework').click(function() {
+    var frameworkid = $(this).data()['frameworkid'];
+    $.ajax({
+        type: 'POST',
+        url: '/api/frameworks/'+frameworkid+'/likes/',
         data: {csrfmiddlewaretoken: csrftoken},
         statusCode: {
             201: function () {

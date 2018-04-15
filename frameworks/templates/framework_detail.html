@@ -53,26 +53,26 @@
                                 metadata</a>
 
                         {% elif user.is_authenticated %}
-                            <button id="likes" data-frameworkid="{{ framework.id }}" class="btn
+                            <button id="likes_framework" data-frameworkid="{{ framework.id }}" class="btn
                 {% if user_liked %}
                 btn-success active" type="button">
                                 <i class="fa fa-thumbs-up"></i>
                                 <span id="liked">Liked </span>
-                                <span id='likes_count'>{{ framework.likes__count }}</span>
+                                <span id='likes_count'>{{ framework.likes.count }}</span>
 
                             {% else %}
                                 btn-default
                                 " type="button">
                                 <i class="fa fa-thumbs-up"></i>
                                 <span id="liked">Like </span>
-                                <span id='likes_count'>{{ framework.likes__count }}</span>
+                                <span id='likes_count'>{{ framework.likes.count }}</span>
                             {% endif %}
                             </button>
                             <a href="{% url 'assets:fetch_metadata' framework.id %}" class="btn btn-default btn-xs"><i
                                     class="fab fa-github"></i> Fetch
                                 metadata</a>
                         {% else %}
-                            <hr><i class="fa fa-thumbs-up"></i> {{ framework.likes__count }}
+                            <hr><i class="fa fa-thumbs-up"></i> {{ framework.likes.count }}
                         {% endif %}
                     {% if framework.repository_url %}
                         <br><a href="{{ framework.repository_url }}">Repo</a>
