@@ -1,12 +1,13 @@
 from rest_framework import serializers
 
 from ..models import Framework, Platform
-from languages.api.serializers import LanguageSerializer
+from apps.languages.api.serializers import LanguageSerializer
 
 class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
         fields = "__all__"
+
 
 class FrameworkSerializer(serializers.ModelSerializer):#add site uri
     user = serializers.ReadOnlyField(source='user.username')
@@ -17,7 +18,7 @@ class FrameworkSerializer(serializers.ModelSerializer):#add site uri
     #total_likes = serializers.ReadOnlyField(source='likes__count')
     class Meta:
         model = Framework
-        fields = ['id', 'title', 'description', 'user','is_2d', 'is_3d', 'site', 'repository_url', 'languages',
+        fields = ['id', 'title', 'description', 'user', 'is_2d', 'is_3d', 'site', 'repository_url', 'languages',
                   'target_platforms', 'editor_platforms']
 
 class FrameworkLikesSerializer(serializers.ModelSerializer):

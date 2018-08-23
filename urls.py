@@ -18,16 +18,16 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from assets import urls as assets_urls
-from frameworks import urls as frameworks_urls
+from apps.assets import urls as assets_urls
+from apps.frameworks import urls as frameworks_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main_page.urls')),
-    path('assets/', include('assets.urls')),
+    path('', include('apps.main_page.urls')),
+    path('assets/', include('apps.assets.urls')),
     path('accounts/', include('allauth.urls')),
-    path('frameworks/', include('frameworks.urls')),
-    path('api/', include('common.api')),
+    path('frameworks/', include('apps.frameworks.urls')),
+    path('api/', include('apps.common.api')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 

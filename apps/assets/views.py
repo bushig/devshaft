@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count
 from django.utils import timezone
 
 import reversion
@@ -13,8 +12,8 @@ from reversion.models import Version
 from .models import Category, Entry, VersionHistory
 from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
 from .filters import EntryFilter
-from languages.models import Language
-from frameworks.models import Framework
+from apps.languages.models import Language
+from apps.frameworks.models import Framework
 
 def assets_list(request):  # TODO:Move to manager, improve image perform
     filter = EntryFilter(request.GET or None, queryset=Entry.objects.all())

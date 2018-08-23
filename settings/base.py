@@ -19,17 +19,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2f-+^+jlqdaw-846d%&qkw&vqy_d3ed1a)7$w2g#-ryd8)8#m4'
-
-GITHUB_TOKEN = ''
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 SITE_ID = 1
 
-ALLOWED_HOSTS = ['devshaft.com']
+ALLOWED_HOSTS = ['*']
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -62,15 +54,15 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
 
-    'common',
-    'assets',
-    'frameworks',
-    'languages',
-    'main_page',
+    'apps.common',
+    'apps.assets',
+    'apps.frameworks',
+    'apps.languages',
+    'apps.main_page',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -79,12 +71,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'godot_site.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -104,30 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'godot_site.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'godot_site',
-        'USER': 'postgres',
-        'PASSWORD': 'qwerty1',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'ddc637n7vgerns',
-    #     'USER': 'imcjjkusbgxred',
-    #     'PASSWORD': 'Te4FQg7cRy9iy7OyuXSOzEexko',
-    #     'HOST': 'ec2-107-20-153-141.compute-1.amazonaws.com',
-    #     'PORT': '5432',
-    # }
-}
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Password validation
@@ -159,12 +128,12 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = '/'
 
 #CACHING
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

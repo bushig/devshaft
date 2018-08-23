@@ -8,9 +8,9 @@ import re
 
 from image_cropping import ImageRatioField, ImageCropField
 
-from common.repos import get_repo_for_repo_url
-from common.models import License
-from languages.models import Language
+from apps.common.repos import get_repo_for_repo_url
+from apps.common.models import License
+from apps.languages.models import Language
 
 PLATFORMS_CHOISES = ((1, 'Windows'),
                      (2, 'Linux'),

@@ -11,7 +11,6 @@ from .models import Framework
 from .forms import FrameworkForm, FrameworkImageFormSet
 
 def framework_list(request):
-    frameworks = Framework.objects.all()
     filter = FrameworkFilter(request.GET or None, queryset=Framework.objects.all())
     page = request.GET.get('page')
     paginator = Paginator(filter.qs, 16)

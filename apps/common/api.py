@@ -6,7 +6,7 @@ app_name = 'api'
 
 urlpatterns = [
     #Assets app
-    url(r'^assets/', include('assets.api.urls')),
+    url(r'^assets/', include('apps.assets.api.urls')),
     #Framework app
-    url(r'^frameworks/', include('frameworks.api.urls')),
+    url(r'^frameworks/', include('apps.frameworks.api.urls')),
 ]

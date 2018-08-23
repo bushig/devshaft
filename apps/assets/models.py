@@ -12,10 +12,10 @@ from mptt.models import MPTTModel, TreeForeignKey
 from image_cropping import ImageRatioField, ImageCropField
 
 from .utils import version_filename_save
-from common.models import License
-from common.repos import get_repo_for_repo_url
-from languages.models import Language
-from frameworks.models import Framework
+from apps.common.models import License
+from apps.common.repos import get_repo_for_repo_url
+from apps.languages.models import Language
+from apps.frameworks.models import Framework
 
 class EntryManager(models.Manager):
     def get_queryset(self):

@@ -13,7 +13,7 @@ class FrameworkFilter(django_filters.FilterSet):
     Filtering for Entries
     '''
     q=django_filters.CharFilter(method='filter_search', label='Search', help_text='You can search by framework name, description or creator')
-    o = django_filters.OrderingFilter(fields=[('-likes__count', 'likes'),
+    o = django_filters.OrderingFilter(fields=[('likes', 'likes'),
                                               ('-updated', 'updated')])
     class Meta:
         model = Framework
