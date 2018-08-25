@@ -3,26 +3,38 @@ from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 from reversion.admin import VersionAdmin
 
-from .models import Entry,Category, VersionHistory, EntryImage, Tag
+from .models import Asset, Category, Release, AssetImage, ReleaseUpload
 
-# class VersionHistoryAdmin(admin.ModelAdmin):
-#     # class Meta:
-#     #     model=VersionHistory
-#
-#     fields = ('entry', 'version', 'timestamp', 'changelog')
-#     list_display = ('entry', 'version')
 
-class EntryAdmin(VersionAdmin):
+class ReleaseInline(admin.TabularInline):
+    model = Release
+    fields = ('asset', 'version', 'timestamp', 'changelog')
+
+
+class AssetImageInline(ImageCroppingMixin, admin.StackedInline):
+    model = AssetImage
+
+
+class ReleaseUploadAdminInline(admin.StackedInline):
+    model = ReleaseUpload
+
+
+@admin.register(Release)
+class ReleaseAdmin(admin.ModelAdmin):
     class Meta:
-        model = Entry
-    # fields = ('category', 'user', 'name', 'description')
+        model = Release
+
+    inlines = (ReleaseUploadAdminInline,)
+    list_display = ('asset', 'version', 'timestamp')
+
+
+@admin.register(Asset)
+class AssetAdmin(VersionAdmin):
+    inlines = (AssetImageInline, ReleaseInline)
     list_display = ('name', 'category', 'user', 'total_likes')
+    class Meta:
+        model = Asset
 
-class EntryImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    pass
 
-admin.site.register(Entry, EntryAdmin)
+
 admin.site.register(Category)
-admin.site.register(VersionHistory)
-admin.site.register(EntryImage, EntryImageAdmin)
-admin.site.register(Tag)

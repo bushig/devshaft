@@ -35,6 +35,7 @@ class Platform(models.Model):
 
 class Framework(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=1000)
     license = models.ForeignKey(License, on_delete=models.CASCADE)
@@ -44,14 +45,13 @@ class Framework(models.Model):
     target_platforms = models.ManyToManyField(Platform, related_name='target_platforms')
     editor_platforms = models.ManyToManyField(Platform, related_name='editor_platforms')
     site = models.URLField(blank=True)
-    repository_url = models.URLField(blank=True) #if not null then its open source
+    repository_url = models.URLField(blank=True)  # if not null then its open source
+    youtube = models.URLField(blank=True, null=True, max_length=300)
+    is_free = models.BooleanField(default=False)
+    is_royalty_free = models.BooleanField(default=False)
+
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=False, default=timezone.now)
-    TYPE_CHOICES = ((1, 'Free'),
-                    (2, 'Open Source'),
-                    (3, 'Paid'),
-                    (4, 'Partially Free'))
-    framework_type = models.IntegerField(choices=TYPE_CHOICES)
 
     repo_stars = models.IntegerField("Stars", null=True, blank=True)
     repo_forks = models.IntegerField("Repo forks", null=True, blank=True)
@@ -95,7 +95,12 @@ class Framework(models.Model):
     def get_absolute_url(self):
         return reverse('frameworks:detail', kwargs={'id': self.id})
 
+
 class FrameworkImage(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE)
     image=ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
+    date_add = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date_add']

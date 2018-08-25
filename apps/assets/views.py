@@ -9,14 +9,14 @@ from django.utils import timezone
 import reversion
 from reversion.models import Version
 
-from .models import Category, Entry, VersionHistory
-from .forms import EntryForm, VersionForm, EntryImageFormSet, VersionFormEdit
+from .models import Category, Asset, Release
+from .forms import AssetForm, ReleaseForm, EntryImageFormSet, ReleaseFormEdit
 from .filters import EntryFilter
 from apps.languages.models import Language
 from apps.frameworks.models import Framework
 
 def assets_list(request):  # TODO:Move to manager, improve image perform
-    filter = EntryFilter(request.GET or None, queryset=Entry.objects.all())
+    filter = EntryFilter(request.GET or None, queryset=Asset.objects.all())
     page = request.GET.get('page')
     paginator = Paginator(filter.qs, 16)
     try:
@@ -35,9 +35,9 @@ def assets_list(request):  # TODO:Move to manager, improve image perform
 def user_assets(request, user_id):  # TODO: Make it DRYer
     user = get_object_or_404(User, id=user_id)
     if request.user == user:
-        queryset = Entry.objects.filter(user=user)
+        queryset = Asset.objects.filter(user=user)
     else:
-        queryset = Entry.objects.filter(user=user)
+        queryset = Asset.objects.filter(user=user)
     filter = EntryFilter(request.GET or None, queryset=queryset)
     page = request.GET.get('page')
     paginator = Paginator(filter.qs, 16)
@@ -55,7 +55,7 @@ def user_assets(request, user_id):  # TODO: Make it DRYer
 
 def assets_liked(request, user_id):  # TODO: Make it DRYer
     user = get_object_or_404(User, id=user_id)
-    queryset = Entry.objects.filter(users_liked=user)
+    queryset = Asset.objects.filter(users_liked=user)
     filter = EntryFilter(request.GET or None, queryset=queryset)
     page = request.GET.get('page')
     paginator = Paginator(filter.qs, 16)
@@ -73,19 +73,19 @@ def assets_liked(request, user_id):  # TODO: Make it DRYer
 
 
 def entry_details(request, id):
-    entry = get_object_or_404(Entry, id=id)
-    images = entry.entryimage_set.all()
-    versions = VersionHistory.objects.filter(entry=entry)
-    context = {'entry': entry, 'versions': versions, 'images': images}
+    asset = get_object_or_404(Asset, id=id)
+    images = asset.images.all()
+    versions = Release.objects.filter(asset=asset)
+    context = {'entry': asset, 'versions': versions, 'images': images}
     if request.user.is_authenticated:
-        user_liked = entry.liked(request.user)
+        user_liked = asset.liked(request.user)
         context['user_liked'] = user_liked
     return render(request, 'assets_detail.html', context)
 
 
 @login_required()
 def add_entry(request):  # TODO:REFACTOR to display formset
-    form = EntryForm(request.POST or None)
+    form = AssetForm(request.POST or None)
     if form.is_valid():
         with reversion.create_revision():
             entry = form.save(commit=False)
@@ -109,10 +109,10 @@ def add_entry(request):  # TODO:REFACTOR to display formset
 
 @login_required()
 def add_version(request, id):
-    entry = get_object_or_404(Entry, id=id)
+    entry = get_object_or_404(Asset, id=id)
     if request.user != entry.user or entry.entry_type != 1:
         raise PermissionDenied
-    form = VersionForm(request.POST or None, request.FILES or None, initial={'entry': entry})
+    form = ReleaseForm(request.POST or None, request.FILES or None, initial={'entry': entry})
     if form.is_valid():
         version = form.save(commit=False)
         version.file = request.FILES['file']
@@ -125,17 +125,17 @@ def add_version(request, id):
 
 
 def entry_versions(request, id):
-    entry = get_object_or_404(Entry, id=id)
-    versions = VersionHistory.objects.filter(entry=entry)
+    entry = get_object_or_404(Asset, id=id)
+    versions = Release.objects.filter(entry=entry)
     context = {'entry': entry, 'versions': versions}
     return render(request, 'assets_entry_versions.html', context)
 
 
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
-    asset = get_object_or_404(Entry, id=id)
+    asset = get_object_or_404(Asset, id=id)
     if request.user.is_authenticated:
-        form = EntryForm(request.POST or None, instance=asset)
+        form = AssetForm(request.POST or None, instance=asset)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
         if form.is_valid() and formset.is_valid():
             with reversion.create_revision():
@@ -156,10 +156,10 @@ def edit(request, id):  # TODO: REFACTOR!
 
 @login_required()
 def edit_version(request, id, version_id):
-    asset = get_object_or_404(Entry, id=id)
-    version = get_object_or_404(VersionHistory, id=version_id)
+    asset = get_object_or_404(Asset, id=id)
+    version = get_object_or_404(Release, id=version_id)
     if request.user == asset.user:
-        form = VersionFormEdit(request.POST or None, request.FILES or None, instance=version)
+        form = ReleaseFormEdit(request.POST or None, request.FILES or None, instance=version)
         if form.is_valid():
             form.save()
             messages.success(request, 'Version saved')
@@ -173,22 +173,20 @@ def edit_version(request, id, version_id):
 
 @login_required()
 def fetch_asset_metadata(request, id):
-    asset = get_object_or_404(Entry, id=id)
+    asset = get_object_or_404(Asset, id=id)
     asset.fetch_metadata()
     return redirect('assets:detail', id)
 # TODO: make asset list, user asset list and liked assets CBV
 
 def revisions_list(request, id):
-    entry = get_object_or_404(Entry, id=id)
-    revisions = Version.objects.get_for_object(entry)
+    asset = get_object_or_404(Asset, id=id)
+    revisions = Version.objects.get_for_object(asset)[:50]
     results = []
     for revision in revisions:
         res = revision.field_dict
-        entry = Entry.objects.get(id=id)
         res['category'] = Category.objects.get(id = revision.field_dict['category_id'])
-        res['entry_type'] = entry.get_entry_type_display()
         res['languages'] = [Language.objects.get(id=i) for i in revision.field_dict['languages']]
         res['frameworks'] = [Framework.objects.get(id=i) for i in revision.field_dict['frameworks']]
         results.append(res)
-    context = {'revisions': results}
+    context = {'revisions': results, 'asset': asset}
     return render(request, 'assets_reversion_list.html', context=context)

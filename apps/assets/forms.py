@@ -6,23 +6,23 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, HTML, Fieldset, Field
 from mptt.forms import TreeNodeChoiceField
 
-from .models import Entry, VersionHistory, EntryImage, Category
+from .models import Asset, Release, AssetImage, Category
 
 
-class EntryForm(forms.ModelForm):
+class AssetForm(forms.ModelForm):
     class Meta:
-        model = Entry
+        model = Asset
         fields = (
-        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license', 'tags', 'entry_type',
-        'github_releases', 'changelog', 'locked')
+        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license',
+        'locked')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
         }
 
 
-class VersionForm(forms.ModelForm):
-    field_order = ('entry', 'version', 'changelog', 'file')
+class ReleaseForm(forms.ModelForm):
+    field_order = ('version', 'changelog')
 
     helper = FormHelper()
     helper.form_id = 'id-addVersionForm'
@@ -35,25 +35,24 @@ class VersionForm(forms.ModelForm):
     helper.label_class = 'col-lg-2'
     helper.field_class = 'col-lg-8'
     helper.layout = Layout(
-        'entry', 'version', 'changelog', 'file'
+        'version', 'changelog'
     )
 
     class Meta:
-        model = VersionHistory
-        fields = ('version', 'file', 'changelog')
+        model = Release
+        fields = ('version', 'changelog')
         widgets = {
             'version': forms.TextInput(attrs={'placeholder': 'v0.0.1'}),
             'changelog': forms.Textarea(attrs={'placeholder': 'Changelog'}),
-            'file': forms.FileInput(attrs={'required': True}),
         }
 
 
-class VersionFormEdit(forms.ModelForm):
-    field_order = ('changelog', 'file')
-
+class ReleaseFormEdit(forms.ModelForm):
+    field_order = ('changelog',)
+    #TODO: add ReleaseUploads forms
     class Meta:
-        model = VersionHistory
-        fields = ('file', 'changelog')
+        model = Release
+        fields = ('changelog',)
 
 
 class SearchForm(forms.Form):
@@ -67,11 +66,11 @@ class SearchForm(forms.Form):
         # widgets = {'q': forms.TextInput(attrs={'help-block': "Type in asset name, description or creator's name"})}
 
 
-class EntryImageForm(forms.ModelForm):
+class AssetImageForm(forms.ModelForm):
     class Meta:
-        model = EntryImage
+        model = AssetImage
         fields = ('image', 'cropping')
 
 
 # Edit entry images formset TODO:REFACTOR
-EntryImageFormSet = inlineformset_factory(Entry, EntryImage, extra=5, max_num=5, form=EntryImageForm)
+EntryImageFormSet = inlineformset_factory(Asset, AssetImage, extra=5, max_num=5, form=AssetImageForm)

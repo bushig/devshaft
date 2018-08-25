@@ -10,7 +10,9 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form | crispy }}
+            {% if user == framework.user %}
             {{ formset }}
+            {% endif %}
             <input type="submit" class="btn btn-default" value="Save">
         </form>
     </div>

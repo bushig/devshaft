@@ -17,13 +17,13 @@ from apps.common.repos import get_repo_for_repo_url
 from apps.languages.models import Language
 from apps.frameworks.models import Framework
 
-class EntryManager(models.Manager):
+class AssetManager(models.Manager):
     def get_queryset(self):
-        return super(EntryManager, self).get_queryset().select_related('category', 'user').prefetch_related('entryimage_set').\
+        return super(AssetManager, self).get_queryset().select_related('category', 'user').prefetch_related('images__first').\
             defer('user__password').annotate(Count('users_liked', distinct=True))
 
     def not_null(self):
-        return self.get_queryset().exclude(versionhistory__isnull=True)
+        return self.get_queryset().exclude(releases__isnull=True)
 
 
 class Category(MPTTModel):
@@ -38,56 +38,43 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
-class Tag(models.Model):
-    title = models.CharField(max_length=40)
-
-    def __str__(self):
-        return self.title
-
-class Entry(models.Model): #make it assets again!
-    category=TreeForeignKey(Category, on_delete=models.CASCADE)
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
-    name=models.CharField(max_length=40)
-    description=models.TextField(max_length=5000)
-    license = models.ForeignKey(License, on_delete=models.PROTECT)
-    repository = models.URLField(blank=True, null=True, max_length=100)
-    site = models.URLField(blank=True, null=True, max_length=100)
-    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked', blank=True)
+class Asset(models.Model):
+    category = TreeForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     languages = models.ManyToManyField(Language, related_name="assets", blank=True)
     frameworks = models.ManyToManyField(Framework, related_name="assets", blank=True)
-    tags = models.ManyToManyField(Tag, blank=True)
+    license = models.ForeignKey(License, on_delete=models.PROTECT)
+    name = models.CharField(max_length=40)
+    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='entry_liked', blank=True)
+    description = models.TextField(max_length=5000)
+    repository = models.URLField(blank=True, null=True, max_length=300)
+    site = models.URLField(blank=True, null=True, max_length=300)
+    youtube = models.URLField(blank=True, null=True, max_length=300)
 
     repo_stars = models.IntegerField("Stars", blank=True, null=True)
     repo_forks = models.IntegerField("Repo forks", blank=True, null=True)
     repo_description = models.CharField("Repo description", null=True, max_length=1000, blank=True)
-    repo_updated = models.DateTimeField(null=True)
+    repo_updated = models.DateTimeField(null=True, blank=True)
     commits = models.CharField(null=True, blank=True, max_length=500, validators=[validate_comma_separated_integer_list])
 
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(default=timezone.now, blank=True)
+    updated = models.DateTimeField(default=timezone.now)
     #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
-    #image in EntryImage for that asset
+    #image in AssetImage for that asset
 
     # Settings
-    choices = ((0, 'Github releases'),
-               (1, 'Versions'),
-               (2, 'Link')
-               )
-    entry_type = models.PositiveSmallIntegerField(choices=choices)
-    github_releases = models.BooleanField(default=False)
-    changelog = models.BooleanField(default=False)
     locked = models.BooleanField(default=True)
 
 
     #managers
-    objects = EntryManager()
+    objects = AssetManager()
 
     def liked(self, user):
-        return Entry.objects.filter(id=self.id, users_liked=user).exists()
+        return Asset.objects.filter(id=self.id, users_liked=user).exists()
 
     @property
     def total_likes(self):
-        return Entry.objects.get(id=self.id).users_liked.count()
+        return Asset.objects.get(id=self.id).users_liked.count()
 
     @property
     def repo(self):
@@ -110,29 +97,32 @@ class Entry(models.Model): #make it assets again!
     def get_absolute_url(self):
         return reverse('assets:detail', args=[self.id])
 
-class EntryImage(models.Model):
-    entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
+class AssetImage(models.Model):
+    entry=models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='images')
     image=ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
-
+    date_add = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.entry.name
 
+    class Meta:
+        ordering = ['date_add']
 
-class VersionHistory(models.Model):
-    entry=models.ForeignKey(Entry, on_delete=models.CASCADE)
+class Release(models.Model):
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='releases')
     version = models.CharField(max_length=25)
-    is_github_release = models.BooleanField(default=False)
-    release_id = models.IntegerField("Github release ID", db_index=True, null=True, blank=True)
-    download_url = models.URLField(null=True, blank=True)
-    timestamp=models.DateTimeField(auto_now=False, auto_now_add=False, default=timezone.now)
-    file=models.FileField(upload_to=version_filename_save, blank=True) # TODO: upload to VERSIONS
-    changelog=models.TextField(max_length=1000, blank=True)
+    timestamp = models.DateTimeField('Date of this release', default=timezone.now)
+    changelog = models.TextField(max_length=10000, blank=True)
 
     class Meta:
-        verbose_name_plural='version history'
+        verbose_name_plural = 'version history'
         ordering = ("-timestamp",)
         get_latest_by = "timestamp"
 
     def __str__(self):
         return self.version
+
+
+class ReleaseUpload(models.Model):
+    release = models.ForeignKey(Release, on_delete=models.CASCADE, related_name='uploads')
+    file = models.FileField(upload_to=version_filename_save, blank=True)

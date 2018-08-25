@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from django.contrib.auth.models import User
 
-from ..models import Entry
+from ..models import Asset
 from .serializers import EntrySerializer, EntryLikesSerializer
 from .permissions import IsOwnerOrReadOnly
 
@@ -17,14 +17,14 @@ class EntryListView(ListCreateAPIView):
     List of all assets
     '''
 
-    queryset = Entry.objects.not_null()
+    queryset = Asset.objects.not_null()
     serializer_class = EntrySerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     lookup_field = 'id'
 
 
 class EntryReadUpdateDeleteView(RetrieveUpdateDestroyAPIView):
-    queryset = Entry.objects.all()
+    queryset = Asset.objects.all()
     serializer_class = EntrySerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     lookup_field = 'id'
@@ -40,7 +40,7 @@ class EntryLikesCreateView(APIView):
 
     def get_queryset(self):
         id = self.kwargs.get('id')
-        return Entry.objects.filter(id=id)
+        return Asset.objects.filter(id=id)
 
 
     def get(self, request, format=None, *args, **kwargs):
@@ -51,7 +51,7 @@ class EntryLikesCreateView(APIView):
         :return:
         """
         id = self.kwargs.get('id')
-        asset = Entry.objects.get(id=id)
+        asset = Asset.objects.get(id=id)
         serializer = EntryLikesSerializer(asset)
         return Response(data=serializer.data)
 
@@ -61,17 +61,17 @@ class EntryLikesCreateView(APIView):
         serializer = EntryLikesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # entry = Entry.objects.get(id = kwargs['id'])
+        # entry = Asset.objects.get(id = kwargs['id'])
         try:
-            entry = Entry.objects.get(users_liked=request.user, id=kwargs['id'])
-        except Entry.DoesNotExist:
+            entry = Asset.objects.get(users_liked=request.user, id=kwargs['id'])
+        except Asset.DoesNotExist:
             print('Failed')
             entry = None
         if entry:
             entry.users_liked.remove(request.user)
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            entry = Entry.objects.get(id=kwargs['id'])
+            entry = Asset.objects.get(id=kwargs['id'])
             entry.users_liked.add(request.user)
             # serializer.save(users_liked = request.user, id = kwargs['id'])
             return Response(status=status.HTTP_201_CREATED)

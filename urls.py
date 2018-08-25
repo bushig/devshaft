@@ -22,7 +22,7 @@ from apps.assets import urls as assets_urls
 from apps.frameworks import urls as frameworks_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('octo/', admin.site.urls),
     path('', include('apps.main_page.urls')),
     path('assets/', include('apps.assets.urls')),
     path('accounts/', include('allauth.urls')),

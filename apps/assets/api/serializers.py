@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 
-from ..models import Entry, Category
+from ..models import Asset, Category
 
 #TODO: move to Users app
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,14 +26,14 @@ class EntrySerializer(serializers.ModelSerializer):
     #last_update=serializers.ReadOnlyField(source='versionhistory__timestamp__max')
     # total_likes = serializers.ReadOnlyField()
     class Meta:
-        model = Entry
+        model = Asset
         fields = (
         'id', 'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license', 'entry_type',
         'github_releases', 'changelog', 'locked', 'total_likes', 'user')
 
 class EntryLikesSerializer(serializers.ModelSerializer):
-    users_liked = serializers.PrimaryKeyRelatedField(many=True, queryset=Entry.objects.all(), required=False)
+    users_liked = serializers.PrimaryKeyRelatedField(many=True, queryset=Asset.objects.all(), required=False)
     class Meta:
-        model = Entry
+        model = Asset
         fields = ('id', 'users_liked',)
         read_only_fields = ('id', 'users_liked')

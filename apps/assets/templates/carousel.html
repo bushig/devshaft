@@ -1,3 +1,6 @@
+{% load cropping %}
+{% load cropping thumbnail %}
+
 {% if images %}
     <div id="carousel" class="carousel slide" data-ride="carousel">
         <!-- Wrapper for slides -->
@@ -8,7 +11,7 @@
                 {% else %}
                     <div class="item entryCarouselImg">
                 {% endif %}
-            <img src="{{ MEDIA_URL }}{{ image.image }}" class="entryCarouselImg"/>
+            <img src="{% cropped_thumbnail image "cropping" %}" class="entryCarouselImg"/>
             </div>
             {% endfor %}
             </div>

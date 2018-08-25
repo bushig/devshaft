@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.bitbucket',
+    # 'allauth.socialaccount.providers.github',
+    # 'allauth.socialaccount.providers.bitbucket',
 
     'autofixture',
     'debug_toolbar',
@@ -117,6 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AUTHENTICATION
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -124,8 +125,12 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 LOGIN_REDIRECT_URL = '/'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
+ACCOUNT_PRESERVE_USERNAME_CASING = False
 
 #CACHING
 # CACHES = {
@@ -142,9 +147,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -155,8 +160,9 @@ LOGIN_URL = 'auth_login'
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATIC_ROOT=os.path.join(BASE_DIR, 'static_cdn')
-MEDIA_ROOT=os.path.join(BASE_DIR, 'media_cdn')
+STATIC_ROOT=os.path.join(
+    os.path.dirname(os.path.dirname(BASE_DIR)), 'static_root')
+MEDIA_ROOT=os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'media_cdn')
 
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 
