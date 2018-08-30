@@ -19,8 +19,10 @@ from apps.frameworks.models import Framework
 
 class AssetManager(models.Manager):
     def get_queryset(self):
-        return super(AssetManager, self).get_queryset().select_related('category', 'user').prefetch_related('images__first').\
-            defer('user__password').annotate(Count('users_liked', distinct=True))
+        return super(AssetManager, self).get_queryset().select_related('category', 'user', 'license').annotate(Count('users_liked', distinct=True))
+
+    def with_image(self):
+        self.get_queryset().prefetch_related('images__first')
 
     def not_null(self):
         return self.get_queryset().exclude(releases__isnull=True)
@@ -63,7 +65,7 @@ class Asset(models.Model):
     #image in AssetImage for that asset
 
     # Settings
-    locked = models.BooleanField(default=True)
+    locked = models.BooleanField('Editing is closed', default=True)
 
 
     #managers
@@ -125,4 +127,5 @@ class Release(models.Model):
 
 class ReleaseUpload(models.Model):
     release = models.ForeignKey(Release, on_delete=models.CASCADE, related_name='uploads')
+    note = models.CharField('Note on file', max_length=15)
     file = models.FileField(upload_to=version_filename_save, blank=True)

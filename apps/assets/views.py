@@ -10,7 +10,7 @@ import reversion
 from reversion.models import Version
 
 from .models import Category, Asset, Release
-from .forms import AssetForm, ReleaseForm, EntryImageFormSet, ReleaseFormEdit
+from .forms import AssetForm, ReleaseForm, EntryImageFormSet, ReleaseFormEdit, ReleaseUploadsFormSet
 from .filters import EntryFilter
 from apps.languages.models import Language
 from apps.frameworks.models import Framework
@@ -97,12 +97,8 @@ def add_entry(request):  # TODO:REFACTOR to display formset
             reversion.set_user(request.user)
             reversion.set_comment("Initial revision")
 
-        if entry.entry_type == 1: # version type
-            messages.success(request, 'Successfully created new asset. Now add version.')
-            return redirect('assets:add_version', id=entry.id)
-        else:
-            messages.success(request, 'Successfully created new asset.')
-            return redirect('assets:detail', id=entry.id)
+        messages.success(request, 'Successfully created new asset.')
+        return redirect('assets:detail', id=entry.id)
     context = {'form': form}
     return render(request, 'assets_add_entry.html', context)
 
@@ -110,23 +106,28 @@ def add_entry(request):  # TODO:REFACTOR to display formset
 @login_required()
 def add_version(request, id):
     entry = get_object_or_404(Asset, id=id)
-    if request.user != entry.user or entry.entry_type != 1:
+    if request.user != entry.user:
         raise PermissionDenied
     form = ReleaseForm(request.POST or None, request.FILES or None, initial={'entry': entry})
-    if form.is_valid():
+    formset = ReleaseUploadsFormSet(request.POST or None, request.FILES or None, instance=form.instance)
+    if form.is_valid() and formset.is_valid():
         version = form.save(commit=False)
-        version.file = request.FILES['file']
-        version.entry = entry
+        version.asset = entry
         entry.updated = timezone.now()
         version.save()
+        uploads = formset.save(commit=False)
+        for upload in uploads:
+            upload.release = version
+            upload.save()
+        messages.success(request, 'Successfuly created release')
         return redirect('assets:detail', id)
-    context = {'form': form}
+    context = {'form': form, 'formset': formset}
     return render(request, 'assets_add_version.html', context)
 
 
 def entry_versions(request, id):
     entry = get_object_or_404(Asset, id=id)
-    versions = Release.objects.filter(entry=entry)
+    versions = Release.objects.filter(asset=entry)
     context = {'entry': entry, 'versions': versions}
     return render(request, 'assets_entry_versions.html', context)
 
@@ -160,11 +161,13 @@ def edit_version(request, id, version_id):
     version = get_object_or_404(Release, id=version_id)
     if request.user == asset.user:
         form = ReleaseFormEdit(request.POST or None, request.FILES or None, instance=version)
-        if form.is_valid():
+        formset = ReleaseUploadsFormSet(request.POST or None, request.FILES or None, instance=version)
+        if form.is_valid() and formset.is_valid():
             form.save()
-            messages.success(request, 'Version saved')
+            formset.save()
+            messages.success(request, 'Release saved')
             return redirect('assets:detail', id)
-        context = {'form': form}
+        context = {'form': form, formset: 'formset'}
         return render(request, 'assets_version_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")

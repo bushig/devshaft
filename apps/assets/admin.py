@@ -31,7 +31,19 @@ class ReleaseAdmin(admin.ModelAdmin):
 @admin.register(Asset)
 class AssetAdmin(VersionAdmin):
     inlines = (AssetImageInline, ReleaseInline)
-    list_display = ('name', 'category', 'user', 'total_likes')
+    list_display = ('name', 'category', 'user', 'likes_count_admin')
+    search_fields = ['name', 'user__username']
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
+
+
+    def likes_count_admin(self, obj):
+        return obj.users_liked__count
+
+    def username(self, obj):
+        return obj.user
+
     class Meta:
         model = Asset
 
