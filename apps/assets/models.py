@@ -57,6 +57,7 @@ class Asset(models.Model):
     repo_forks = models.IntegerField("Repo forks", blank=True, null=True)
     repo_description = models.CharField("Repo description", null=True, max_length=1000, blank=True)
     repo_updated = models.DateTimeField(null=True, blank=True)
+    last_commit = models.DateTimeField(null=True, blank=True)
     commits = models.CharField(null=True, blank=True, max_length=500, validators=[validate_comma_separated_integer_list])
 
     created = models.DateTimeField(auto_now_add=True)

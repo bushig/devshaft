@@ -57,6 +57,7 @@ class Framework(models.Model):
     repo_forks = models.IntegerField("Repo forks", null=True, blank=True)
     repo_description = models.CharField("Repo description", null=True, blank=True, max_length=1000)
     repo_updated = models.DateTimeField(null=True, blank=True)
+    last_commit = models.DateTimeField(null=True, blank=True)
     commits = models.CharField(null=True, blank=True, max_length=500,
                                validators=[validate_comma_separated_integer_list])
 
@@ -98,7 +99,7 @@ class Framework(models.Model):
 
 class FrameworkImage(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE)
-    image=ImageCropField(blank=True, upload_to='uploaded_images')
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
     date_add = models.DateTimeField(auto_now_add=True)
 

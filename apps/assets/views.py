@@ -135,7 +135,7 @@ def entry_versions(request, id):
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
     asset = get_object_or_404(Asset, id=id)
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not asset.locked:
         form = AssetForm(request.POST or None, instance=asset)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
         if form.is_valid() and formset.is_valid():
