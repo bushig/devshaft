@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'image_cropping',
     'reversion',
+    'markdownx',
+    'taggit',
+    'tagulous',
 
     'allauth',
     'allauth.account',
@@ -56,6 +59,7 @@ INSTALLED_APPS = [
 
     'apps.common',
     'apps.assets',
+    'apps.tutorials',
     'apps.frameworks',
     'apps.languages',
     'apps.main_page',
@@ -195,3 +199,5 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 9,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
+
+TAGGIT_CASE_INSENSITIVE = True

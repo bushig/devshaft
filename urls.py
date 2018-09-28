@@ -27,8 +27,10 @@ urlpatterns = [
     path('assets/', include('apps.assets.urls')),
     path('accounts/', include('allauth.urls')),
     path('frameworks/', include('apps.frameworks.urls')),
+    path('tutorials/', include('apps.tutorials.urls')),
     path('api/', include('apps.common.api')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('markdownx/', include('markdownx.urls')),
 ]
 
 if settings.DEBUG is True:

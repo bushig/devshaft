@@ -1,0 +1,19 @@
+from django.conf.urls import url, include
+
+from .views import tutorial_list
+
+app_name = 'tutorials'
+
+urlpatterns = [
+    url(r'^$', tutorial_list, name='list'),
+    url(r'^(?P<id>[\d]+)/$', tutorial_list, name='detail'),
+#     url(r'^add/$', add_entry, name='add_entry'),
+#     url(r'^(?P<id>[\d]+)/edit/$', edit, name='edit'),
+#     url(r'^user/(?P<user_id>[\d]+)/assets/$', user_assets, name='user_assets'),
+#     url(r'^user/(?P<user_id>[\d]+)/likes/$', assets_liked, name='assets_liked'),
+#     url(r'^(?P<id>[\d]+)/add$', add_version, name='add_version'),
+#     url(r'^(?P<id>[\d]+)/revisions$', revisions_list, name='revisions_list'),
+#     url(r'^(?P<id>[\d]+)/versions/$', entry_versions, name='entry_versions'),
+#     url(r'^(?P<id>[\d]+)/versions/(?P<version_id>[\d]+)/$', edit_version, name='edit_version'),
+#     url(r'^(?P<id>[\d]+)/fetch/$', fetch_asset_metadata, name='fetch_metadata'),
+]

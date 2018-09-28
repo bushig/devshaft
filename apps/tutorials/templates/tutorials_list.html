@@ -1,0 +1,85 @@
+{% extends 'base_list.html' %}
+{% load crispy_forms_tags %}
+{% load cropping %}
+{% load cropping thumbnail %}
+{% block head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+{% block search %}
+    <form method="get" id="filterForm">
+        {{ filter.form | crispy }}
+        <button type="submit" class="btn btn-success">Search</button>
+
+    </form>
+{% endblock search %}
+
+{% block list %}
+    {% for entry in entries %}
+        {% cycle 'start' '' '' 'end' as row_cycle silent %}
+        {% if row_cycle == 'start' %}
+            <div class="row">
+        {% endif %}
+    <!-- CONTENT -->
+    <div class="col-lg-3 col-md-4">
+    <a href="{{ entry.get_absolute_url }}" class="nohover-link">
+        <div class="panel panel-default panel-no-padding">
+            <div class="panel-heading" style="min-height: 100px;"><h4 class="panel-title"> {{ entry.name }}</h4>
+                <span class="label label-default"><i class="fas fa-tags"></i> {{ entry.category }}</span>
+
+{#                <span class="label label-info"><i class="fas fa-user"></i> {{ entry.user }}</span>#}
+                <span class="label label-warning"><i class="fas fa-balance-scale"></i> {{ entry.license }}</span></div>
+
+            <div class="panel-body panel-no-padding">
+                <img class="img-thumbnail img-responsive asset-img" src="
+                        {% with entry_image=entry.image__first %}
+                        {% if entry_image %}
+                        {% cropped_thumbnail entry_image "cropping" %}
+                        {% elif entry.category.image %}{{ MEDIA_URL }}{{ entry.category.image }}
+                        {% else %}
+                        /static/placeholder.jpg
+                        {% endif %}
+                        {% endwith %}">
+            </div>
+            <div class="panel-footer">
+                <i class="fas fa-thumbs-up"></i> {{ entry.users_liked__count }}
+                <small href="#" data-toggle="tooltip"
+                                       title="{{ entry.updated | timesince }} ago"><i class="far fa-calendar-alt"></i> {{ entry.updated }}</small>
+            </div>
+        </div>
+     </a>
+    </div>
+    <!-- CONTENT -->
+    {% if row_cycle == 'end' %}
+        </div>
+    {% endif %}
+
+
+
+    {% empty %}
+        <h1>No entries there</h1>
+
+    {% endfor %}
+{% endblock list %}
+
+{% block footer %}
+    {% include 'pagination.html' with entries=entries %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    <script>
+    function formatState(state){
+        return state.text.replace(/-/g, "")
+    }
+       $(document).ready(function() {
+            $('#id_category').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+            $('#id_frameworks').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+            $('#id_languages').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+            $('#id_tags').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+    </script>
+{% endblock %}
