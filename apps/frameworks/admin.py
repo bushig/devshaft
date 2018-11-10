@@ -8,7 +8,8 @@ from .models import Platform, Framework, FrameworkImage
 class FrameworkImageInline(admin.StackedInline):
     model = FrameworkImage
 
-class FrameworkAdmin(VersionAdmin):
+class FrameworkAdmin(admin.ModelAdmin):
+    readonly_fields = ('repo_stars', 'repo_forks', 'repo_description', 'repo_updated', 'last_commit', 'commits')
     inlines = (FrameworkImageInline, )
 
 admin.site.register(Platform)

@@ -37,7 +37,7 @@ class Framework(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=40)
-    description = models.TextField(max_length=1000)
+    description = models.TextField(max_length=10000)
     license = models.ForeignKey(License, on_delete=models.CASCADE)
     is_2d = models.BooleanField()
     is_3d = models.BooleanField()
@@ -61,11 +61,14 @@ class Framework(models.Model):
     commits = models.CharField(null=True, blank=True, max_length=500,
                                validators=[validate_comma_separated_integer_list])
 
+    version = models.CharField(blank=True, max_length=20)
+    version_date = models.DateTimeField(default=timezone.now)
     # images
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='frameworks_liked', blank=True)
 
     class Meta:
         verbose_name_plural = 'frameworks'
+        ordering = ('version_date',)
 
     #cache with signals
     def liked(self, user):
@@ -102,6 +105,7 @@ class FrameworkImage(models.Model):
     image = ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
     date_add = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
-        ordering = ['date_add']
+        ordering = ['order', 'date_add']

@@ -13,7 +13,6 @@
                     Delete asset
                 </button>
             {% endif %}
-            <a class="btn btn-info btn-xs" href=""><i class="far fa-save"></i> Revisions</a>
             </div>
             {% comment %} CAROUSEL {% endcomment %}
             <div class="panel-body">
@@ -77,6 +76,13 @@
                     {% if framework.site %}
                         <br><a href="{{ framework.site }}">Site</a>
                     {% endif %}
+                    {% if framework.version %}
+                        <br>Latest version: <small href="#" data-toggle="tooltip"
+                                       title="ass">{{ framework.version }}</small>
+                    {% endif %}
+                    <br><span class="label label-warning"><i
+                            class="fas fa-balance-scale"></i> {{ framework.license }}</span>
+                    <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
                     </div>
                 </div>
             </div>

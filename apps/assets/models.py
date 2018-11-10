@@ -17,30 +17,38 @@ from apps.common.repos import get_repo_for_repo_url
 from apps.languages.models import Language
 from apps.frameworks.models import Framework
 
+
 class AssetManager(models.Manager):
     def get_queryset(self):
-        return super(AssetManager, self).get_queryset().select_related('category', 'user', 'license').annotate(Count('users_liked', distinct=True))
+        return super(AssetManager, self).get_queryset().select_related('category', 'user', 'license').annotate(
+            Count('users_liked', distinct=True))
 
     def with_image(self):
-        self.get_queryset().prefetch_related('images__first')
+        return self.get_queryset().prefetch_related('images')
 
     def not_null(self):
         return self.get_queryset().exclude(releases__isnull=True)
 
 
 class Category(MPTTModel):
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,
+                            on_delete=models.CASCADE)
     name = models.CharField(max_length=120, unique=True)
     image = models.ImageField(blank=True)
 
     class Meta:
-        verbose_name_plural='categories'
-
+        verbose_name_plural = 'categories'
 
     def __str__(self):
         return self.name
 
+
 class Asset(models.Model):
+    # TYPES = (
+    #     (0, 'Releases'),
+    #     (1, 'Commits'),
+    #     (2, 'Github Releases')
+    # )
     category = TreeForeignKey(Category, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     languages = models.ManyToManyField(Language, related_name="assets", blank=True)
@@ -51,25 +59,22 @@ class Asset(models.Model):
     description = models.TextField(max_length=5000)
     repository = models.URLField(blank=True, null=True, max_length=300)
     site = models.URLField(blank=True, null=True, max_length=300)
-    youtube = models.URLField(blank=True, null=True, max_length=300)
 
     repo_stars = models.IntegerField("Stars", blank=True, null=True)
     repo_forks = models.IntegerField("Repo forks", blank=True, null=True)
     repo_description = models.CharField("Repo description", null=True, max_length=1000, blank=True)
     repo_updated = models.DateTimeField(null=True, blank=True)
     last_commit = models.DateTimeField(null=True, blank=True)
-    commits = models.CharField(null=True, blank=True, max_length=500, validators=[validate_comma_separated_integer_list])
+    commits = models.CharField(null=True, blank=True, max_length=500,
+                               validators=[validate_comma_separated_integer_list])
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(default=timezone.now)
-    #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
-    #image in AssetImage for that asset
 
     # Settings
-    locked = models.BooleanField('Editing is closed', default=True)
+    # update_type = models.IntegerField(default=0, choices=TYPES)
 
-
-    #managers
+    # managers
     objects = AssetManager()
 
     def liked(self, user):
@@ -92,7 +97,7 @@ class Asset(models.Model):
 
     class Meta:
         ordering = ['-updated']
-        verbose_name_plural='entries'
+        verbose_name_plural = 'entries'
 
     def __str__(self):
         return self.name
@@ -100,16 +105,19 @@ class Asset(models.Model):
     def get_absolute_url(self):
         return reverse('assets:detail', args=[self.id])
 
+
 class AssetImage(models.Model):
-    entry=models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='images')
-    image=ImageCropField(blank=True, upload_to='uploaded_images')
+    entry = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='images')
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
     date_add = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.entry.name
 
     class Meta:
         ordering = ['date_add']
+
 
 class Release(models.Model):
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='releases')

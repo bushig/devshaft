@@ -16,7 +16,7 @@ from apps.languages.models import Language
 from apps.frameworks.models import Framework
 
 def assets_list(request):  # TODO:Move to manager, improve image perform
-    filter = EntryFilter(request.GET or None, queryset=Asset.objects.all())
+    filter = EntryFilter(request.GET or None, queryset=Asset.objects.with_image())
     page = request.GET.get('page')
     paginator = Paginator(filter.qs, 16)
     try:
@@ -135,7 +135,7 @@ def entry_versions(request, id):
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
     asset = get_object_or_404(Asset, id=id)
-    if request.user.is_authenticated and not asset.locked:
+    if request.user == asset.user:
         form = AssetForm(request.POST or None, instance=asset)
         formset = EntryImageFormSet(request.POST or None, request.FILES or None, instance=asset)
         if form.is_valid() and formset.is_valid():
@@ -167,7 +167,7 @@ def edit_version(request, id, version_id):
             formset.save()
             messages.success(request, 'Release saved')
             return redirect('assets:detail', id)
-        context = {'form': form, formset: 'formset'}
+        context = {'form': form, 'formset': formset}
         return render(request, 'assets_version_edit.html', context)
     else:
         messages.warning(request, "You can't edit this one.")

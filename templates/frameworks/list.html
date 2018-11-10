@@ -28,9 +28,7 @@
         <a href="{{ framework.get_absolute_url }}" class="nohover-link">
             <div class="panel panel-default">
                 <div class="panel-heading"><h4 class="panel-title"> {{ framework.title }}</h4>
-                    <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
-                    <span class="label label-warning"><i
-                            class="fas fa-balance-scale"></i> {{ framework.license }}</span></div>
+                    </div>
             <div class="panel-body panel-no-padding">
                 <img class="img-thumbnail img-responsive asset-img" src="
                 {% with framework_image=framework.frameworkimage_set.first %}
@@ -43,7 +41,7 @@
             </div>
             <div class="panel-footer">
                 <i class="fas fa-thumbs-up"></i> {{ framework.likes.count }}
-                <small><i class="far fa-calendar-alt"></i> {{ framework.updated | timesince }} ago</small>
+                <small><i class="far fa-calendar-alt"></i> {{ framework.version_date | timesince }} ago</small>
             </div>
             </div>
         </a>

@@ -8,7 +8,7 @@ from apps.tutorials.models import Tutorial
 
 
 @admin.register(Tutorial)
-class TutorialAdmin(MarkdownxModelAdmin, VersionAdmin):
+class TutorialAdmin(MarkdownxModelAdmin):
     list_display = ('name', 'user')
     search_fields = ['name', 'user__username']
 

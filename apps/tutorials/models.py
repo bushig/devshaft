@@ -20,6 +20,18 @@ from apps.frameworks.models import Framework
 from apps.assets.models import Asset
 
 
+class TutorialManager(models.Manager):
+    def get_queryset(self):
+        return super(TutorialManager, self).get_queryset().select_related('user').annotate(
+            Count('users_liked', distinct=True))
+
+    def with_image(self):
+        self.get_queryset().prefetch_related('images__first')
+
+    def not_null(self):
+        return self.get_queryset().exclude(releases__isnull=True)
+
+
 class Tutorial(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     languages = models.ManyToManyField(Language, related_name="tutorials", blank=True)
@@ -30,24 +42,28 @@ class Tutorial(models.Model):
         space_delimiter=False,
         tree=True
     )
+    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tutorials_liked', blank=True)
 
     name = models.CharField(max_length=40)
-    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tutorials_liked', blank=True)
-    description = MarkdownxField()
+    short_description = models.CharField(max_length=500, blank=True)
+    content = MarkdownxField(blank=True)
     url = models.URLField(blank=True, null=True, max_length=300)
-    youtube = models.URLField(blank=True, null=True, max_length=300)
     credit_note = models.CharField(max_length=255, blank=True)
+
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
+    cropping = ImageRatioField('image', '300x300')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(default=timezone.now)
-    #image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
-    #image in AssetImage for that asset
+    # image field with asset image that displayed on on lists. if no image, then it will be equal to first uploaded
+    # image in AssetImage for that asset
 
     # Settings
-    locked = models.BooleanField('Editing is closed', default=True)
+
+    objects = TutorialManager()
 
     def liked(self, user):
-        return Asset.objects.filter(id=self.id, users_liked=user).exists()
+        return Tutorial.objects.filter(id=self.id, users_liked=user).exists()
 
     @property
     def total_likes(self):
@@ -55,10 +71,21 @@ class Tutorial(models.Model):
 
     class Meta:
         ordering = ['-updated']
-        verbose_name_plural='tutorials'
+        verbose_name_plural = 'tutorials'
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('tutorials:detail', args=[self.id])
+
+
+class TutorialImage(models.Model):
+    tutorial = models.ForeignKey(Framework, on_delete=models.CASCADE)
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
+    cropping = ImageRatioField('image', '300x300')
+    date_add = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveSmallIntegerField(default=1)
+
+    class Meta:
+        ordering = ['order', 'date_add']

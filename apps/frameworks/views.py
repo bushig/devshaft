@@ -36,42 +36,27 @@ def detail(request, id):
 def add_framework(request):  # TODO:REFACTOR to display formset
     form = FrameworkForm(request.POST or None)
     if form.is_valid():
-        with reversion.create_revision():
-            framework = form.save(commit=False)
-            framework.user = request.user
-            framework.save()
-            form.save_m2m()
+        framework = form.save(commit=False)
+        framework.user = request.user
+        framework.save()
+        form.save_m2m()
 
-            reversion.set_user(request.user)
-            reversion.set_comment("Initial revision")
-
-            messages.success(request, 'Successfully created new framework.')
-            return redirect('frameworks:detail', id=framework.id)
+        messages.success(request, 'Successfully created new framework.')
+        return redirect('frameworks:detail', id=framework.id)
     context = {'form': form}
     return render(request, 'frameworks/create_framework.html', context)
 
 @login_required()
 def edit(request, id):  # TODO: REFACTOR!
     framework = get_object_or_404(Framework, id=id)
-    if request.user.is_authenticated: # TODO CHECK IF USER IS OWNER THAN CAN CHANGE IMAGES
+    if request.user == framework.user:
         form = FrameworkEditForm(request.POST or None, instance=framework)
         formset = FrameworkImageFormSet(request.POST or None, request.FILES or None, instance=framework)
-        if (request.user == framework.user) and form.is_valid() and formset.is_valid():
-            with reversion.create_revision():
-                form.save()
-
-                reversion.set_user(request.user)
-                reversion.set_comment(form.cleaned_data['comment'])
+        if form.is_valid() and formset.is_valid():
+            form.save()
             formset.save()
             messages.success(request, 'Framework saved')
             return redirect('frameworks:detail', id)
-
-        elif form.is_valid():
-            with reversion.create_revision():
-                form.save()
-
-                reversion.set_user(request.user)
-                reversion.set_comment(form.cleaned_data['comment'])
         context = {'form': form, 'formset': formset, 'framework': framework}
         return render(request, 'frameworks/edit_framework.html', context)
     else:

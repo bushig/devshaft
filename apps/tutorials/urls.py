@@ -1,14 +1,14 @@
 from django.conf.urls import url, include
 
-from .views import tutorial_list
+from .views import tutorial_list, detail, edit, create
 
 app_name = 'tutorials'
 
 urlpatterns = [
     url(r'^$', tutorial_list, name='list'),
-    url(r'^(?P<id>[\d]+)/$', tutorial_list, name='detail'),
-#     url(r'^add/$', add_entry, name='add_entry'),
-#     url(r'^(?P<id>[\d]+)/edit/$', edit, name='edit'),
+    url(r'^(?P<id>[\d]+)/$', detail, name='detail'),
+    url(r'^create/$', create, name='create'),
+    url(r'^(?P<id>[\d]+)/edit/$', edit, name='edit'),
 #     url(r'^user/(?P<user_id>[\d]+)/assets/$', user_assets, name='user_assets'),
 #     url(r'^user/(?P<user_id>[\d]+)/likes/$', assets_liked, name='assets_liked'),
 #     url(r'^(?P<id>[\d]+)/add$', add_version, name='add_version'),

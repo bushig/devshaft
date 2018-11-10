@@ -31,7 +31,7 @@
 
             <div class="panel-body panel-no-padding">
                 <img class="img-thumbnail img-responsive asset-img" src="
-                        {% with entry_image=entry.image__first %}
+                        {% with entry_image=entry.images.first %}
                         {% if entry_image %}
                         {% cropped_thumbnail entry_image "cropping" %}
                         {% elif entry.category.image %}{{ MEDIA_URL }}{{ entry.category.image }}

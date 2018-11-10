@@ -11,7 +11,7 @@
                 {% if entry.user == user %}
                     <a href="{% url 'assets:add_version' entry.id %}" class="btn btn-success btn-xs" role="button">Add
                         version</a> {% endif %}
-                {% if not entry.locked %}
+                {% if entry.user == request.user %}
                     <a href="{% url 'assets:edit' entry.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
                 {% endif %}
                 {% if entry.user == user %}
@@ -30,6 +30,7 @@
                     </div>
                     <div class="col-lg-7">
                         <p>{{ entry.description }}</p>
+                    {% if entry.repository %}
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -50,11 +51,14 @@
                             </tr>
                             </tbody>
                         </table>
+                    {% endif %}
                         {% if entry.user == user %}
                             <br><i class="fas fa-thumbs-up"></i> {{ entry.users_liked__count }}
-                            <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs"><i
+                            {% if entry.repository %}
+                                <a href="{% url 'assets:fetch_metadata' entry.id %}" class="btn btn-default btn-xs"><i
                                     class="fab fa-github"></i> Fetch
-                                metadata</a>
+                                metadata</a>\
+                            {% endif %}
 
                         {% elif user.is_authenticated %}
                             <button id="likes_asset" data-entryid="{{ entry.id }}" class="btn

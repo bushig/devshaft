@@ -76,6 +76,36 @@ $('#likes_framework').click(function() {
     })
 });
 
+// tutorial likes
+$('#likes_tutorial').click(function() {
+    var tutorialid = $(this).data()['tutorialid'];
+    $.ajax({
+        type: 'POST',
+        url: '/api/tutorials/'+tutorialid+'/likes/',
+        data: {csrfmiddlewaretoken: csrftoken},
+        statusCode: {
+            201: function () {
+                $('#likes').toggleClass('btn-default');
+                $('#likes').toggleClass('btn-success active');
+                $('#likes').find('i').toggleClass('fa-rotate-270');
+                $('#liked').html('Liked ');
+                $('#likes_count').html(function (i, val) {
+                    return +val + 1
+                });
+            },
+            204: function () {
+                $('#likes').toggleClass('btn-default');
+                $('#likes').toggleClass('btn-success active');
+                $('#likes').find('i').toggleClass('fa-rotate-270');
+                $('#liked').html('Like ');
+                $('#likes_count').html(function (i, val) {
+                    return +val - 1
+                });
+            }
+        }
+    })
+});
+
 $('#deleteEntry').click(function() {
     var entryid = $(this).data()['entryid'];
     console.log(entryid, csrftoken);

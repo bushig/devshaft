@@ -13,8 +13,7 @@ class AssetForm(forms.ModelForm):
     class Meta:
         model = Asset
         fields = (
-        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license',
-        'locked')
+        'category', 'name', 'description', 'languages', 'frameworks', 'repository', 'site', 'license')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of asset'}),
             'description': forms.Textarea(attrs={'placeholder': 'Describe asset'}),
