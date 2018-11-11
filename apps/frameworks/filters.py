@@ -14,7 +14,7 @@ class FrameworkFilter(django_filters.FilterSet):
     '''
     q=django_filters.CharFilter(method='filter_search', label='Search', help_text='You can search by framework name, description or creator')
     o = django_filters.OrderingFilter(fields=[('likes', 'likes'),
-                                              ('-updated', 'updated')])
+                                              ('updated', 'updated')])
     is_open_source = django_filters.BooleanFilter(method='is_open_source_filter', label='Is open source')
     class Meta:
         model = Framework
