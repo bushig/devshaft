@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -44,7 +43,6 @@ INSTALLED_APPS = [
     'image_cropping',
     'reversion',
     'markdownx',
-    'taggit',
     'tagulous',
 
     'allauth',
@@ -94,14 +92,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',  #Added one
+                'django.template.context_processors.media',  # Added one
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'wsgi.application'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -131,12 +128,12 @@ AUTHENTICATION_BACKENDS = (
 )
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 LOGIN_REDIRECT_URL = '/'
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 
-#CACHING
+# CACHING
 # CACHES = {
 #     'default': {
 #         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -164,9 +161,9 @@ LOGIN_URL = 'auth_login'
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATIC_ROOT=os.path.join(
+STATIC_ROOT = os.path.join(
     os.path.dirname(os.path.dirname(BASE_DIR)), 'static_root')
-MEDIA_ROOT=os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
 
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 
@@ -177,14 +174,14 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 from easy_thumbnails.conf import Settings as thumbnail_settings
+
 THUMBNAIL_PROCESSORS = (
-    'image_cropping.thumbnail_processors.crop_corners',
-) + thumbnail_settings.THUMBNAIL_PROCESSORS
+                           'image_cropping.thumbnail_processors.crop_corners',
+                       ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 IMAGE_CROPPING_JQUERY_URL = None
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -199,5 +196,3 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 9,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
-
-TAGGIT_CASE_INSENSITIVE = True
