@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    DevShaft.org - {{ framework.name }}
+{% endblock %}
+
+{% block meta %}
+    <meta property="og:title" content="DevShaft.org - {{ framework.name }}" />
+    <meta property="og:description" content="{{ framework.description }}" />
+    <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
+
+    <meta name="description" content="{{ framework.description }}"/>
+
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="panel panel-default">

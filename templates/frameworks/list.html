@@ -4,6 +4,19 @@
 {% load cropping %}
 {% load cropping thumbnail %}
 
+{% block title %}
+    DevShaft.org - Frameworks, Engines, Libraries
+{% endblock %}
+
+{% block meta %}
+    <meta property="og:title" content="DevShaft.org - Frameworks, Engines, Libraries" />
+    <meta property="og:description" content="Find and download  Frameworks, Engines, Libraries for your gamedev needs." />
+    <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
+
+    <meta name="description" content="Find and download  Frameworks, Engines, Libraries for your gamedev needs."/>
+
+{% endblock %}
+
 {% block head %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 {% endblock %}

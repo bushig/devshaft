@@ -2,6 +2,19 @@
 
 {% load common_tags %}
 
+
+{% block title %}
+    DevShaft.org - {{ tutorial.name }}
+{% endblock %}
+
+{% block meta %}
+    <meta property="og:title" content="DevShaft.org - {{ tutorial.name }}" />
+    <meta property="og:description" content="{{ tutorial.short_description }}" />
+    <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
+
+    <meta name="description" content="{{ tutorial.short_description }}"/>
+
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="panel panel-default">

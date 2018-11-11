@@ -2,6 +2,19 @@
 {% load crispy_forms_tags %}
 {% load cropping %}
 {% load cropping thumbnail %}
+
+{% block title %}
+    DevShaft.org - Tutorials, Courses, Videos
+{% endblock %}
+
+{% block meta %}
+    <meta property="og:title" content="DevShaft.org - Tutorials, Courses, Videos" />
+    <meta property="og:description" content="Find free Tutorials, Courses and Videos for your gamedev needs." />
+    <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
+
+    <meta name="description" content="Find free Tutorials, Courses and Videos for your gamedev needs."/>
+
+{% endblock %}
 {% block head %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
 {% endblock %}
