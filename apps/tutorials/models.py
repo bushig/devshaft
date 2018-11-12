@@ -89,3 +89,23 @@ class TutorialImage(models.Model):
 
     class Meta:
         ordering = ['order', 'date_add']
+
+#
+# class Series(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     languages = models.ManyToManyField(Language, related_name="tutorials", blank=True)
+#     frameworks = models.ManyToManyField(Framework, related_name="tutorials", blank=True)
+#     assets = models.ManyToManyField(Asset, related_name='tutorials', blank=True)
+#     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tutorials_liked', blank=True)
+#
+#     name = models.CharField(max_length=40)
+#     short_description = models.CharField(max_length=500, blank=True)
+#     content = MarkdownxField(blank=True)
+#     url = models.URLField(blank=True, null=True, max_length=300)
+#     credit_note = models.CharField(max_length=255, blank=True)
+#
+#     image = ImageCropField(blank=True, upload_to='uploaded_images')
+#     cropping = ImageRatioField('image', '300x300')
+#
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(default=timezone.now)
