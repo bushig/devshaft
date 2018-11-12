@@ -48,14 +48,21 @@ class TutorialFilter(django_filters.FilterSet):
         # Just bunch of hacks
         parent = super(TutorialFilter, self).qs
         desc_tags = self.data.get('desc_tags', '0')
-        print(self.data.get('tags', []))
+        print(dir(self.data))
+        print(self.data.getlist('tags', []))
         tags = set()
-        for tag_id in self.data.get('tags', []):
-            tag = Tutorial.tags.tag_model.objects.get(id=tag_id)
-            tags.add(tag)
-            if str(desc_tags) == '1':
-                for t in tag.get_descendants():
-                    tags.add(t)
+        for tag_id in self.data.getlist('tags', []):
+            tag_id = int(tag_id)
+            print('tag', tag_id)
+            try:
+                tag = Tutorial.tags.tag_model.objects.get(id=tag_id)
+                tags.add(tag)
+                if str(desc_tags) == '1':
+                    for t in tag.get_descendants():
+                        tags.add(t)
+            except Tutorial.tags.tag_model.DoesNotExist:
+                print('Error in filtering, cant find tag id {}'.format(tag_id))
+                pass
         if len(tags) > 0:
             return parent.filter(tags__in=tags).distinct()
         else:

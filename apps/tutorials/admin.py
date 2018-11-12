@@ -1,4 +1,5 @@
 from django.contrib import admin
+import tagulous
 
 from image_cropping import ImageCroppingMixin
 from reversion.admin import VersionAdmin
@@ -18,3 +19,4 @@ class TutorialAdmin(MarkdownxModelAdmin):
     class Meta:
         model = Tutorial
 
+tagulous.admin.register(Tutorial.tags)
