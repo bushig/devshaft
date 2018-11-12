@@ -32,3 +32,5 @@ six==1.11.0
 sqlparse==0.2.4
 whitenoise==3.3.1
 django-tagulous==0.13.2
+django-robots==3.1.0
+

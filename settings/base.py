@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
 
     'crispy_forms',
     'rest_framework',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'reversion',
     'markdownx',
     'tagulous',
+    'robots',
 
     'allauth',
     'allauth.account',
@@ -195,3 +197,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 9,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
+
+
+# robots.txt
+ROBOTS_USE_SCHEME_IN_HOST = True
