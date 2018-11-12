@@ -45,13 +45,15 @@ class TutorialFilter(django_filters.FilterSet):
 
     @property
     def qs(self):
-        # Just bunch of hacks
+        # Just bunch of dirty hacks
         parent = super(TutorialFilter, self).qs
         desc_tags = self.data.get('desc_tags', '0')
-        print(dir(self.data))
-        print(self.data.getlist('tags', []))
         tags = set()
-        for tag_id in self.data.getlist('tags', []):
+        try:
+            tags_in_request = self.data.getlist('tags', [])
+        except AttributeError:
+            tags_in_request = []
+        for tag_id in tags_in_request:
             tag_id = int(tag_id)
             print('tag', tag_id)
             try:
