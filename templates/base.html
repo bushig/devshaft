@@ -75,11 +75,12 @@
                     <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Tutorials <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'tutorials:list' %}">Browse</a></li>
+                        <li><a href="{% url 'tutorials:series_list' %}">Series</a></li>
+                        <li><a href="{% url 'tutorials:list' %}">Tutorials</a></li>
                         {% if user.is_authenticated %}
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Actions</li>
-                            <li><a href="{% url 'tutorials:create' %}">Add new</a></li>
+                            <li><a href="{% url 'tutorials:create' %}">Add Tutorial</a></li>
 {#                            <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>#}
 {#                            <li><a href="{% url 'assets:user_assets' user.id %}">Liked assets</a></li>#}
                         {% endif %}

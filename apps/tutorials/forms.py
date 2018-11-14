@@ -1,6 +1,7 @@
 from django import forms
+from django.forms.models import inlineformset_factory
 
-from apps.tutorials.models import Tutorial
+from apps.tutorials.models import Tutorial, Series, TutorialMembership
 
 
 class SearchForm(forms.Form):
@@ -25,3 +26,19 @@ class TutorialEditForm(forms.ModelForm):
         model = Tutorial
         fields = ('languages', 'frameworks', 'assets', 'tags', 'name', 'short_description', 'content', 'url',
                   'credit_note', 'image', 'cropping')
+
+
+class SeriesForm(forms.ModelForm):
+    class Meta:
+        model = Series
+        fields = ('languages', 'frameworks', 'assets', 'tags', 'name', 'short_description', 'content',
+                  'credit_note', 'image')
+
+
+class TutorialMembershipForm(forms.ModelForm):
+    class Meta:
+        model = TutorialMembership
+        fields = ('tutorial', 'order')
+
+
+TutorialFormSet = inlineformset_factory(Series, TutorialMembership, extra=15, max_num=20, form=TutorialMembershipForm)

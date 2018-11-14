@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block meta %}
-    <meta property="og:title" content="DevShaft.org - Tutorials, Courses, Videos" />
+    <meta property="og:title" content="DevShaft.org - Tutorials, Courses, Series, Videos" />
     <meta property="og:description" content="Find free Tutorials, Courses and Videos for your gamedev needs." />
     <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
 
@@ -27,7 +27,7 @@
 {% endblock search %}
 
 {% block list %}
-    {% for entry in tutorials %}
+    {% for entry in series %}
         <!-- CONTENT -->
             <div class="card">
                 <div class="row">
@@ -60,7 +60,7 @@
 {% endblock list %}
 
 {% block footer %}
-    {% include 'pagination.html' with entries=tutorials %}
+    {% include 'pagination.html' with entries=series %}
 {% endblock %}
 
 {% block scripts %}
