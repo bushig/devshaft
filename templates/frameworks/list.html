@@ -37,7 +37,7 @@
             <!-- CONTENT -->
             <div class="card">
                 <a class="image" href="{{ framework.get_absolute_url }}">
-                    {% with framework_image=framework.frameworkimage_set.first %}
+                    {% with framework_image=framework.images.first %}
                         <img src="{% if framework_image %}
                         {% cropped_thumbnail framework_image "cropping" %}
                         {% else %}
