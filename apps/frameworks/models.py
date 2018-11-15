@@ -72,7 +72,7 @@ class Framework(models.Model):
 
     #cache with signals
     def liked(self, user):
-        return self.objects.filter(pk=self.pk, likes=user).exists()
+        return Framework.objects.filter(pk=self.pk, likes=user).exists()
 
     @property
     def total_likes(self):
@@ -101,7 +101,7 @@ class Framework(models.Model):
 
 
 class FrameworkImage(models.Model):
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, related_name='images')
     image = ImageCropField(blank=True, upload_to='uploaded_images')
     cropping = ImageRatioField('image', '300x300')
     date_add = models.DateTimeField(auto_now_add=True)

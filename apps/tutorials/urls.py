@@ -7,7 +7,7 @@ app_name = 'tutorials'
 urlpatterns = [
     url(r'^tutorials/$', tutorial_list, name='list'),
     url(r'^tutorials/(?P<id>[\d]+)/$', detail, name='detail'),
-    url(r'^tutorials/create/$', create, name='create'),
+    url(r'^tutorials/create/$', create, name='tutorial_create'),
     url(r'^tutorials/(?P<id>[\d]+)/edit/$', edit, name='edit'),
 
     url(r'^series/$', series_list, name='series_list'),

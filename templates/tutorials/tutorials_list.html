@@ -15,71 +15,70 @@
     <meta name="description" content="Find free Tutorials, Courses and Videos for your gamedev needs."/>
 
 {% endblock %}
-{% block head %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
-{% endblock %}
 {% block search %}
-    <form method="get" id="filterForm">
-        {{ filter.form | crispy }}
-        <button type="submit" class="btn btn-success">Search</button>
-
+    <form method="get" id="filterForm" class="ui form">
+        {% for field in filter.form %}
+                <div class="field">
+                <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+        {% endfor %}
+        <button class="ui positive button" type="submit">Search</button>
     </form>
 {% endblock search %}
 
 {% block list %}
+    {% if tutorials %}
     {% for entry in tutorials %}
-        <!-- CONTENT -->
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-3">
-                        <img class="img-thumbnail img-responsive asset-img"
-                             src="{% if entry.image %}
-                        {% cropped_thumbnail entry "cropping" %}
-                        {% else %}
-                        /static/placeholder.jpg
-                        {% endif %}
-                        ">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-block">
-                            <h4 class="card-title">{{ entry.name }}</h4>
-                            <p class="card-text">{{ entry.short_description }}</p>
-                            <a href="{{ entry.get_absolute_url }}" class="btn btn-primary">Read</a>
-                            <i class="fas fa-thumbs-up"></i> {{ entry.total_likes }}
-                            <small><i class="far fa-calendar-alt"></i> {{ entry.created | timesince }} ago</small>
-                        </div>
-                    </div>
-
+        <div class="ui divided items">
+            <div class="item">
+                <div class="image">
+                    <img src="{% if entry.image %}#}
+                                    {% cropped_thumbnail entry "cropping" %}
+                                    {% else %}
+                                    /static/placeholder.jpg
+                                    {% endif %}">
                 </div>
-            </div>
-        <!-- CONTENT -->
-        {% empty %}
-        <h1>No tutorials there</h1>
-
+                <div class="content">
+                    <a class="header" href="{{ entry.get_absolute_url }}">{{ entry.name }}</a>
+                    <div class="meta">
+                        <span><i class="like icon"></i> {{ entry.total_likes }}</span>
+                        <span><i class="far fa-calendar-alt"></i> {{ entry.updated | timesince }} ago</span>
+                    </div>
+                    <div class="description">
+                        <p>{{ entry.short_description }}</p>
+                    </div>
+                    <div class="extra">
+                        {% for tag in entry.tags.all %}
+                            <div class="ui label">{{ tag.name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+        </div>
+        </div>
     {% endfor %}
+    {% else %}
+        <div class="ui placeholder segment">
+          <div class="ui icon header">
+            <i class="search icon"></i>
+            We don't have any tutorials matching your query
+          </div>
+          <div class="inline">
+            <a class="ui primary button" href="{% url 'tutorials:list' %}">Clear Query</a>
+          </div>
+        </div>
+    {% endif %}
+    <div class="ui divider"></div>
+    <div class="container" align="center">{% include 'pagination.html' with entries=series %}</div>
 {% endblock list %}
 
-{% block footer %}
-    {% include 'pagination.html' with entries=tutorials %}
-{% endblock %}
 
 {% block scripts %}
     {{ block.super }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script>
-        function formatState(state) {
-            return state.text.replace(/-/g, "")
-        }
-
-        $(document).ready(function () {
-            $('#id_category').select2({templateSelection: formatState});
-            $('#id_frameworks').select2({templateSelection: formatState});
-            $('#id_languages').select2({templateSelection: formatState});
-            $('#id_assets').select2({templateSelection: formatState});
-            $('#id_tags').select2();
-            $('[data-toggle="tooltip"]').tooltip();
-
-
-        });
+        $('#id_tags').toggleClass('ui search dropdown').dropdown();
+        $('#id_languages').toggleClass('ui search dropdown').dropdown();
+        $('#id_frameworks').toggleClass('ui search dropdown').dropdown();
+        $('#id_assets').toggleClass('ui search dropdown').dropdown();
     </script>
 {% endblock %}

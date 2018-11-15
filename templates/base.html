@@ -18,10 +18,10 @@
         {% endblock title %}
     </title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link href="/static/custom.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+          integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q="
+          crossorigin="anonymous" />
+{#    <link href="/static/custom.css" rel="stylesheet" type="text/css">#}
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     {% block head %}
@@ -29,110 +29,95 @@
     <meta property="og:image" content="/static/devshaft_main.png" />
     {% block meta %}
     {% endblock %}
-    <!-- Optional theme -->
-    {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"#}
-    {#          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">#}
-    {#    <link rel="stylesheet" href="/static/custom.css">#}
 </head>
 <body>
 
-<!-- Static navbar -->
-<nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'main_page:stats' %}">DevShaft</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="disabled"><a href="#">News</a></li>
-                <li class="disabled"><a href="#">Showcase</a></li>
-                <li class="dropdown"><a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Frameworks <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'frameworks:list' %}">Browse</a></li>
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'frameworks:add' %}">Add framework</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Assets <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'assets:list' %}">Browse</a></li>
-                        {% if user.is_authenticated %}
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Actions</li>
-                            <li><a href="{% url 'assets:add_entry' %}">Add new</a></li>
-                            <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>
-                            <li><a href="{% url 'assets:user_assets' user.id %}">Liked assets</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="./" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Tutorials <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'tutorials:series_list' %}">Series</a></li>
-                        <li><a href="{% url 'tutorials:list' %}">Tutorials</a></li>
-                        {% if user.is_authenticated %}
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Actions</li>
-                            <li><a href="{% url 'tutorials:create' %}">Add Tutorial</a></li>
-{#                            <li><a href="{% url 'assets:user_assets' user.id %}">My assets</a></li>#}
-{#                            <li><a href="{% url 'assets:user_assets' user.id %}">Liked assets</a></li>#}
-                        {% endif %}
-                    </ul>
-                </li>
-                <li class="disabled"><a href="#">Snippets</a></li>
-                <li class="disabled"><a href="#">Q&A</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
+<!-- MENU -->
+<div class="container">
+<div class="ui inverted menu">
+        <a href="{% url 'main_page:stats' %}" class="header item">
+            DevShaft
+        </a>
+{#            <div class="disabled item" disabled>News</div>#}
+{#                <div class="disabled item" disabled>Showcase</div>#}
+                <div class="ui dropdown item" tabindex="0">
+                Frameworks
+                <i class="dropdown icon"></i>
+                <div class="menu transition hidden" tabindex="-1">
+                  <a class="item" href="{% url 'frameworks:list' %}">Browse</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="item" href="{% url 'frameworks:create' %}">Create</a>
+                    {% endif %}
+                </div>
+            </div>
+<div class="ui dropdown item" tabindex="0">
+                Assets
+                <i class="dropdown icon"></i>
+                <div class="menu transition hidden" tabindex="-1">
+                  <a class="item" href="{% url 'assets:list' %}">Browse</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="item" href="{% url 'assets:add_entry' %}">Create</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="ui dropdown item" tabindex="0">
+                Tutorials
+                <i class="dropdown icon"></i>
+                <div class="menu transition hidden" tabindex="-1">
+                    <div class="ui blue header">Series</div>
+                  <a class="item" href="{% url 'tutorials:series_list' %}">Browse</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="item" href="{% url 'tutorials:series_create' %}">Create</a>
+                    {% endif %}
+                    <div class="ui blue header">Tutorials</div>
+                  <a class="item" href="{% url 'tutorials:list' %}">Browse</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="item" href="{% url 'tutorials:tutorial_create' %}">Create</a>
+                    {% endif %}
+                </div>
+            </div>
+            <ul class="right menu">
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'account_logout' %}">Logout</a></li>
+                    <a href="{% url 'account_logout' %}" class="item">Logout</a>
                 {% else %}
-                    <li><a href="{% url 'account_signup' %}">Register</a></li>
-                    <li><a href="{% url 'account_login' %}">Login</a></li>
+                    <a href="{% url 'account_signup' %}" class="item">Register</a>
+                    <a href="{% url 'account_login' %}" class="item">Login</a>
                 {% endif %}
             </ul>
-        </div><!--/.nav-collapse -->
-    </div><!--/.container-fluid -->
-</nav>
-
+</div>
+</div>
 <!-- Main component for a primary marketing message or call to action -->
-<div class="container-fluid" align="center">
+<div class="container">
+    <div class="ui top attached header" align="center">{% include 'messages.html' %}{% block page_header %}
+        {% endblock page_header %}</div>
+    <div class="ui grid">
 
+        {% block content %}
 
-    {#<div class="page-header">#}
-    {% include 'messages.html' %}
-    {% block page_header %}
+        {% endblock content %}
 
-    {% endblock page_header %}
-
-    {#    </div>#}
-
-    {% block content %}
-
-    {% endblock content %}
-
+    </div>
 </div>
 
 
 {% block footer %}
 {% endblock footer %}
 
-{% block scripts %}
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+<!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
+            integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI="
             crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
             integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
             crossorigin="anonymous"></script>
     <script src="/static/godot-ajax.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+{% block scripts %}
 {% endblock scripts %}
 </body>
 </html>

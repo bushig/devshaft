@@ -1,3 +1,7 @@
 {% for message in messages %}
-    <div class="alert alert-success" role="alert">{{ message }}</div>
+        <div class="ui success message">
+            <div class="header">
+                {{ message }}
+            </div>
+        </div>
 {% endfor %}

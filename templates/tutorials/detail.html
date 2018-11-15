@@ -8,111 +8,69 @@
 {% endblock %}
 
 {% block meta %}
-    <meta property="og:title" content="DevShaft.org - {{ tutorial.name }}" />
-    <meta property="og:description" content="{{ tutorial.short_description }}" />
-    <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
+    <meta property="og:title" content="DevShaft.org - {{ tutorial.name }}"/>
+    <meta property="og:description" content="{{ tutorial.short_description }}"/>
+    <meta property="og:url" content="https://devshaft.org{{ request.path }}"/>
 
     <meta name="description" content="{{ tutorial.short_description }}"/>
 
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1>{{ tutorial.name }}</h1>
-            {% if user.is_authenticated %}
-                <a href="{% url 'tutorials:edit' tutorial.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
-                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ModalDelete">
-                    Delete tutorial
-                </button>
-            {% endif %}
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p>{{ tutorial.content | show_markdown | safe }}</p>
-                        {% if tutorial.user == user %}
-                            <br><i class="fas fa-thumbs-up"></i> {{ tutorial.users_liked.count }}
-
-                        {% elif user.is_authenticated %}
-                            <button id="likes_tutorial" data-tutorialid="{{ tutorial.id }}" class="btn
+<div class="column" align="center">
+    <div class="ui segment">
+        <h1 class="ui header" align="center">{{ tutorial.name }}{% if user.is_authenticated %}
+            <a href="{% url 'tutorials:edit' tutorial.id %}" class="blue mini ui button">Edit</a>
+        {% endif %}
+        </h1>
+        <img class="ui small image" src="{{ tutoral.image.url }}"/>
+        <p>{{ tutorial.content | show_markdown | safe }}</p>
+    <p>
+        {% if tutorial.user == user %}
+            <i class="like icon disabled"></i> {{ tutorial.users_liked.count }}
+        {% elif user.is_authenticated %}
+            <i id="likes_tutorials" data-frameworkid="{{ framework.id }}" class="circular like icon
                 {% if user_liked %}
-                btn-success active" type="button">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span id="liked">Liked </span>
-                                <span id='likes_count'>{{ tutorial.users_liked.count }}</span>
-
-                            {% else %}
-                                btn-default
-                                " type="button">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span id="liked">Like </span>
-                                <span id='likes_count'>{{ tutorial.users_liked.count }}</span>
-                            {% endif %}
-                            </button>
-                        {% else %}
-                            <hr><i class="fa fa-thumbs-up"></i> {{ tutorial.users_liked.count }}
-                        {% endif %}
-                    <h4>Languages:</h4>
-                    <p>
-                    {% for language in tutorial.languages.all %}
-                        <span class="label label-warning"> {{ language.name }}</span>
-                    {% endfor %}
-                    </p>
-                    <h4>Assets:</h4>
-                    <p>
-                    {% for asset in tutorial.assets.all %}
-                        <a href="{{ asset.get_absolute_url }}"><span class="label label-success"> {{ asset.name }}</span></a>
-                        {% empty %}
-                        -
-                    {% endfor %}
-                    </p>
-                    <h4>Tags:</h4>
-                    <p>
-                    {% for tag in tutorial.tags.all %}
-                        <span class="label label-default"><i class="fas fa-tags"></i> {{ tag.name }}</span>
-                    {% endfor %}
-                    </p>
-                    {% if tutorial.url %}
-                        <br><a href="{{ tutorial.url }}" target="_blank">Source</a>
-                    {% endif %}
-                    {% if tutorial.credit_note %}
-                        <p><small>{{ tutorial.credit_note }}</small></p>
-                    {% endif %}
-                    <br><span class="label label-info"><i class="fas fa-user"></i> {{ tutorial.user }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+                active">
+                <span id='likes_count'>{{ tutorial.users_liked.count }}</span>
+            {% else %}
+                ">
+                <span id='likes_count'>{{ tutorial.users_liked.count }}</span>
+            {% endif %}
+            </i>
+        {% else %}
+        <hr>
+        <i class="fa fa-thumbs-up"></i> {{ tutorial.users_liked.count }}
+        {% endif %}
+    </p>
+        {% if tutorial.url %}
+            <a href="{{ tutorial.url }}" target="_blank" class="ui massive purple button">Go to source</a>
+        {% endif %}
+        {% if tutorial.credit_note %}
+            <p>Credit note:
+                <small>{{ tutorial.credit_note }}</small>
+            </p>
+        {% endif %}
+        <h4 class="ui header">Languages:</h4>
+        <p>
+            {% for language in tutorial.languages.all %}
+                <span class="ui yellow label">{{ language.name }}</span>
+            {% endfor %}
+        </p>
+        <h4 class="ui header">Assets:</h4>
+        <p>
+            {% for asset in tutorial.assets.all %}
+                <a class="ui green label" href="{{ asset.get_absolute_url }}">{{ asset.name }}</a>
+                {% empty %}
+                -
+            {% endfor %}
+        </p>
+        <h4 class="ui header">Tags:</h4>
+        <p>
+            {% for tag in tutorial.tags.all %}
+                <span class="ui label"><i class="fas fa-tags"></i> {{ tag.name }}</span>
+            {% endfor %}
+        </p>
+        <span class="ui label"><i class="fas fa-user"></i> {{ tutorial.user }}</span>
     </div>
-
-    {% comment %} MODAL {% endcomment %}
-    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="DeletetutorialButton">Delete</h4>
-                </div>
-                <div class="modal-body">
-                    Do you want to delete this asset?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="deletetutorial" type="button" data-tutorialid="{{ tutorial.id }}" class="btn btn-danger">Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+</div>
 {% endblock %}

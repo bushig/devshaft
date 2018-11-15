@@ -5,31 +5,41 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 {% endblock %}
 {% block content %}
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="six wide column centered" align="center">
+        <div class="ui form">
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form | crispy }}
-            {{ formset }}
-            <input type="submit" class="btn btn-default" value="Save">
-        </form>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                {{ formset.management_form }}
+            <h4 class="ui horizontal divider header">
+                Files
+            </h4>
+                {% for form in formset %}
+                    {% for field in form %}
+                        <div class="field">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                <input type="submit" class="blue massive ui button" value="Save">
+            </form>
+        </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
     {{ block.super }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script>
-    function formatState(state){
-        return state.text.replace(/-/g, "")
-    }
-    $(document).ready(function() {
-        $('#id_category').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
-        $('#id_frameworks').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
-        $('#id_languages').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
-        $('#id_tags').select2({dropdownCssClass: "bigdrop", templateSelection: formatState});
-
-});
+    $(document).ready(function () {
+            $('select').dropdown();
+        });
     </script>
     {{ formset.media }}
 {% endblock %}

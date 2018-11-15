@@ -1,25 +1,66 @@
 {% extends 'base.html' %}
 
 {% block meta %}
-    <meta property="og:title" content="Devshaft.org - Game development aggregator" />
-    <meta property="og:description" content="Game development News, Frameworks, Engines, Assets, Libraries, Tools, Demos and Tutorials" />
-    <meta property="og:url" content="https://devshaft.org/" />
+    <meta property="og:title" content="Devshaft.org - Game development aggregator"/>
+    <meta property="og:description"
+          content="Game development News, Frameworks, Engines, Assets, Libraries, Tools, Demos and Tutorials"/>
+    <meta property="og:url" content="https://devshaft.org/"/>
 
-    <meta name="description" content="Game development News, Frameworks, Engines, Assets, Libraries, Tools, Demos and Tutorials"/>
+    <meta name="description"
+          content="Game development News, Frameworks, Engines, Assets, Libraries, Tools, Demos and Tutorials"/>
 
 {% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
+    <div class="column" align="center">
         <h1>Hello there!</h1>
         <p>This is site for game developers.</p>
         <p>
-            <a class="btn btn-primary btn-lg" href="{% url 'assets:list' %}" role="button">Assets</a>
-            <a class="btn btn-primary btn-lg" href="{% url 'frameworks:list' %}" role="button">Frameworks</a>
-            <a class="btn btn-primary btn-lg" href="{% url 'tutorials:list' %}" role="button">Tutorials</a>
+            <a class="ui button" href="{% url 'assets:list' %}" role="button">Assets</a>
+            <a class="ui button" href="{% url 'frameworks:list' %}" role="button">Frameworks</a>
+            <a class="ui button" href="{% url 'tutorials:list' %}" role="button">Tutorials</a>
         </p>
-        <p>
-            <small>Soon there will be stats and other stuff</small>
-        </p>
+        <div class="ui five statistics">
+            <div class="statistic">
+                <div class="value">
+                    0
+                </div>
+                <div class="label">
+                    News
+                </div>
+            </div>
+            <div class="statistic">
+                <div class="value">
+                    43
+                </div>
+                <div class="label">
+                    Frameworks
+                </div>
+            </div>
+            <div class="statistic">
+                <div class="value">
+                    5
+                </div>
+                <div class="label">
+                    Assets
+                </div>
+            </div>
+            <div class="statistic">
+                <div class="value">
+                    12
+                </div>
+                <div class="label">
+                    Tutorials
+                </div>
+            </div>
+            <div class="statistic">
+                <div class="value">
+                    9
+                </div>
+                <div class="label">
+                    Courses
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@ from .utils import check_framework_equal_to_version
 def framework_list(request):
     filter = FrameworkFilter(request.GET or None, queryset=Framework.objects.all())
     page = request.GET.get('page')
-    paginator = Paginator(filter.qs, 16)
+    paginator = Paginator(filter.qs, 30)
     try:
         paginated = paginator.page(page)
     except PageNotAnInteger:
@@ -29,8 +29,11 @@ def framework_list(request):
 
 def detail(request, id):
     framework = Framework.objects.get(id=id)
-    images = framework.frameworkimage_set.all()
-    context = {'framework': framework, 'images': images}
+    images = framework.images.all()
+    liked = False
+    if request.user.is_authenticated:
+        liked = framework.liked(request.user)
+    context = {'framework': framework, 'images': images, 'user_liked': liked}
     return render(request, 'frameworks/detail.html', context)
 
 def add_framework(request):  # TODO:REFACTOR to display formset

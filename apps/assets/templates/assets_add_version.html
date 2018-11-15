@@ -1,14 +1,40 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="six wide column centered" align="center">
+        <div class="ui form">
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form | crispy }}
-            {{ formset }}
-            <input type="submit" class="btn btn-success" value="Save">
-        </form>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                {{ formset.management_form }}
+            <h4 class="ui horizontal divider header">
+                Files
+            </h4>
+                {% for form in formset %}
+                    {% for field in form %}
+                        <div class="field">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                <input type="submit" class="blue massive ui button" value="Save">
+            </form>
+        </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            $('select').dropdown();
+        });
+    </script>
 {% endblock %}

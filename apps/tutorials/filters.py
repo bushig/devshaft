@@ -91,7 +91,7 @@ class SeriesFilter(django_filters.FilterSet):
 
     def filter_search(self, queryset, name, value):
         if value:
-            return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
+            return queryset.filter(Q(name__icontains=value) | Q(short_description__icontains=value))
         else:
             return queryset
 

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    DevShaft.org - {{ framework.name }}
+    DevShaft.org - {{ framework.title }}
 {% endblock %}
 
 {% block meta %}
-    <meta property="og:title" content="DevShaft.org - {{ framework.name }}" />
+    <meta property="og:title" content="DevShaft.org - {{ framework.title }}" />
     <meta property="og:description" content="{{ framework.description }}" />
     <meta property="og:url" content="https://devshaft.org{{ request.path }}" />
 
@@ -13,121 +13,82 @@
 
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1>{{ framework.name }}
-                    <small>{{ framework.category }}</small>
-                </h1>
-            {% if user.is_authenticated %}
-                <a href="{% url 'frameworks:edit' framework.id %}" class="btn btn-info btn-xs" role="button">Edit</a>
-                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#ModalDelete">
-                    Delete asset
-                </button>
-            {% endif %}
+    <div class="column">
+        <div class="ui segment">
+        <h1 class="ui header" align="center">{{ framework.title }}{% if user.is_authenticated %}
+                <a href="{% url 'frameworks:edit' framework.id %}" class="blue mini ui button">Edit</a>
+                {% endif %}
+        </h1>
+        {% with images.first as image %}
+            <img class="ui small image left floated" src="{{ image.image.url }}"/>
+        {% endwith %}
+            {{ framework.description }}
+        {% with images|slice:"1:" as gallery %}
+            <div class="ui tiny images">
+            {% for image in gallery %}
+                    <img class="ui image" src="{{ image.image.url }}"/>
+            {% endfor %}
             </div>
-            {% comment %} CAROUSEL {% endcomment %}
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-5">
-                        {% include 'carousel.html' %}
-                    </div>
-                    <div class="col-lg-7">
-                        <p>{{ framework.description }}</p>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th><i class="fas fa-star"></i>Stars</th>
-                                <th><i class="fas fa-code-branch"></i>Forks</th>
-                                <th><i class="far fa-calendar-alt"></i> Repo fetched</th>
-                                <th><i class="fas fa-chart-bar"></i>Stats</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ framework.repo_stars }}</td>
-                                <td>{{ framework.repo_forks }}</td>
-                                <td>{{ framework.repo_updated | timesince }} ago</td>
-                                <td><img
-                                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ framework.commits }}&chco=666666&chbh=1,1,1&chds=0,50">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        {% if framework.user == user %}
-                            <br><i class="fas fa-thumbs-up"></i> {{ framework.likes.count }}
-                            <a href="{% url 'frameworks:fetch_metadata' framework.id %}" class="btn btn-default btn-xs"><i
-                                    class="fab fa-github"></i> Fetch
-                                metadata</a>
+        {% endwith %}
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th><i class="fas fa-star"></i>Stars</th>
+                <th><i class="fas fa-code-branch"></i>Forks</th>
+                <th><i class="far fa-calendar-alt"></i> Repo fetched</th>
+                <th><i class="far fa-calendar"></i> Last commit</th>
+                <th><i class="fas fa-chart-bar"></i>Stats</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ framework.repo_stars }}</td>
+                <td>{{ framework.repo_forks }}</td>
+                <td>{{ framework.repo_updated | timesince }} ago</td>
+                <td>{% if framework.last_commit %}{{ framework.last_commit | timesince }} ago{% else %}-{% endif %}</td>
+                <td><img
+                        src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ framework.commits }}&chco=666666&chbh=1,1,1&chds=0,10">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="ui divider"></div>
+        <div class="container" align="center">
+         {% if framework.user == user %}
+                            <i class="like icon disabled"></i> {{ framework.likes.count }}
+                            <a href="{% url 'frameworks:fetch_metadata' framework.id %}" class="mini ui button"><i
+                                    class="large github icon"></i>Fetch metadata</a>
 
                         {% elif user.is_authenticated %}
-                            <button id="likes_framework" data-frameworkid="{{ framework.id }}" class="btn
+                            <i id="likes_framework" data-frameworkid="{{ framework.id }}" class="circular like icon
                 {% if user_liked %}
-                btn-success active" type="button">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span id="liked">Liked </span>
+                active">
                                 <span id='likes_count'>{{ framework.likes.count }}</span>
 
                             {% else %}
-                                btn-default
-                                " type="button">
-                                <i class="fa fa-thumbs-up"></i>
-                                <span id="liked">Like </span>
+                                ">
                                 <span id='likes_count'>{{ framework.likes.count }}</span>
                             {% endif %}
-                            </button>
-                            <a href="{% url 'assets:fetch_metadata' framework.id %}" class="btn btn-default btn-xs"><i
-                                    class="fab fa-github"></i> Fetch
-                                metadata</a>
+                            </i>
+                            <a href="{% url 'assets:fetch_metadata' framework.id %}" class="mini ui button"><i
+                                    class="large github icon"></i>Fetch metadata</a>
                         {% else %}
-                            <hr><i class="fa fa-thumbs-up"></i> {{ framework.likes.count }}
+                            <i class="like icon disabled"></i> {{ framework.likes.count }}
                         {% endif %}
-                    {% if framework.repository_url %}
-                        <br><a href="{{ framework.repository_url }}">Repo</a>
+
+            <span class="ui label"><i class="user icon"></i> {{ framework.user }}</span>
+        {% if framework.repository_url %}
+            <span class="ui label"><a href="{{ framework.repository_url }}">Repository</a></span>
                     {% endif %}
                     {% if framework.site %}
-                        <br><a href="{{ framework.site }}">Site</a>
+                        <span class="ui label"><a href="{{ framework.site }}">Official site</a></span>
                     {% endif %}
                     {% if framework.version %}
-                        <br>Latest version: <small href="#" data-toggle="tooltip"
-                                       title="ass">{{ framework.version }}</small>
+                        Latest version: <small data-tooltip="{{ framework.version_date }}">
+                        {{ framework.version }}
+                    </small>
                     {% endif %}
-                    <br><span class="label label-warning"><i
-                            class="fas fa-balance-scale"></i> {{ framework.license }}</span>
-                    <span class="label label-info"><i class="fas fa-user"></i> {{ framework.user }}</span>
-                    </div>
-                </div>
-            </div>
+    </div>
         </div>
     </div>
-
-    {% comment %} MODAL {% endcomment %}
-    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="DeleteframeworkButton">Delete</h4>
-                </div>
-                <div class="modal-body">
-                    Do you want to delete this asset?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="deleteframework" type="button" data-frameworkid="{{ framework.id }}" class="btn btn-danger">Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
 {% endblock %}

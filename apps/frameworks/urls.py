@@ -7,7 +7,7 @@ app_name = 'frameworks'
 
 urlpatterns = [
     url(r'^$', framework_list, name='list'),
-    url(r'^add/$', add_framework, name='add'),
+    url(r'^create/$', add_framework, name='create'),
     url(r'^(?P<id>\d+)/$', detail, name='detail'),
     url(r'^(?P<id>\d+)/edit/$', edit, name='edit'),
     url(r'^(?P<id>\d+)/fetch/$', fetch_framework_metadata, name='fetch_metadata'),
