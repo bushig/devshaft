@@ -3,7 +3,7 @@
 
 {% block title %}{Register for an account{% endblock %}
 
-{% block content %}
+{% block body_content %}
 <form class="col-lg-4 col-lg-offset-4" method="post" action="">
     {% csrf_token %}
     {{ form | crispy }}

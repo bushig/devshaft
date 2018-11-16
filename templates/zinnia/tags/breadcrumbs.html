@@ -1,0 +1,10 @@
+<div class="ui breadcrumb">
+    {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+                <a class="section" href="{{ crumb.url }}">{{ crumb.name }}</a>
+                <div class="divider"> / </div>
+            {% else %}
+                <div class="active section">{{ crumb.name }}</div>
+            {% endif %}
+    {% endfor %}
+</div>

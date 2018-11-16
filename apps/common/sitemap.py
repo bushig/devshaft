@@ -3,6 +3,11 @@ from apps.tutorials.models import Tutorial
 from apps.frameworks.models import Framework
 from apps.assets.models import Asset
 
+from zinnia.sitemaps import AuthorSitemap
+from zinnia.sitemaps import CategorySitemap
+from zinnia.sitemaps import EntrySitemap
+from zinnia.sitemaps import TagSitemap
+
 class TutorialSitemap(Sitemap):
     changefreq = 'never'
     priority = 0.5
@@ -39,4 +44,9 @@ class AssetsSitemap(Sitemap):
         return obj.updated
 
 
-sitemaps = {'tutorials': TutorialSitemap, 'frameworks': FrameworkSitemap, 'assets': AssetsSitemap}
+sitemaps = {'tutorials': TutorialSitemap, 'frameworks': FrameworkSitemap, 'assets': AssetsSitemap,
+            'tags': TagSitemap,
+            'blog': EntrySitemap,
+            'authors': AuthorSitemap,
+            'categories': CategorySitemap
+            }

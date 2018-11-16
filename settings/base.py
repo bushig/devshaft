@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
 
     'crispy_forms',
+    'django_comments',
+    'tagging',
+    'zinnia',
     'rest_framework',
     'django_filters',
     'mptt',
@@ -94,7 +97,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',  # Added one
+                'django.template.context_processors.media',  # Added ones
+                'zinnia.context_processors.version',
             ],
         },
     },
@@ -201,3 +205,11 @@ REST_FRAMEWORK = {
 
 # robots.txt
 ROBOTS_USE_SCHEME_IN_HOST = True
+
+
+# NEWS APP (Blog)
+ZINNIA_ENTRY_CONTENT_TEMPLATES = [
+  ('zinnia/_short_entry_detail.html', 'Short entry template'),
+]
+
+ZINNIA_MARKUP_LANGUAGE = 'markdown'

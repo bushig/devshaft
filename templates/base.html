@@ -30,6 +30,8 @@
     <meta property="og:image" content="/static/devshaft_main.png" />
     {% block meta %}
     {% endblock %}
+    {% block meta-keywords %}
+    {% endblock %}
 </head>
 <body>
 
@@ -39,7 +41,7 @@
         <a href="{% url 'main_page:stats' %}" class="header item">
             DevShaft
         </a>
-{#            <div class="disabled item" disabled>News</div>#}
+            <a href="{% url 'zinnia:entry_archive_index' %}" class="item">News</a>
 {#                <div class="disabled item" disabled>Showcase</div>#}
                 <div class="ui dropdown item" tabindex="0">
                 Frameworks
@@ -93,9 +95,8 @@
         {% endblock page_header %}</div>
     <div class="ui grid">
 
-        {% block content %}
-
-        {% endblock content %}
+        {% block body_content %}
+        {% endblock %}
 
     </div>
 </div>

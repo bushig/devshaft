@@ -1,0 +1,7 @@
+{% load i18n %}
+{% for tag in tags %}
+    <a href="{% url 'zinnia:tag_detail' tag.name %}"
+       class="ui label {% if tag.name == context_tag.name %} active{% endif %}">{{ tag }}</a>
+    {% empty %}
+    {% trans "No tags yet." %}
+{% endfor %}

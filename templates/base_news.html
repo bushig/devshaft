@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+    {% block breadcrumbs %}
+    {% endblock %}
+{% endblock %}
+
+{% block body_content %}
+    <div class="four wide column">
+                <div class="ui secondary segment">
+    {% block link %}
+    {% endblock %}
+    {% block sidebar %}
+    {% endblock %}
+                </div>
+    </div>
+    <div class="twelve wide column">
+    {% block content %}
+    {% endblock %}
+    </div>
+{% endblock %}
