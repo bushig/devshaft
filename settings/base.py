@@ -216,3 +216,4 @@ ZINNIA_MARKUP_LANGUAGE = 'markdown'
 
 MIGRATION_MODULES = {'zinnia': 'apps.common.migrations_zinnia'}
 ZINNIA_ENTRY_BASE_MODEL = 'apps.common.zinnia_models.NewsEntry'
+# ZINNIA_MARKDOWN_EXTENSIONS = ['markdown.extensions.sane_lists',]
