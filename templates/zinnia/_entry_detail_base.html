@@ -3,7 +3,7 @@
 <div id="entry-{{ object.pk }}" class="item{% if object.featured %} active{% endif %}">
     {% block entry-image %}
     {% if object.image %}
-    <div class="ui small image">
+    <div class="image">
       {% if continue_reading %}
       <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">
         {% endif %}
