@@ -42,7 +42,7 @@ class Tutorial(models.Model):
     )
     users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tutorials_liked', blank=True)
 
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=60)
     short_description = models.CharField(max_length=500, blank=True)
     content = MarkdownxField(blank=True)
     url = models.URLField(blank=True, null=True, max_length=300)
