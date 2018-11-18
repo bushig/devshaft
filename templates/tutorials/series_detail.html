@@ -20,7 +20,7 @@
     <div class="column sixteen wide" align="center">
     <div class="ui segment">
         <h1 class="ui header" align="center">{{ series.name }}{% if user.is_authenticated %}
-            <a href="{% url 'tutorials:edit' series.id %}" class="blue mini ui button">Edit</a>
+            <a href="{% url 'tutorials:series_edit' series.id %}" class="blue mini ui button">Edit</a>
         {% endif %}
         </h1>
         <img class="ui small image" src="{{ tutoral.image.url }}"/>
