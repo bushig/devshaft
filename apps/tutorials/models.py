@@ -95,7 +95,7 @@ class Series(models.Model):
 
     tutorials = models.ManyToManyField(Tutorial, through='TutorialMembership')
 
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=80)
     short_description = models.CharField(max_length=500, blank=True)
     content = MarkdownxField(blank=True)
     credit_note = models.CharField(max_length=255, blank=True)
