@@ -9,7 +9,6 @@ from zinnia.sitemaps import EntrySitemap
 from zinnia.sitemaps import TagSitemap
 
 class TutorialSitemap(Sitemap):
-    changefreq = 'never'
     priority = 0.5
     protocol = 'https'
 
@@ -21,7 +20,6 @@ class TutorialSitemap(Sitemap):
 
 
 class FrameworkSitemap(Sitemap):
-    changefreq = 'monthly'
     priority = 0.5
     protocol = 'https'
 
@@ -33,7 +31,6 @@ class FrameworkSitemap(Sitemap):
 
 
 class AssetsSitemap(Sitemap):
-    changefreq = 'weekly'
     priority = 0.5
     protocol = 'https'
 
