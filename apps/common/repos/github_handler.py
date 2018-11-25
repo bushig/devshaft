@@ -40,6 +40,7 @@ class GitHubHandler:
         asset.repo_forks = repo.forks
         asset.repo_description = repo.description
         asset.repo_updated = timezone.now()
+        asset.last_commit = repo.get_commits()[0].commit.author.date  # TODO: Dangerous, make it more reliable
         commit_activity = []
         try:
             for stat in repo.get_stats_commit_activity():
