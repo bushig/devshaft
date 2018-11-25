@@ -20,12 +20,19 @@ class TutorialForm(forms.ModelForm):
         fields = ('languages', 'frameworks', 'assets', 'tags', 'name', 'short_description', 'content', 'url',
                   'credit_note', 'image')
 
+        widgets = {
+            'short_description': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
+        }
+
 
 class TutorialEditForm(forms.ModelForm):
     class Meta:
         model = Tutorial
         fields = ('languages', 'frameworks', 'assets', 'tags', 'name', 'short_description', 'content', 'url',
                   'credit_note', 'image', 'cropping')
+        widgets = {
+            'short_description': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
+        }
 
 
 class SeriesForm(forms.ModelForm):
@@ -34,6 +41,9 @@ class SeriesForm(forms.ModelForm):
         fields = ('languages', 'frameworks', 'assets', 'tags', 'name', 'short_description', 'content',
                   'credit_note', 'image')
 
+        widgets = {
+            'short_description': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
+        }
 
 class TutorialMembershipForm(forms.ModelForm):
     class Meta:
