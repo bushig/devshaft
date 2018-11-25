@@ -3,16 +3,16 @@
     {% if not entries.has_previous %}
         disabled
     {% endif %} item"
-        href="{% if entries.has_previous %}?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.previous_page_number }}{% endif %}">&laquo;</a>
+        href="{% if entries.has_previous %}?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}{% for l in request.GET.languages %}&languages={{ l }}{% endfor %}{% for f in request.GET.frameworks %}&frameworks={{ l }}{% endfor %}{% for a in request.GET.assets %}&assets={{ a }}{% endfor %}{% for t in request.GET.tags %}&tags={{ t }}{% endfor %}{% if request.GET.desc_tags %}&desc_tags={{ request.GET.desc_tags }}{% endif %}&o={{ request.GET.o }}&page={{ entries.previous_page_number }}{% endif %}">&laquo;</a>
 
 
     {% for page in entries.paginator.page_range %}
-      <a class="{% if page == entries.number %}active{% endif %} item" href="?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ page }}">{{ page }}</a>
+      <a class="{% if page == entries.number %}active{% endif %} item" href="?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}{% for l in request.GET.languages %}&languages={{ l }}{% endfor %}{% for f in request.GET.frameworks %}&frameworks={{ l }}{% endfor %}{% for a in request.GET.assets %}&assets={{ a }}{% endfor %}{% for t in request.GET.tags %}&tags={{ t }}{% endfor %}{% if request.GET.desc_tags %}&desc_tags={{ request.GET.desc_tags }}{% endif %}&o={{ request.GET.o }}&page={{ page }}">{{ page }}</a>
     {% endfor %}
 
   <a class="
     {% if not entries.has_next %}
         disabled
     {% endif %} item"
-        href="{% if entries.has_next %}?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}&o={{ request.GET.o }}&page={{ entries.next_page_number }}{% endif %}">&raquo;</a>
+        href="{% if entries.has_next %}?q={{ request.GET.q }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% for t in request.GET.t %}&t={{ t }}{% endfor %}{% for l in request.GET.languages %}&languages={{ l }}{% endfor %}{% for f in request.GET.frameworks %}&frameworks={{ l }}{% endfor %}{% for a in request.GET.assets %}&assets={{ a }}{% endfor %}{% for t in request.GET.tags %}&tags={{ t }}{% endfor %}{% if request.GET.desc_tags %}&desc_tags={{ request.GET.desc_tags }}{% endif %}&o={{ request.GET.o }}&page={{ entries.next_page_number }}{% endif %}">&raquo;</a>
   </div>
