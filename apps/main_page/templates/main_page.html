@@ -15,52 +15,47 @@
     <div class="column" align="center">
         <h1>Hello there!</h1>
         <p>This is site for game developers.</p>
-        <p>
-            <a class="ui button" href="{% url 'assets:list' %}" role="button">Assets</a>
-            <a class="ui button" href="{% url 'frameworks:list' %}" role="button">Frameworks</a>
-            <a class="ui button" href="{% url 'tutorials:list' %}" role="button">Tutorials</a>
-        </p>
         <div class="ui five statistics">
-            <div class="statistic">
+            <a class="statistic" href="/news">
                 <div class="value">
                     {{ news_count }}
                 </div>
                 <div class="label">
                     News
                 </div>
-            </div>
-            <div class="statistic">
+            </a>
+            <a class="statistic" href="{% url 'frameworks:list' %}">
                 <div class="value">
                     {{ frameworks_count }}
                 </div>
                 <div class="label">
                     Frameworks
                 </div>
-            </div>
-            <div class="statistic">
+            </a>
+            <a class="statistic" href="{% url 'assets:list' %}">
                 <div class="value">
                     {{ assets_count }}
                 </div>
                 <div class="label">
                     Assets
                 </div>
-            </div>
-            <div class="statistic">
+            </a>
+            <a class="statistic" href="{% url 'tutorials:list' %}">
                 <div class="value">
                     {{ tutorials_count }}
                 </div>
                 <div class="label">
                     Tutorials
                 </div>
-            </div>
-            <div class="statistic">
+            </a>
+            <a class="statistic" href="{% url 'tutorials:series_list' %}">
                 <div class="value">
                     {{ series_count }}
                 </div>
                 <div class="label">
                     Courses
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 {% endblock %}
